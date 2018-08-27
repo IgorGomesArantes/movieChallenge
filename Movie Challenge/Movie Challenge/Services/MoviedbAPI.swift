@@ -16,34 +16,27 @@ enum Quality : String{
 }
 
 class MoviedbAPI{
-    let apiKey: String = "423a7efcc5851107f96bc25a3b0c3f28"
-    let language: String = "pt-BR"
-    let baseURL: String = "https://api.themoviedb.org/3"
-    let imageBaseURL: String = "https://image.tmdb.org/t/p"
+    private let apiKey: String = "423a7efcc5851107f96bc25a3b0c3f28"
+    private let language: String = "pt-BR"
+    private let baseURL: String = "https://api.themoviedb.org/3"
+    private let imageBaseURL: String = "https://image.tmdb.org/t/p"
     
-    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+    private func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
             }.resume()
     }
     
-    func getPoster(path: String, quality: Quality, completion: @escaping (Data?, URLResponse?, Error?) -> ()){
+    public func getPoster(path: String, quality: Quality, completion: @escaping (Data?, URLResponse?, Error?) -> ()){
         let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
         //let url = URL(string: "https://image.tmdb.org/t/p/original/kqjL17yufvn9OVLyXYpvtyrFfak.jpg")
         getDataFromUrl(url: url!, completion: completion)
     }
     
-    func downloadImage(path: String, quality: Quality) {
-        print("Download Started")
-        
-        let url = URL(string: imageBaseURL + "/" + quality.rawValue + path)
-        getDataFromUrl(url: url!) { data, response, error in
-
-            print("Download Finished")
-            DispatchQueue.main.async() {
-            
-            }
-        }
+    public func getMovie(id: Int, completion: @escaping (Data?, URLResponse?, Error?) -> ()){
+        let url = URL(string: baseURL + "/movie/" + String(id) + "?api_key=" +
+        apiKey + "&language=" + language)
+        getDataFromUrl(url: url!, completion: completion)
     }
     
     func getMovie() -> Movie{
@@ -69,47 +62,4 @@ class MoviedbAPI{
 
         return image!
     }
-    
-//    func getMovie(id: Int) {
-//
-//        let url = URL(string: baseURL + "/movie/" + String(id) + "?api_key=" + apiKey + "&language=" + language)
-//
-//
-//        let session = URLSession.shared
-//        if let usableUrl = url {
-//            let task = session.dataTask(with: usableUrl, completionHandler: { (data, response, error) in
-//                if let data = data {
-//                    if let stringData = String(data: data, encoding: String.Encoding.utf8) {
-//                        print(stringData)
-//
-//                        do {
-//                            print("Entrou")
-//                            let decoder = JSONDecoder()
-//                            let model = try decoder.decode(Movie.self, from:
-//                                data)
-//                            print(model)
-//                        } catch let parsingError {
-//                            print("Error", parsingError)
-//                        }
-//
-//                    }
-//                }
-//            })
-//            task.resume()
-//        }
-//    }
-//
-//
-//    func getPoster(path: String, quality: Quality) -> UIImage? {
-//
-//        let url = URL(string: imageBaseURL + "/" + quality.rawValue + path)
-//        let data = try? Data(contentsOf: url!)
-//        let image = UIImage(data: data!)
-//
-//        return image
-//    }
-
 }
-
-
-    //https://stackoverflow.com/questions/24231680/loading-downloading-image-from-url-on-swift
