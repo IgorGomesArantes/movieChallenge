@@ -50,7 +50,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
             if let indexPath = tableView.indexPathForSelectedRow{
                 let selectedMovie = self.moviePage.results[indexPath.row]
                 
-                let destinationViewController = segue.destination as! ViewController
+                let destinationViewController = segue.destination as! DetailViewController
                 destinationViewController.movie = selectedMovie
             }
         }

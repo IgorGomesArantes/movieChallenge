@@ -60,5 +60,5 @@ struct Movie : Codable{
     var title: String?
     var video: Bool?
     var vote_average: Float?
-    var vote_count: Float?
+    var vote_count: Int?
 }
