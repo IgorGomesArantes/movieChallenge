@@ -111,6 +111,7 @@
                         <outlet property="numberOfVotesLabel" destination="P3e-zV-YJ8" id="F5U-mz-kam"/>
                         <outlet property="overviewLabel" destination="Gwt-Ni-zcO" id="1tE-gm-U6c"/>
                         <outlet property="posterImageView" destination="lMC-Jv-by5" id="nPN-9N-fCE"/>
+                        <outlet property="saveMovieUIButton" destination="x6B-hr-Wom" id="nKX-Nj-g1O"/>
                         <outlet property="titleLabel" destination="7jc-h9-oW5" id="3qD-gJ-SEY"/>
                     </connections>
                 </viewController>
@@ -168,19 +169,22 @@
         <!--Favoritos-->
         <scene sceneID="7pm-I0-Tuh">
             <objects>
-                <tableViewController id="LQ0-0z-FBR" sceneMemberID="viewController">
+                <tableViewController id="LQ0-0z-FBR" customClass="FavoriteViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="vNk-py-c3Q">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Adm-Kk-Fpw">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="movieEntityPrototypeCell" id="Adm-Kk-Fpw">
                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Adm-Kk-Fpw" id="sD1-Nc-dmb">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="favoriteToMovieDetail" id="FKr-Qg-Jer"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -235,4 +239,7 @@
     <resources>
         <image name="placeholder-image" width="1200" height="900"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="FKr-Qg-Jer"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -8,13 +8,13 @@
 
 import Foundation
 
-struct MoviePage : Codable{
+struct MoviePageDTO : Codable{
     var page: Int?
     var total_results: Int?
     var total_pages: Int?
-    var results: [Movie]
+    var results: [MovieDTO]
     
     init() {
-        results = [Movie]()
+        results = [MovieDTO]()
     }
 }

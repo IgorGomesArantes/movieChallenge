@@ -13,26 +13,32 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
     @IBOutlet weak var searchBar: UISearchBar!
     
     let moviedbAPI = MoviedbAPI()
-    var moviePage = MoviePage()
+    var moviePage = MoviePageDTO()
     
     override func viewWillDisappear(_ animated: Bool) {
-        moviePage = MoviePage()
-        
-        DispatchQueue.main.async() {
-            self.searchBar.text = ""
-            self.tableView.reloadData()
-        }
+//        moviePage = MoviePageDTO()
+//        
+//        DispatchQueue.main.async() {
+//            self.searchBar.text = ""
+//            self.tableView.reloadData()
+//        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+        
+//        let movieService = MovieService()
+//        
+//        movieService.findAllFromAPI(query: "senhor dos aneis"){ movieList in
+//            print("Aqui")
+//            print(movieList)
+//        }
+        
         _ = self.moviedbAPI.getMovies(query: searchBar.text!){ data, response, error in
             
             if let data = data{
                 do {
                     let decoder = JSONDecoder()
-                    self.moviePage = try decoder.decode(MoviePage.self, from: data)
-                    print(data)
-                    print(self.moviePage)
+                    self.moviePage = try decoder.decode(MoviePageDTO.self, from: data)
                     
                     DispatchQueue.main.async() {
                         self.tableView.reloadData()

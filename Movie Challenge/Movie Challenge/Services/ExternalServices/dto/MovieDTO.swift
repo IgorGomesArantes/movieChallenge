@@ -35,7 +35,7 @@ struct SpokenLanguage : Codable{
     var name: String?
 }
 
-struct Movie : Codable{
+struct MovieDTO : Codable{
     var adult: Bool?
     var backdrop_path: String?
     var belongs_to_collection: Bool?
