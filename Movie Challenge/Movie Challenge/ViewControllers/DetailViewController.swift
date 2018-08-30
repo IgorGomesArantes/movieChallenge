@@ -17,8 +17,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var numberOfVotesLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
     
-    private let moviedbAPI: MoviedbAPI = MoviedbAPI()
-    private var wasSaved: Bool!
+    private var wasSaved = false
     
     public var movie: MovieDTO!
     public var imageDownloadTask: URLSessionDataTask!
@@ -28,18 +27,15 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         do{
-            if (try MovieRepository.shared().findOne(by: movie.id!)) != nil{
-                wasSaved = true
-                DispatchQueue.main.async(){
-                    self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-                    self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
-                }
-            }else{
-                wasSaved = false
+            _ = try MovieRepository.shared().findOne(by: movie.id!)
+            wasSaved = true
+            DispatchQueue.main.async(){
+                self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
             }
             
-        }catch{
-            print("Erro ao consultar o banco")
+        }catch let error{
+            print("Erro ao consultar o banco", error)
         }
 
         DispatchQueue.main.async() {
@@ -49,19 +45,26 @@ class DetailViewController: UIViewController {
             self.overviewLabel.text = self.movie.overview
         }
         
-        imageDownloadTask = self.moviedbAPI.getPoster(path: self.movie.poster_path!, quality: Quality.high) { data, response, error in
-
-            DispatchQueue.main.sync() {
-                if let image = UIImage(data: data!){
+        if(movie.poster == nil){
+            imageDownloadTask = MovieService.shared().getPosterFromAPI(path: self.movie.poster_path!, quality: Quality.high) { image in
+                
+                self.movie.poster = UIImagePNGRepresentation(image)
+                
+                DispatchQueue.main.async() {
                     self.posterImageView.image = image
                 }
-                
+            }
+        }else{
+            DispatchQueue.main.async() {
+                self.posterImageView.image = UIImage(data: self.movie.poster!)
             }
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        imageDownloadTask.cancel()
+        if(imageDownloadTask != nil){
+            imageDownloadTask.cancel()
+        }
     }
     
     @IBAction func favoriteMovie(_ sender: Any) {
@@ -71,8 +74,8 @@ class DetailViewController: UIViewController {
                 self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
                 self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
                 wasSaved = true
-            }catch{
-                print("Erro ao salvar o filme")
+            }catch let error{
+                print("Erro ao salvar o filme", error)
             }
         }else{
             do{
@@ -82,11 +85,9 @@ class DetailViewController: UIViewController {
                 self.saveMovieUIButton.setTitle("Favoritar", for: UIControlState.normal)
                 
                 wasSaved = false
-            }catch{
-                print("Erro ao deletar filme")
+            }catch let error{
+                print("Erro ao deletar filme", error)
             }
-            
-
         }
     }
 }

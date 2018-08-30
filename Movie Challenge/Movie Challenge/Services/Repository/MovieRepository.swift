@@ -47,6 +47,10 @@ class MovieRepository{
         movieEntity.setValue(movie.overview, forKey: "overview")
         movieEntity.setValue(movie.poster_path, forKey: "poster_path")
         
+        if(movie.poster != nil){
+            movieEntity.setValue(movie.poster!, forKey: "poster")
+        }
+        
         try context.save()
     }
 

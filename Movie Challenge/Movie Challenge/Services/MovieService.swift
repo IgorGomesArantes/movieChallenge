@@ -12,7 +12,22 @@ import UIKit
 //Utilizar o DTO
 class MovieService{
     
-    //Corrigir Funcao
+    private static var sharedInstance: MovieService = {
+        let instance = MovieService()
+        
+        return instance
+    }()
+    
+    
+    private init(){
+
+    }
+    
+    class func shared() -> MovieService{
+        return sharedInstance
+    }
+    
+    //TODO Corrigir Funcao
     private func movieDTOToEntity(movieDTO: MovieDTO) -> MovieEntity{
         
         let movieEntity = MovieEntity()
@@ -35,70 +50,77 @@ class MovieService{
         movieDTO.title = movieEntity.title
         movieDTO.vote_average = movieEntity.vote_average
         movieDTO.vote_count = Int(movieEntity.vote_count)
+        movieDTO.poster = movieEntity.poster
         
         return movieDTO
     }
     
-    private func movieDTOListToEntityList(movieDTOList: [MovieDTO]) -> [MovieEntity]{
-        var movieEntityList = [MovieEntity]()
+    private func movieEntityListToDTOList(movieEntityList: [MovieEntity]) -> [MovieDTO]{
+        var movieDTOList = [MovieDTO]()
         
-        movieDTOList.forEach{ movieDTO in
-            movieEntityList.append(movieDTOToEntity(movieDTO: movieDTO))
+        movieEntityList.forEach{ movieEntity in
+            movieDTOList.append(movieEntityToDTO(movieEntity: movieEntity))
         }
         
-        return movieEntityList
+        return movieDTOList
     }
     
-    public func findAllFromDevice(completion: @escaping ([MovieEntity]) -> ()) throws{
+    public func findAllFromDevice(completion: @escaping ([MovieDTO]) -> ()) throws{
         
-        let movies = try MovieRepository.shared().findAll()
+        let movieEntityList = try MovieRepository.shared().findAll()
         
-        completion(movies)
-    }
-    
-    public func findOneFromDevice(by id: Int, completion: @escaping (MovieEntity) -> ()) throws{
+        let movieDTOList = movieEntityListToDTOList(movieEntityList: movieEntityList)
         
-        let movie = try MovieRepository.shared().findOne(by: id)
+        completion(movieDTOList)
+    }
+    
+    public func findOneFromDevice(by id: Int, completion: @escaping (MovieDTO) -> ()) throws{
         
-        completion(movie!)
+        let movieEntity = try MovieRepository.shared().findOne(by: id)
+        
+        let movieDTO = movieEntityToDTO(movieEntity: movieEntity!)
+        
+        completion(movieDTO)
     }
     
-    public func saveOnDevice(movieEntity : MovieEntity) throws{
-        try MovieRepository.shared().save(movie: movieEntity)
+    public func saveOnDevice(movie : MovieDTO) throws{
+        try MovieRepository.shared().save(movie: movie)
     }
     
-    public func removeMovieFromDevice(movieEntity : MovieEntity) throws{
-        try MovieRepository.shared().remove(movieEntity: movieEntity)
+    public func removeMovieFromDevice(id : Int) throws{
+        try MovieRepository.shared().remove(id: id)
     }
     
-    //TODO Paginavel
-    public func findAllFromAPI(query: String, completion: @escaping ([MovieEntity]) -> ()){
+
+    public func findAllFromAPI(query: String, completion: @escaping (MoviePageDTO) -> ()) -> URLSessionDataTask{
         let moviedbAPI = MoviedbAPI()
         
-        _ = moviedbAPI.getMovies(query: query){ data, response, error in
+        let task = moviedbAPI.getMovies(query: query){ data, response, error in
             if let data = data{
                 do {
                     let decoder = JSONDecoder()
                     let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
-                    
-                    let movieEntityList = self.movieDTOListToEntityList(movieDTOList: moviePage.results)
-                    
-                    completion(movieEntityList)
+                
+                    completion(moviePage)
                     
                 } catch let parsingError {
                     print("Error", parsingError)
                 }
             }
         }
+        
+        return task
     }
     
-    public func getPosterFromAPI(posterPath: String, completion: @escaping (UIImage) -> ()){
+    public func getPosterFromAPI(path: String, quality: Quality, completion: @escaping (UIImage) -> ()) -> URLSessionDataTask{
         let moviedbAPI = MoviedbAPI()
         
-        _ = moviedbAPI.getPoster(path: posterPath, quality: Quality.high) { data, response, error in
+        let task = moviedbAPI.getPoster(path: path, quality: quality) { data, response, error in
             if let image = UIImage(data: data!){
                 completion(image)
             }
         }
+        
+        return task
     }
 }

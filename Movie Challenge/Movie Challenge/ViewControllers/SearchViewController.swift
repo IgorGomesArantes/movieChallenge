@@ -12,47 +12,28 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    let moviedbAPI = MoviedbAPI()
     var moviePage = MoviePageDTO()
     
-    override func viewWillDisappear(_ animated: Bool) {
-//        moviePage = MoviePageDTO()
-//        
-//        DispatchQueue.main.async() {
-//            self.searchBar.text = ""
-//            self.tableView.reloadData()
-//        }
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
-        
-//        let movieService = MovieService()
-//        
-//        movieService.findAllFromAPI(query: "senhor dos aneis"){ movieList in
-//            print("Aqui")
-//            print(movieList)
-//        }
-        
-        _ = self.moviedbAPI.getMovies(query: searchBar.text!){ data, response, error in
-            
-            if let data = data{
-                do {
-                    let decoder = JSONDecoder()
-                    self.moviePage = try decoder.decode(MoviePageDTO.self, from: data)
-                    
-                    DispatchQueue.main.async() {
-                        self.tableView.reloadData()
-                    }
-                    
-                } catch let parsingError {
-                    print("Error", parsingError)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchText == ""){
+            self.moviePage = MoviePageDTO()
+            DispatchQueue.main.async() {
+                self.tableView.reloadData()
+            }
+        }
+        else{
+            _ = MovieService.shared().findAllFromAPI(query: searchText){ newMoviePage in
+                self.moviePage = newMoviePage
+                
+                DispatchQueue.main.async() {
+                    self.tableView.reloadData()
                 }
             }
         }
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "movieDetail"{
+        if segue.identifier == "searchToMovieDetail"{
             if let indexPath = tableView.indexPathForSelectedRow{
                 let selectedMovie = self.moviePage.results[indexPath.row]
                 
@@ -73,8 +54,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moviePrototypeCell", for: indexPath)
         
-        cell.textLabel?.text = self.moviePage.results[indexPath.row].title
-        
+        if(indexPath.row < moviePage.results.count){
+            cell.textLabel?.text = self.moviePage.results[indexPath.row].title
+        }
+
         return cell
     }
 }

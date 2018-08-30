@@ -11,12 +11,14 @@ import CoreData
 
 class FavoriteViewController : UITableViewController{
     
-    var movies : [MovieEntity]!
+    var movies : [MovieDTO]!
     
     override func viewWillAppear(_ animated: Bool) {
         do{
-            movies = try MovieRepository.shared().findAll()
-
+            try MovieService.shared().findAllFromDevice(){ savedMovies in
+                self.movies = savedMovies
+            }
+            
             DispatchQueue.main.async(){
                 self.tableView.reloadData()
             }
@@ -49,31 +51,9 @@ class FavoriteViewController : UITableViewController{
             if let indexPath = tableView.indexPathForSelectedRow{
                 let selectedMovie = self.movies[indexPath.row]
                 
-                var movieDTO = MovieDTO()
-                movieDTO.title = selectedMovie.title
-                movieDTO.overview = selectedMovie.overview
-                movieDTO.id = Int(selectedMovie.id)
-                movieDTO.vote_average = selectedMovie.vote_average
-                movieDTO.vote_count = Int(selectedMovie.vote_count)
-                movieDTO.poster_path = selectedMovie.poster_path
-                
                 let destinationViewController = segue.destination as! DetailViewController
-                destinationViewController.movie = movieDTO
+                destinationViewController.movie = selectedMovie
             }
         }
     }
-    
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        do{
-//            try MovieRepository.shared().remove(movieEntity: movies[indexPath.row])
-//
-//            movies.remove(at: indexPath.row)
-//
-//            DispatchQueue.main.async() {
-//                tableView.deleteRows(at: [indexPath], with: .fade)
-//            }
-//        }catch{
-//            print("Erro ao deletar filme")
-//        }
-//    }
 }

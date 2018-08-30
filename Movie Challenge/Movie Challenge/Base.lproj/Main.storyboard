@@ -148,7 +148,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" identifier="movieDetail" id="EBv-qY-ITS"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="searchToMovieDetail" id="EBv-qY-ITS"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
