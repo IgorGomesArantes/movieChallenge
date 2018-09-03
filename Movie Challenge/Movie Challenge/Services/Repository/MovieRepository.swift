@@ -46,6 +46,8 @@ class MovieRepository{
         movieEntity.setValue(movie.vote_average, forKey: "vote_average")
         movieEntity.setValue(movie.overview, forKey: "overview")
         movieEntity.setValue(movie.poster_path, forKey: "poster_path")
+        movieEntity.setValue(movie.release_date, forKey: "release_date")
+        movieEntity.setValue(movie.runtime, forKey: "runtime")
         
         if(movie.poster != nil){
             movieEntity.setValue(movie.poster!, forKey: "poster")

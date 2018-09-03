@@ -16,10 +16,13 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var averagePointsLabel: UILabel!
     @IBOutlet weak var numberOfVotesLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var yearLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
     
     private var wasSaved = false
     
     public var movie: MovieDTO!
+    public var movieId: Int!
     public var imageDownloadTask: URLSessionDataTask!
     @IBOutlet weak var saveMovieUIButton: UIButton!
     
@@ -27,22 +30,49 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         do{
-            _ = try MovieRepository.shared().findOne(by: movie.id!)
-            wasSaved = true
-            DispatchQueue.main.async(){
-                self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-                self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
+            try MovieService.shared().findOneFromDevice(by: movieId){ movie in
+                self.wasSaved = true
+                
+                DispatchQueue.main.async(){
+                    self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                    self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
+                }
+                
+                self.fillFields(with: movie)
             }
-            
-        }catch let error{
-            print("Erro ao consultar o banco", error)
+        }catch let notFoundError{
+            print("Error", notFoundError)
         }
-
+        
+        if(!wasSaved){
+            _ = MovieService.shared().findOneFromAPI(id: movieId){ movie in
+                self.fillFields(with: movie)
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if(imageDownloadTask != nil){
+            imageDownloadTask.cancel()
+        }
+    }
+    
+    //TODO Corrigir quando campos vem vazios
+    func fillFields(with movie: MovieDTO){
+        self.movie = movie
+        
         DispatchQueue.main.async() {
             self.titleLabel.text = self.movie.title
             self.averagePointsLabel.text = String(self.movie.vote_average!)
             self.numberOfVotesLabel.text = String(self.movie.vote_count!)
             self.overviewLabel.text = self.movie.overview
+            
+            if let releaseDate = self.movie.release_date{
+                self.yearLabel.text = String(releaseDate.split(separator: "-").first!)
+            }else{
+                self.yearLabel.text = self.movie.release_date
+            }
+            self.durationLabel.text = String(self.movie.runtime!) + " min"
         }
         
         if(movie.poster == nil){
@@ -58,12 +88,6 @@ class DetailViewController: UIViewController {
             DispatchQueue.main.async() {
                 self.posterImageView.image = UIImage(data: self.movie.poster!)
             }
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if(imageDownloadTask != nil){
-            imageDownloadTask.cancel()
         }
     }
     

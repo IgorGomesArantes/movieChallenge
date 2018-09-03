@@ -39,6 +39,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
                 
                 let destinationViewController = segue.destination as! DetailViewController
                 destinationViewController.movie = selectedMovie
+                destinationViewController.movieId = selectedMovie.id
             }
         }
     }

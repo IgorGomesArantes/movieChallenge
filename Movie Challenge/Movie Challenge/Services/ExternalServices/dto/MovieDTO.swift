@@ -38,7 +38,6 @@ struct SpokenLanguage : Codable{
 struct MovieDTO : Codable{
     var adult: Bool?
     var backdrop_path: String?
-    var belongs_to_collection: Bool?
     var budget: Int?
     var genres: [Genre]?
     var homepage: String?

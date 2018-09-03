@@ -51,6 +51,8 @@ class MovieService{
         movieDTO.vote_average = movieEntity.vote_average
         movieDTO.vote_count = Int(movieEntity.vote_count)
         movieDTO.poster = movieEntity.poster
+        movieDTO.runtime = Int(movieEntity.runtime)
+        movieDTO.release_date = movieEntity.release_date
         
         return movieDTO
     }
@@ -89,6 +91,25 @@ class MovieService{
     
     public func removeMovieFromDevice(id : Int) throws{
         try MovieRepository.shared().remove(id: id)
+    }
+    
+    public func findOneFromAPI(id: Int, completion: @escaping (MovieDTO) -> ()) -> URLSessionTask{
+        let moviedbAPI = MoviedbAPI()
+        
+        let task = moviedbAPI.getMovie(id: id){ data, response, error in
+            if let data = data{
+                do{
+                    let decoder = JSONDecoder()
+                    let movie = try decoder.decode(MovieDTO.self, from: data)
+                    
+                    completion(movie)
+                }catch let parsingError{
+                    print("Error", parsingError)
+                }
+            }
+        }
+        
+        return task
     }
     
 

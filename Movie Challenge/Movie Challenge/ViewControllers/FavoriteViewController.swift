@@ -53,6 +53,7 @@ class FavoriteViewController : UITableViewController{
                 
                 let destinationViewController = segue.destination as! DetailViewController
                 destinationViewController.movie = selectedMovie
+                destinationViewController.movieId = selectedMovie.id
             }
         }
     }
