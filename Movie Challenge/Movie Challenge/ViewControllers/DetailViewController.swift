@@ -76,12 +76,18 @@ class DetailViewController: UIViewController {
         }
         
         if(movie.poster == nil){
-            imageDownloadTask = MovieService.shared().getPosterFromAPI(path: self.movie.poster_path!, quality: Quality.high) { image in
-                
-                self.movie.poster = UIImagePNGRepresentation(image)
-                
+            if(movie.poster_path != nil){
+                imageDownloadTask = MovieService.shared().getPosterFromAPI(path: self.movie.poster_path!, quality: Quality.high) { image in
+                    
+                    self.movie.poster = UIImagePNGRepresentation(image)
+                    
+                    DispatchQueue.main.async() {
+                        self.posterImageView.image = image
+                    }
+                }
+            } else{
                 DispatchQueue.main.async() {
-                    self.posterImageView.image = image
+                    self.posterImageView.image = UIImage(named: "placeholder-image")
                 }
             }
         }else{

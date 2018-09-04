@@ -16,6 +16,8 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
     
     @IBOutlet weak var movieCollectionView: UICollectionView!
     
+    var searchNewMoviesTask = DispatchWorkItem { }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
@@ -41,6 +43,10 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
                     DispatchQueue.main.async() {
                         cell.posterImageView.image = image
                     }
+                }
+            } else{
+                DispatchQueue.main.async() {
+                    cell.posterImageView.image = UIImage(named: "placeholder-image")
                 }
             }
         
@@ -68,9 +74,16 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
+        
+        searchNewMoviesTask.cancel()
+        searchNewMoviesTask = DispatchWorkItem { self.searchMovies(by: searchText) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: searchNewMoviesTask)
+    }
+    
+    private func searchMovies(by searchText: String){
         if(searchText == ""){
             self.moviePage = MoviePageDTO()
-
+            
             DispatchQueue.main.async() {
                 self.movieCollectionView.reloadData()
             }
@@ -84,7 +97,6 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
                 }
             }
         }
-
     }
     
 }
