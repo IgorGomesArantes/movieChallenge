@@ -44,6 +44,21 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "searchCollectionToMovieDetail"{
+            
+            let indexPathArray = movieCollectionView.indexPathsForSelectedItems! as NSArray
+            
+            let indexPath = indexPathArray[0] as! NSIndexPath
+                
+            let selectedMovie = self.moviePage.results[indexPath.row]
+                
+            let destinationViewController = segue.destination as! DetailViewController
+            destinationViewController.movie = selectedMovie
+            destinationViewController.movieId = selectedMovie.id
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(moviePage.results[indexPath.row].title ?? "Nulo")
     }
