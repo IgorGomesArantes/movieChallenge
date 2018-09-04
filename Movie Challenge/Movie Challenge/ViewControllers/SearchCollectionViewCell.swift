@@ -12,4 +12,10 @@ import UIKit
 class SearchCollectionViewCell : UICollectionViewCell{
     
     @IBOutlet weak var posterImageView: UIImageView!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        posterImageView.image = nil
+    }
 }

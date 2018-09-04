@@ -10,13 +10,16 @@ import Foundation
 import UIKit
 
 class SearchCollectionViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate{
-
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     var moviePage = MoviePageDTO()
     
     @IBOutlet weak var movieCollectionView: UICollectionView!
     
     override func viewDidLoad() {
-        
+        super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        self.movieCollectionView.clearsContextBeforeDrawing = true
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -30,8 +33,9 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
         
-        if let result: MovieDTO? = moviePage.results[indexPath.row]{
-            if let posterPath = result?.poster_path{
+        let result: MovieDTO = moviePage.results[indexPath.row]
+        
+            if let posterPath = result.poster_path{
                 _ = MovieService.shared().getPosterFromAPI(path: posterPath, quality: Quality.low) { image in
                     
                     DispatchQueue.main.async() {
@@ -39,7 +43,7 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
                     }
                 }
             }
-        }
+        
         
         return cell
     }
