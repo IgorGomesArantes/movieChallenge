@@ -9,19 +9,14 @@
 import Foundation
 import UIKit
 
-//Utilizar o DTO
 class MovieService{
     
     private static var sharedInstance: MovieService = {
         let instance = MovieService()
-        
         return instance
     }()
     
-    
-    private init(){
-
-    }
+    private init(){}
     
     class func shared() -> MovieService{
         return sharedInstance

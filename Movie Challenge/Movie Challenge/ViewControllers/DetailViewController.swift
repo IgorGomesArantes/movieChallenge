@@ -26,8 +26,14 @@ class DetailViewController: UIViewController {
     public var imageDownloadTask: URLSessionDataTask!
     @IBOutlet weak var saveMovieUIButton: UIButton!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        startLoading()
         
         do{
             try MovieService.shared().findOneFromDevice(by: movieId){ movie in
@@ -55,6 +61,7 @@ class DetailViewController: UIViewController {
         if(imageDownloadTask != nil){
             imageDownloadTask.cancel()
         }
+        stopLoading()
     }
     
     //TODO Corrigir quando campos vem vazios
@@ -72,27 +79,35 @@ class DetailViewController: UIViewController {
             }else{
                 self.yearLabel.text = self.movie.release_date
             }
-            self.durationLabel.text = String(self.movie.runtime!) + " min"
+            //self.durationLabel.text = String(self.movie.runtime!) ?? "0" + " min"
         }
         
         if(movie.poster == nil){
             if(movie.poster_path != nil){
+                
                 imageDownloadTask = MovieService.shared().getPosterFromAPI(path: self.movie.poster_path!, quality: Quality.high) { image in
                     
                     self.movie.poster = UIImagePNGRepresentation(image)
                     
                     DispatchQueue.main.async() {
                         self.posterImageView.image = image
+                        self.posterImageView.setNeedsDisplay()
+                        self.stopLoading()
                     }
+
                 }
             } else{
                 DispatchQueue.main.async() {
                     self.posterImageView.image = UIImage(named: "placeholder-image")
+                    self.posterImageView.setNeedsDisplay()
+                    self.stopLoading()
                 }
             }
         }else{
             DispatchQueue.main.async() {
                 self.posterImageView.image = UIImage(data: self.movie.poster!)
+                self.posterImageView.setNeedsDisplay()
+                self.stopLoading()
             }
         }
     }
@@ -119,5 +134,26 @@ class DetailViewController: UIViewController {
                 print("Erro ao deletar filme", error)
             }
         }
+    }
+    
+    func startLoading(){
+        let alert = UIAlertController(title: nil, message: "Aguarde os dados...", preferredStyle: .alert)
+        
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        
+        present(alert, animated: true, completion: {
+            if(self.posterImageView != nil){
+                self.stopLoading()
+            }
+        })
+    }
+    
+    func stopLoading(){
+        dismiss(animated: true, completion: nil)
     }
 }

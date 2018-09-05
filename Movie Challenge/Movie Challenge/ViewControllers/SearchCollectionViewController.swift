@@ -20,6 +20,7 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.hideKeyboardWhenTappedAround()
         self.movieCollectionView.clearsContextBeforeDrawing = true
     }
