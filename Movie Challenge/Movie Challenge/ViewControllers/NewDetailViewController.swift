@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-class NewDetailViewController : UIViewController{
-    
+class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+
     @IBOutlet weak var overviewLabelView: UILabel!
     @IBOutlet weak var numberOfVotesLabelView: UILabel!
     @IBOutlet weak var pointsLabelView: UILabel!
@@ -18,10 +18,12 @@ class NewDetailViewController : UIViewController{
     @IBOutlet weak var yearLabelView: UILabel!
     @IBOutlet weak var titleLabelView: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var categoryCollectionView: UICollectionView!
     
     private var movieDTO: MovieDTO!
-    private var movieId: Int!
+    public var movieId: Int!
     private var imageDownloadTask: URLSessionDataTask!
+    
     
     override func viewDidLoad() {
         
@@ -34,22 +36,47 @@ class NewDetailViewController : UIViewController{
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if(movieDTO != nil){
+            return (movieDTO.genres?.count)!
+        }
+        else{
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! DetailCollectionViewCell
+        
+        let result = movieDTO.genres![indexPath.row]
+        
+        DispatchQueue.main.async {
+            cell.nameLabelView.text = result.name
+        }
+        
+        return cell
+    }
+    
     func fillFields(movie: MovieDTO){
 
         DispatchQueue.main.async() {
             self.titleLabelView.text = movie.title
             self.pointsLabelView.text = String(movie.vote_average!)
-            self.numberOfVotesLabelView.text = String(movie.vote_count!)
+            self.numberOfVotesLabelView.text = "(" + String(movie.vote_count!) + ")"
             self.overviewLabelView.text = movie.overview
             
-            if let releaseDate = movie.release_date{
-                self.yearLabelView.text = String(releaseDate.split(separator: "-").first!)
+            if(movie.release_date != nil && !(movie.release_date?.isEmpty)!){
+                self.yearLabelView.text = String((movie.release_date?.split(separator: "-").first!)!)
             }
             
             if let runtime = movie.runtime{
-                self.runtimeLabelView.text = String(runtime) ?? "Não há"
+                let hours = Int(runtime / 60)
+                let minutes = Int(runtime % 60)
+                
+                self.runtimeLabelView.text = String(hours) + "h" + String(minutes) + "m"
             }
-            //self.durationLabel.text = String(self.movie.runtime!) ?? "0" + " min"
+            
+            self.categoryCollectionView.reloadData()
         }
         
         if(movie.poster == nil){
@@ -63,6 +90,16 @@ class NewDetailViewController : UIViewController{
                     }
                 }
             }
+        }
+    }
+    
+    @IBAction func favoriteMovie(_ sender: Any) {
+        
+        do{
+            try MovieRepository.shared().save(movie: movieDTO)
+            print("Salvou")
+        }catch let error{
+            print("Erro ao salvar o filme", error)
         }
     }
 }

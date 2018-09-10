@@ -64,8 +64,8 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
                 
             let selectedMovie = self.moviePage.results[indexPath.row]
                 
-            let destinationViewController = segue.destination as! DetailViewController
-            destinationViewController.movie = selectedMovie
+            let destinationViewController = segue.destination as! NewDetailViewController
+            //destinationViewController.movie = selectedMovie
             destinationViewController.movieId = selectedMovie.id
         }
     }
