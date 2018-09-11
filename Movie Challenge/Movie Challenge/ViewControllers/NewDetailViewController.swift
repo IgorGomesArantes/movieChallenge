@@ -27,7 +27,7 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
     
     override func viewDidLoad() {
         
-        movieId = 76341
+        //movieId = 76341
         
         _ = MovieService.shared().findOneFromAPI(id: movieId){ movie in
             self.movieDTO = movie
