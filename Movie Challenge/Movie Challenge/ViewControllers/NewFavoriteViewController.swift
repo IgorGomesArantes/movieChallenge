@@ -14,7 +14,7 @@ class NewFavoriteViewController : UITableViewController{
     @IBOutlet var favoriteTableView: UITableView!
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 5
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -23,7 +23,13 @@ class NewFavoriteViewController : UITableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteTableCell", for: indexPath) as! FavoriteTableViewCell
+
+        return cell
+    }
     
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteHeaderCell") as! FavoriteHeaderTableViewCell
+        
         return cell
     }
 }

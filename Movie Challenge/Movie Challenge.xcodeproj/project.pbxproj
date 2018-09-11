@@ -26,6 +26,7 @@
 		78095BA121482F8C00D282EA /* NewFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78095BA021482F8C00D282EA /* NewFavoriteViewController.swift */; };
 		78095BA32148301600D282EA /* FavoriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78095BA22148301600D282EA /* FavoriteTableViewCell.swift */; };
 		78095BA52148302700D282EA /* FavoriteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78095BA42148302700D282EA /* FavoriteCollectionViewCell.swift */; };
+		78095BA72148506200D282EA /* FavoriteHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78095BA62148506200D282EA /* FavoriteHeaderTableViewCell.swift */; };
 		78D9E3E62146A2D5000237BA /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D9E3E42146A2D5000237BA /* DetailCollectionViewCell.swift */; };
 		78D9E3E72146A2D5000237BA /* DetailCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D9E3E52146A2D5000237BA /* DetailCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		78095BA021482F8C00D282EA /* NewFavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFavoriteViewController.swift; sourceTree = "<group>"; };
 		78095BA22148301600D282EA /* FavoriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewCell.swift; sourceTree = "<group>"; };
 		78095BA42148302700D282EA /* FavoriteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCollectionViewCell.swift; sourceTree = "<group>"; };
+		78095BA62148506200D282EA /* FavoriteHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		78D9E3E42146A2D5000237BA /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		78D9E3E52146A2D5000237BA /* DetailCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewCell.xib; sourceTree = "<group>"; };
 		78E4154F2146D71700BFF64C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -109,6 +111,7 @@
 				78095BA021482F8C00D282EA /* NewFavoriteViewController.swift */,
 				78095BA22148301600D282EA /* FavoriteTableViewCell.swift */,
 				78095BA42148302700D282EA /* FavoriteCollectionViewCell.swift */,
+				78095BA62148506200D282EA /* FavoriteHeaderTableViewCell.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			files = (
 				164FFBA0213D7CB4003FC07E /* SearchCollectionViewController.swift in Sources */,
 				165021D221372369007FFCB1 /* MovieService.swift in Sources */,
+				78095BA72148506200D282EA /* FavoriteHeaderTableViewCell.swift in Sources */,
 				164FFBA2213D8AD8003FC07E /* SearchCollectionViewCell.swift in Sources */,
 				78095BA121482F8C00D282EA /* NewFavoriteViewController.swift in Sources */,
 				78095BA52148302700D282EA /* FavoriteCollectionViewCell.swift in Sources */,
