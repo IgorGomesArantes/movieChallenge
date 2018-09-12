@@ -12,4 +12,5 @@ import UIKit
 class FavoriteHeaderTableViewCell: UITableViewCell{
     
     @IBOutlet weak var categoryLabelView: UILabel!
+    @IBOutlet weak var numberOfMoviesLabelView: UILabel!
 }

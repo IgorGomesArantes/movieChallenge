@@ -13,15 +13,12 @@ class FavoriteTableViewCell : UITableViewCell, UICollectionViewDataSource, UICol
     
     @IBOutlet weak var favoriteCollectionView: UICollectionView!
     private var moviePage = MoviePageDTO()
+    var category: CategoryDTO!
     
-    override func awakeFromNib() {
-        _ = MovieService.shared().findAllFromAPI(query: "Senhor"){ newMoviePage in
-            self.moviePage = newMoviePage
-            
-            DispatchQueue.main.async() {
-                self.favoriteCollectionView.reloadData()
-            }
-        }
+    func setUp() {
+        favoriteCollectionView.delegate = self
+        favoriteCollectionView.dataSource = self
+        favoriteCollectionView.reloadData()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -29,26 +26,16 @@ class FavoriteTableViewCell : UITableViewCell, UICollectionViewDataSource, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return moviePage.results.count
+        return category.movies?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionCell", for: indexPath) as! FavoriteCollectionViewCell
-        
-        let movie = moviePage.results[indexPath.row]
+        guard let movies = category.movies else {return UICollectionViewCell()}
+        let movie = movies[indexPath.row]
         
         cell.titleLabelView.text = movie.title
-        cell.poster_path = movie.poster_path
-        
-        if(movie.poster_path != nil){
-            _ = MovieService.shared().getPosterFromAPI(path: movie.poster_path!, quality: Quality.low) { image in
-                
-                DispatchQueue.main.async() {
-                    cell.posterImageView.image = image
-                    cell.posterImageView.setNeedsDisplay()
-                }
-            }
-        }
+        cell.posterImageView.image = movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image")
         
         return cell
     }

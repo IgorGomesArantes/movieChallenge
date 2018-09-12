@@ -94,10 +94,6 @@ class MovieService{
             print(movie.categoriesOfMovie as Any)
         }
         
-        try findAllCategoriesFromDevice(){ categoryList in
-            print(categoryList)
-        }
-        
         completion(movieDTOList)
     }
     
@@ -115,13 +111,6 @@ class MovieService{
         let movieEntity = try MovieRepository.shared().findOne(by: id)
         
         let movieDTO = movieEntityToDTO(movieEntity: movieEntity!)
-        
-        let categories = movieEntity?.categoriesOfMovie
-        let array = Array(categories!) as! [CategoryEntity]
-        
-        for category in array{
-            print(category.name ?? "Nada")
-        }
         
         completion(movieDTO)
     }
