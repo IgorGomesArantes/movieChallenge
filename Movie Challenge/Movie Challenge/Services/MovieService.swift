@@ -52,6 +52,28 @@ class MovieService{
         return movieDTO
     }
     
+    private func categoryEntityToDTO(categoryEntity: CategoryEntity) -> CategoryDTO{
+        var categoryDTO = CategoryDTO()
+        categoryDTO.id = Int(categoryEntity.id)
+        categoryDTO.name = categoryEntity.name
+        
+        let movies = Array(categoryEntity.moviesOfCategory!) as! [MovieEntity]
+        
+        categoryDTO.movies = movieEntityListToDTOList(movieEntityList: movies)
+        
+        return categoryDTO
+    }
+    
+    private func categoryEntityListToDTOList(categoryEntityList: [CategoryEntity]) -> [CategoryDTO]{
+        var categoryDTOList = [CategoryDTO]()
+        
+        categoryEntityList.forEach{ categoryEntity in
+            categoryDTOList.append(categoryEntityToDTO(categoryEntity: categoryEntity))
+        }
+        
+        return categoryDTOList
+    }
+    
     private func movieEntityListToDTOList(movieEntityList: [MovieEntity]) -> [MovieDTO]{
         var movieDTOList = [MovieDTO]()
         
@@ -68,7 +90,24 @@ class MovieService{
         
         let movieDTOList = movieEntityListToDTOList(movieEntityList: movieEntityList)
         
+        for movie in movieEntityList{
+            print(movie.categoriesOfMovie as Any)
+        }
+        
+        try findAllCategoriesFromDevice(){ categoryList in
+            print(categoryList)
+        }
+        
         completion(movieDTOList)
+    }
+    
+    public func findAllCategoriesFromDevice(completion: @escaping ([CategoryDTO]) -> ()) throws{
+        
+        let categoryEntityList = try MovieRepository.shared().findAllCategories()
+        
+        let categoryDTOList = categoryEntityListToDTOList(categoryEntityList: categoryEntityList)
+        
+        completion(categoryDTOList)
     }
     
     public func findOneFromDevice(by id: Int, completion: @escaping (MovieDTO) -> ()) throws{
@@ -76,6 +115,13 @@ class MovieService{
         let movieEntity = try MovieRepository.shared().findOne(by: id)
         
         let movieDTO = movieEntityToDTO(movieEntity: movieEntity!)
+        
+        let categories = movieEntity?.categoriesOfMovie
+        let array = Array(categories!) as! [CategoryEntity]
+        
+        for category in array{
+            print(category.name ?? "Nada")
+        }
         
         completion(movieDTO)
     }

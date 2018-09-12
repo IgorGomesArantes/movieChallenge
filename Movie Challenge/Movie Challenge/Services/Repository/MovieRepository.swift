@@ -38,7 +38,25 @@ class MovieRepository{
     
     //TODO Alterar para entity
     public func save(movie: MovieDTO) throws {
-        let movieEntity = NSEntityDescription.insertNewObject(forEntityName: "MovieEntity", into: context)
+        
+        //let movieEntity = NSEntityDescription.insertNewObject(forEntityName: "MovieEntity", into: context)
+        
+        let movieEntity = NSEntityDescription.insertNewObject(forEntityName: "MovieEntity", into: context) as! MovieEntity
+        
+        for genre in movie.genres!{
+            do{
+                let category = try findOneCategory(by: genre.id!) as! CategoryEntity
+
+                category.addToMoviesOfCategory(movieEntity)
+            }catch{
+                let categotyEntity = NSEntityDescription.insertNewObject(forEntityName: "CategoryEntity", into: context) as! CategoryEntity
+                
+                categotyEntity.setValue(genre.id, forKey: "id")
+                categotyEntity.setValue(genre.name, forKey: "name")
+                
+                categotyEntity.addToMoviesOfCategory(movieEntity)
+            }
+        }
         
         movieEntity.setValue(movie.id, forKey: "id")
         movieEntity.setValue(movie.title, forKey: "title")
@@ -89,7 +107,21 @@ class MovieRepository{
         let fetchedMovies = try context.fetch(request) as! [MovieEntity]
         
         if(fetchedMovies.count > 0){
-            return fetchedMovies[0]
+            return fetchedMovies.first
+        }else{
+            throw NotFoundError.runtimeError("Filme nao encontrado")
+        }
+    }
+    
+    public func findOneCategory(by id: Int) throws -> CategoryEntity?{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CategoryEntity")
+        
+        request.predicate = NSPredicate(format: "id = " + String(id))
+        
+        let fetchedCategories = try context.fetch(request) as! [CategoryEntity]
+        
+        if(fetchedCategories.count > 0){
+            return fetchedCategories.first
         }else{
             throw NotFoundError.runtimeError("Filme nao encontrado")
         }
@@ -100,6 +132,13 @@ class MovieRepository{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieEntity")
         
         return try context.fetch(request) as! [MovieEntity]
+    }
+    
+    
+    public func findAllCategories() throws -> [CategoryEntity]{
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CategoryEntity")
+        
+        return try context.fetch(request) as! [CategoryEntity]
     }
 }
 

@@ -22,8 +22,6 @@ class FavoriteViewController : UITableViewController{
             DispatchQueue.main.async(){
                 self.tableView.reloadData()
             }
-
-            print(movies.count)
             
         }catch{
             print("Erro ao acessar o banco")

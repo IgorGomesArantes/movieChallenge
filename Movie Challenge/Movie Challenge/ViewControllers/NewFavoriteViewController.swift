@@ -29,7 +29,7 @@ class NewFavoriteViewController : UITableViewController{
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteHeaderCell") as! FavoriteHeaderTableViewCell
-        
+
         return cell
     }
 }
