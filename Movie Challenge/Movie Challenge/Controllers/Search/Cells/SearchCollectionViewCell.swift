@@ -18,4 +18,8 @@ class SearchCollectionViewCell : UICollectionViewCell{
         
         posterImageView.image = nil
     }
+    
+    func setUp(poster: UIImage?){
+        posterImageView.image = poster ?? UIImage(named: "placeholder-image")
+    }
 }

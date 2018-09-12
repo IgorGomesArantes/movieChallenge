@@ -12,13 +12,14 @@ import UIKit
 class FavoriteTableViewCell : UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate{
     
     @IBOutlet weak var favoriteCollectionView: UICollectionView!
-    private var moviePage = MoviePageDTO()
-    var category: CategoryDTO!
+    private var category: CategoryDTO!
     
-    func setUp() {
+    func setUp(category: CategoryDTO) {
         favoriteCollectionView.delegate = self
         favoriteCollectionView.dataSource = self
         favoriteCollectionView.reloadData()
+        
+        self.category = category
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -31,11 +32,11 @@ class FavoriteTableViewCell : UITableViewCell, UICollectionViewDataSource, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteCollectionCell", for: indexPath) as! FavoriteCollectionViewCell
+        
         guard let movies = category.movies else {return UICollectionViewCell()}
         let movie = movies[indexPath.row]
         
-        cell.titleLabelView.text = movie.title
-        cell.posterImageView.image = movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image")
+        cell.setUp(title: movie.title, poster: UIImage(data: movie.poster!))
         
         return cell
     }

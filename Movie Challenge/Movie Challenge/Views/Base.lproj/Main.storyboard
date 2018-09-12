@@ -123,6 +123,7 @@
                                                     <connections>
                                                         <outlet property="posterImageView" destination="FN8-qW-UIs" id="8uL-6G-xhZ"/>
                                                         <outlet property="titleLabelView" destination="wvB-8a-H2P" id="TGd-Cp-hYd"/>
+                                                        <segue destination="9zj-S5-asl" kind="show" identifier="newFavoriteToMovieDetail" id="7ed-P7-LQp"/>
                                                     </connections>
                                                 </collectionViewCell>
                                             </cells>
@@ -328,7 +329,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryCell" id="z9F-Xe-cEz" customClass="DetailCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryCell" id="z9F-Xe-cEz" customClass="CategoryCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="3.6666666666666665" width="153" height="22"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -681,5 +682,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="FKr-Qg-Jer"/>
+        <segue reference="7ed-P7-LQp"/>
     </inferredMetricsTieBreakers>
 </document>

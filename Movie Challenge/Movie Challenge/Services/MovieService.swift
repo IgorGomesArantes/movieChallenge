@@ -155,6 +155,8 @@ class MovieService{
                     completion(moviePage)
                     
                 } catch let parsingError {
+                    completion(MoviePageDTO())
+                    
                     print("Error", parsingError)
                 }
             }

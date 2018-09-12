@@ -14,10 +14,8 @@ class FavoriteCollectionViewCell : UICollectionViewCell{
     @IBOutlet weak var titleLabelView: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     
-    var poster_path: String!
-    
-    override func awakeFromNib() {
-        
+    func setUp(title: String?, poster: UIImage?){
+        titleLabelView.text = title ?? "Não há"
+        posterImageView.image = poster ?? UIImage(named: "placeholder-image")!
     }
-    
 }

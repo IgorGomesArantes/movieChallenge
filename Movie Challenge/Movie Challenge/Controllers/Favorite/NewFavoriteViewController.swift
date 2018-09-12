@@ -13,7 +13,7 @@ class NewFavoriteViewController : UITableViewController{
     
     @IBOutlet var favoriteTableView: UITableView!
     
-    var categoryList: [CategoryDTO]!
+    var categoryList = [CategoryDTO]()
     
     override func viewDidLoad() {
         do{
@@ -36,19 +36,15 @@ class NewFavoriteViewController : UITableViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteTableCell", for: indexPath) as! FavoriteTableViewCell
 
-        cell.category = categoryList[indexPath.section]
-        //cell.favoriteCollectionView.reloadData()
-        cell.setUp()
+        cell.setUp(category: categoryList[indexPath.section])
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteHeaderCell") as! FavoriteHeaderTableViewCell
 
-        let numberOfMovies: Int = categoryList[section].movies?.count ?? 0
-        
-        cell.categoryLabelView.text = categoryList[section].name
-        cell.numberOfMoviesLabelView.text = "(" + String(numberOfMovies) + ")"
+        cell.setUp(categoryName: categoryList[section].name, numberOfMovies: categoryList[section].movies?.count)
         
         return cell
     }

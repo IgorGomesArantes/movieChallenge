@@ -13,4 +13,10 @@ class FavoriteHeaderTableViewCell: UITableViewCell{
     
     @IBOutlet weak var categoryLabelView: UILabel!
     @IBOutlet weak var numberOfMoviesLabelView: UILabel!
+    
+    func setUp(categoryName: String?, numberOfMovies: Int?){
+        categoryLabelView.text = categoryName ?? "Genero"
+        let number: Int = numberOfMovies ?? 0
+        numberOfMoviesLabelView.text = "(" + String(number) + ")"
+    }
 }
