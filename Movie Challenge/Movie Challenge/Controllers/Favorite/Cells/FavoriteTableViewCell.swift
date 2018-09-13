@@ -36,7 +36,7 @@ class FavoriteTableViewCell : UITableViewCell, UICollectionViewDataSource, UICol
         guard let movies = category.movies else {return UICollectionViewCell()}
         let movie = movies[indexPath.row]
         
-        cell.setUp(title: movie.title, poster: UIImage(data: movie.poster!))
+        cell.setUp(title: movie.title, poster: movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image"))
         
         return cell
     }

@@ -11,9 +11,10 @@ import UIKit
 
 class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource{
     
-    private var movieDTO: MovieDTO!
+    private var movie = MovieDTO()
     private var imageDownloadTask: URLSessionDataTask!
     private var movieId: Int!
+    private var favorite: Bool!
 
     @IBOutlet weak var overviewLabelView: UILabel!
     @IBOutlet weak var numberOfVotesLabelView: UILabel!
@@ -23,13 +24,51 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
     @IBOutlet weak var titleLabelView: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
+    @IBOutlet weak var favoriteButtonView: UIButton!
     
     @IBAction func favoriteMovie(_ sender: Any) {
-        do{
-            try MovieRepository.shared().save(movie: movieDTO)
-            print("Salvou")
-        }catch let error{
-            print("Erro ao salvar o filme", error)
+        if(favorite){
+            do{
+                try MovieRepository.shared().remove(id: movieId)
+                favorite = false
+                setButtonState()
+                
+                print("Removeu")
+            }catch let error{
+                print("Erro ao deletar o filme", error)
+            }
+            
+        }else{
+            do{
+                try MovieRepository.shared().save(movie: movie)
+                favorite = true
+                setButtonState()
+                
+                print("Salvou")
+            }catch let error{
+                print("Erro ao salvar o filme", error)
+            }
+        }
+    }
+    
+    private func setPoster(poster: UIImage){
+        DispatchQueue.main.async() {
+            self.posterImageView.image = poster
+            self.posterImageView.setNeedsDisplay()
+        }
+    }
+    
+    private func setButtonState(){
+        if(favorite){
+            DispatchQueue.main.async(){
+                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                self.favoriteButtonView.setTitle("Remover", for: UIControlState.normal)
+            }
+        }else{
+            DispatchQueue.main.async(){
+                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 1, green: 0.6116010603, blue: 0.006196474039, alpha: 1)
+                self.favoriteButtonView.setTitle("Favoritar", for: UIControlState.normal)
+            }
         }
     }
     
@@ -37,9 +76,19 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
         categoryCollectionView.delegate = self
         categoryCollectionView.dataSource = self
         
-        _ = MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
-            self.movieDTO = movie
-            self.fillFields(movie: self.movieDTO)
+        do{
+            self.movie = try MovieRepository.shared().getOne(by: movieId)
+            self.favorite = true
+            self.setButtonState()
+            self.fillFields()
+        }catch{
+            self.favorite = false
+            
+            _ = MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
+                self.movie = movie
+                self.setButtonState()
+                self.fillFields()
+            }
         }
     }
     
@@ -49,38 +98,34 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if(movieDTO != nil){
-            return (movieDTO.genres?.count)!
-        }
-        else{
-            return 0
-        }
+        guard let genres = movie.genres else { return 0 }
+        
+        return genres.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCollectionViewCell
         
-        guard let categoryList = movieDTO.genres else{ return UICollectionViewCell() }
+        guard let categoryList = movie.genres else{ return UICollectionViewCell() }
         cell.setUp(name: categoryList[indexPath.row].name)
         
         return cell
     }
     
-    func fillFields(movie: MovieDTO){
-        
+    func fillFields(){
         DispatchQueue.main.async(){
-            self.titleLabelView.text = movie.title
-            self.pointsLabelView.text = String(movie.vote_average!)
-            self.numberOfVotesLabelView.text = "(" + String(movie.vote_count!) + ")"
-            self.overviewLabelView.text = movie.overview
+            self.titleLabelView.text = self.movie.title
+            self.pointsLabelView.text = String(self.movie.vote_average!)
+            self.numberOfVotesLabelView.text = "(" + String(self.movie.vote_count!) + ")"
+            self.overviewLabelView.text = self.movie.overview
             
-            if let releaseDate = movie.release_date{
+            if let releaseDate = self.movie.release_date{
                 if(!releaseDate.isEmpty){
-                    self.yearLabelView.text = String((movie.release_date?.split(separator: "-").first)!)
+                    self.yearLabelView.text = String((self.movie.release_date?.split(separator: "-").first)!)
                 }
             }
             
-            if let runtime = movie.runtime{
+            if let runtime = self.movie.runtime{
                 self.runtimeLabelView.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
             } else{
                 self.runtimeLabelView.text = "Duração indefinida"
@@ -89,12 +134,12 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
             self.categoryCollectionView.reloadData()
         }
         
-        if let posterPath = movie.poster_path{
-            imageDownloadTask = MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
-                DispatchQueue.main.async() {
-                    self.posterImageView.image = image
-                    self.posterImageView.setNeedsDisplay()
-                }
+        if let poster = self.movie.poster{
+            setPoster(poster: UIImage(data: poster)!)
+        }else if let posterPath = self.movie.poster_path{
+            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
+                self.movie.poster = UIImagePNGRepresentation(image)
+                self.setPoster(poster: image)
             }
         }
     }

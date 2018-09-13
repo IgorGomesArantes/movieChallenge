@@ -413,6 +413,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="categoryCollectionView" destination="L0s-Xl-76c" id="38r-UT-aEo"/>
+                        <outlet property="favoriteButtonView" destination="aQw-na-TUc" id="paV-H0-tDZ"/>
                         <outlet property="numberOfVotesLabelView" destination="KDr-eo-f8R" id="odx-Po-wnA"/>
                         <outlet property="overviewLabelView" destination="Eu4-7f-LnF" id="ikj-LE-Va8"/>
                         <outlet property="pointsLabelView" destination="fUn-ef-9Vp" id="iDH-FP-akZ"/>

@@ -35,7 +35,27 @@ class MovieHelper{
         movieDTO.runtime = Int(movieEntity.runtime)
         movieDTO.release_date = movieEntity.release_date
         
+        if let categories = movieEntity.categoriesOfMovie{
+            movieDTO.genres = categoryEntityListToGenreList(categoryEntityList: Array(categories) as! [CategoryEntity])
+        }
+
         return movieDTO
+    }
+    
+    static func categoryEntityToGenre(categoryEntity: CategoryEntity) -> Genre{
+        let genre = Genre(id: Int(categoryEntity.id), name: categoryEntity.name ?? "Genero")
+        
+        return genre
+    }
+    
+    static func categoryEntityListToGenreList(categoryEntityList: [CategoryEntity]) -> [Genre]{
+        var genreList = [Genre]()
+        
+        categoryEntityList.forEach{ categoryEntity in
+            genreList.append(categoryEntityToGenre(categoryEntity: categoryEntity))
+        }
+        
+        return genreList
     }
     
     static func categoryEntityToDTO(categoryEntity: CategoryEntity) -> CategoryDTO{
