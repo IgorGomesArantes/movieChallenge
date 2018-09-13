@@ -22,7 +22,6 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
         super.viewDidLoad()
         
         self.hideKeyboardWhenTappedAround()
-        self.movieCollectionView.clearsContextBeforeDrawing = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -52,7 +51,7 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
         let movie: MovieDTO = moviePage.results[indexPath.row]
         
         if let posterPath = movie.poster_path{
-            _ = MovieService.shared().getPosterFromAPI(path: posterPath, quality: Quality.low) { image in
+            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
                 DispatchQueue.main.async() {
                     cell.setUp(poster: image)
                 }
@@ -69,7 +68,7 @@ class SearchCollectionViewController : UIViewController, UICollectionViewDelegat
     }
     
     private func searchMovies(by searchText: String){
-        _ = MovieService.shared().findAllFromAPI(query: searchText){ newMoviePage in
+        _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
             self.moviePage = newMoviePage
             
             DispatchQueue.main.async() {

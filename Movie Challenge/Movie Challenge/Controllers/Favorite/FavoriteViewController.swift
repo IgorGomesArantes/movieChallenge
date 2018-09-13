@@ -15,9 +15,7 @@ class FavoriteViewController : UITableViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         do{
-            try MovieService.shared().findAllFromDevice(){ savedMovies in
-                self.movies = savedMovies
-            }
+            movies = try MovieRepository.shared().getAll()
             
             DispatchQueue.main.async(){
                 self.tableView.reloadData()

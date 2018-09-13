@@ -36,22 +36,23 @@ class DetailViewController: UIViewController {
         startLoading()
         
         do{
-            try MovieService.shared().findOneFromDevice(by: movieId){ movie in
-                self.wasSaved = true
-                
-                DispatchQueue.main.async(){
-                    self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-                    self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
-                }
-                
-                self.fillFields(with: movie)
+            let movie = try MovieRepository.shared().getOne(by: movieId)
+            
+            self.wasSaved = true
+            
+            DispatchQueue.main.async(){
+                self.saveMovieUIButton.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                self.saveMovieUIButton.setTitle("Remover", for: UIControlState.normal)
             }
+            
+            self.fillFields(with: movie)
+            
         }catch let notFoundError{
             print("Error", notFoundError)
         }
         
         if(!wasSaved){
-            _ = MovieService.shared().findOneFromAPI(id: movieId){ movie in
+            _ = MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
                 self.fillFields(with: movie)
             }
         }
@@ -85,7 +86,7 @@ class DetailViewController: UIViewController {
         if(movie.poster == nil){
             if(movie.poster_path != nil){
                 
-                imageDownloadTask = MovieService.shared().getPosterFromAPI(path: self.movie.poster_path!, quality: Quality.high) { image in
+                imageDownloadTask = MovieService.shared().getPoster(path: self.movie.poster_path!, quality: Quality.high) { image, response, error in
                     
                     self.movie.poster = UIImagePNGRepresentation(image)
                     

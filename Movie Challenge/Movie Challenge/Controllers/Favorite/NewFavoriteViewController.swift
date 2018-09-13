@@ -17,9 +17,7 @@ class NewFavoriteViewController : UITableViewController{
     
     override func viewDidLoad() {
         do{
-            try MovieService.shared().findAllCategoriesFromDevice(){ categoryList in
-                self.categoryList = categoryList
-            }
+            categoryList = try MovieRepository.shared().getAllCategories()
         }catch let exception{
             print("Erro", exception)
         }

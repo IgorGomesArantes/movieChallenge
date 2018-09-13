@@ -197,7 +197,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1zH-As-2U0">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder-image" translatesAutoresizingMaskIntoConstraints="NO" id="1zH-As-2U0">
                                                     <rect key="frame" x="0.0" y="0.0" width="96" height="144"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="96" id="5GX-qF-W9i"/>
@@ -355,10 +355,6 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
-                                        <connections>
-                                            <outlet property="dataSource" destination="9zj-S5-asl" id="VWd-de-Heg"/>
-                                            <outlet property="delegate" destination="9zj-S5-asl" id="O82-3u-nof"/>
-                                        </connections>
                                     </collectionView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resumo" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eu4-7f-LnF">
                                         <rect key="frame" x="8" y="560" width="398" height="20.333333333333371"/>
@@ -682,6 +678,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="FKr-Qg-Jer"/>
-        <segue reference="7ed-P7-LQp"/>
+        <segue reference="uma-yy-vPK"/>
     </inferredMetricsTieBreakers>
 </document>

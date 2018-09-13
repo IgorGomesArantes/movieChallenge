@@ -22,7 +22,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate{
             }
         }
         else{
-            _ = MovieService.shared().findAllFromAPI(query: searchText){ newMoviePage in
+            _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, response, error in
                 self.moviePage = newMoviePage
                 
                 DispatchQueue.main.async() {

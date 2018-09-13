@@ -34,7 +34,10 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
     }
     
     override func viewDidLoad() {
-        _ = MovieService.shared().findOneFromAPI(id: movieId){ movie in
+        categoryCollectionView.delegate = self
+        categoryCollectionView.dataSource = self
+        
+        _ = MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
             self.movieDTO = movie
             self.fillFields(movie: self.movieDTO)
         }
@@ -87,7 +90,7 @@ class NewDetailViewController : UIViewController, UICollectionViewDelegate, UICo
         }
         
         if let posterPath = movie.poster_path{
-            imageDownloadTask = MovieService.shared().getPosterFromAPI(path: posterPath, quality: Quality.high) { image in
+            imageDownloadTask = MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
                 DispatchQueue.main.async() {
                     self.posterImageView.image = image
                     self.posterImageView.setNeedsDisplay()
