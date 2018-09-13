@@ -15,7 +15,9 @@ class FavoriteCollectionViewCell : UICollectionViewCell{
     @IBOutlet weak var posterImageView: UIImageView!
     
     func setUp(title: String?, poster: UIImage?){
-        titleLabelView.text = title ?? "Não há"
-        posterImageView.image = poster ?? UIImage(named: "placeholder-image")!
+        DispatchQueue.main.async(){
+            self.titleLabelView.text = title ?? "Não há"
+            self.posterImageView.image = poster ?? UIImage(named: "placeholder-image")!
+        }
     }
 }

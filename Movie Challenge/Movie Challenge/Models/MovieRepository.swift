@@ -15,8 +15,7 @@ enum NotFoundError: Error {
 }
 
 class MovieRepository{
-    
-    //private static var instance : MovieRepository!
+
     private let appDelegate : AppDelegate
     private let context : NSManagedObjectContext
     
@@ -26,7 +25,6 @@ class MovieRepository{
         return instance
     }()
 
-    
     private init(){
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
@@ -35,8 +33,6 @@ class MovieRepository{
     class func shared() -> MovieRepository{
         return sharedInstance
     }
-    
-
 
     public func save(movie: MovieEntity) throws {
         let movieDescription = NSEntityDescription.insertNewObject(forEntityName: "MovieEntity", into: context)
@@ -151,7 +147,27 @@ class MovieRepository{
     }
     
     public func remove(movieEntity: MovieEntity) throws {
+        
         context.delete(movieEntity as NSManagedObject)
+        
+        if let array = movieEntity.categoriesOfMovie{
+            let categories = Array(array) as! [CategoryEntity]
+            
+            for category in categories{
+                do{
+                    let genre = try findOneCategory(by: Int(category.id)) as! CategoryEntity
+                    
+                    let categoryDTO = MovieHelper.categoryEntityToDTO(categoryEntity: genre)
+                    
+                    if(categoryDTO.movies?.count == 0){
+                        context.delete(genre)
+                    }
+                }catch{
+                    print("Erro ao remover categoria")
+                }
+            }
+        }
+        
         try context.save()
     }
     

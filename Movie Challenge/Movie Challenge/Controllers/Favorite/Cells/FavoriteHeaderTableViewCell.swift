@@ -15,8 +15,10 @@ class FavoriteHeaderTableViewCell: UITableViewCell{
     @IBOutlet weak var numberOfMoviesLabelView: UILabel!
     
     func setUp(categoryName: String?, numberOfMovies: Int?){
-        categoryLabelView.text = categoryName ?? "Genero"
-        let number: Int = numberOfMovies ?? 0
-        numberOfMoviesLabelView.text = "(" + String(number) + ")"
+        DispatchQueue.main.async(){
+            self.categoryLabelView.text = categoryName ?? "Genero"
+            let number: Int = numberOfMovies ?? 0
+            self.numberOfMoviesLabelView.text = "(" + String(number) + ")"
+        }
     }
 }

@@ -1,56 +1,50 @@
 //
-//  FavoriteViewController.swift
+//  NewFavoriteViewController.swift
 //  Movie Challenge
 //
-//  Created by igor gomes arantes on 28/08/18.
+//  Created by Igor Gomes Arantes on 11/09/2018.
 //  Copyright © 2018 igor gomes arantes. All rights reserved.
 //
 
+import Foundation
 import UIKit
-import CoreData
 
 class FavoriteViewController : UITableViewController{
     
-    var movies : [MovieDTO]!
+    @IBOutlet var favoriteTableView: UITableView!
+    
+    var categoryList = [CategoryDTO]()
     
     override func viewWillAppear(_ animated: Bool) {
         do{
-            movies = try MovieRepository.shared().getAll()
-            
-            DispatchQueue.main.async(){
-                self.tableView.reloadData()
-            }
-            
-        }catch{
-            print("Erro ao acessar o banco")
+            categoryList = try MovieRepository.shared().getAllCategories()
+            favoriteTableView.reloadData()
+        }catch let exception{
+            print("Erro", exception)
         }
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return categoryList.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (self.movies.count)
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "movieEntityPrototypeCell", for: indexPath)
-        
-        cell.textLabel?.text = self.movies[indexPath.row].title
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteTableCell", for: indexPath) as! FavoriteTableViewCell
+
+        cell.setUp(category: categoryList[indexPath.section])
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteHeaderCell") as! FavoriteHeaderTableViewCell
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "favoriteToMovieDetail"{
-            if let indexPath = tableView.indexPathForSelectedRow{
-                let selectedMovie = self.movies[indexPath.row]
-                
-                let destinationViewController = segue.destination as! DetailViewController
-                destinationViewController.movie = selectedMovie
-                destinationViewController.movieId = selectedMovie.id
-            }
-        }
+        cell.setUp(categoryName: categoryList[section].name, numberOfMovies: categoryList[section].movies?.count)
+        
+        return cell
     }
 }

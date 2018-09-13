@@ -1,64 +1,79 @@
 //
-//  SearchViewController.swift
+//  SearchCollectionViewController.swift
 //  Movie Challenge
 //
-//  Created by igor gomes arantes on 26/08/18.
+//  Created by igor gomes arantes on 03/09/18.
 //  Copyright © 2018 igor gomes arantes. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
-class SearchViewController: UITableViewController, UISearchBarDelegate{
+class SearchViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate{
+    
+    private var moviePage = MoviePageDTO()
     
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var movieCollectionView: UICollectionView!
     
-    var moviePage = MoviePageDTO()
+    var searchNewMoviesTask = DispatchWorkItem { }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if(searchText == ""){
-            self.moviePage = MoviePageDTO()
-            DispatchQueue.main.async() {
-                self.tableView.reloadData()
-            }
-        }
-        else{
-            _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, response, error in
-                self.moviePage = newMoviePage
-                
-                DispatchQueue.main.async() {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.hideKeyboardWhenTappedAround()
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "searchToMovieDetail"{
-            if let indexPath = tableView.indexPathForSelectedRow{
-                let selectedMovie = self.moviePage.results[indexPath.row]
-                
-                let destinationViewController = segue.destination as! DetailViewController
-                destinationViewController.movie = selectedMovie
-                destinationViewController.movieId = selectedMovie.id
-            }
+        if segue.identifier == "searchCollectionToMovieDetail"{
+            
+            let indexPathArray = movieCollectionView.indexPathsForSelectedItems! as NSArray
+            let indexPath = indexPathArray.firstObject as! NSIndexPath
+            
+            let selectedMovie = self.moviePage.results[indexPath.row]
+            
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.setUp(movieId: selectedMovie.id)
         }
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (self.moviePage.results.count)
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return moviePage.results.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "moviePrototypeCell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
         
-        if(indexPath.row < moviePage.results.count){
-            cell.textLabel?.text = self.moviePage.results[indexPath.row].title
+        let movie: MovieDTO = moviePage.results[indexPath.row]
+        
+        if let posterPath = movie.poster_path{
+            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
+                DispatchQueue.main.async() {
+                    cell.setUp(poster: image)
+                }
+            }
         }
 
         return cell
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
+        searchNewMoviesTask.cancel()
+        searchNewMoviesTask = DispatchWorkItem { self.searchMovies(by: searchText) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchNewMoviesTask)
+    }
+    
+    private func searchMovies(by searchText: String){
+        _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
+            self.moviePage = newMoviePage
+            
+            DispatchQueue.main.async() {
+                self.movieCollectionView.reloadData()
+            }
+        }
     }
 }
