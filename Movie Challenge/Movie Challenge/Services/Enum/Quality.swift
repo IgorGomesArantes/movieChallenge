@@ -1,5 +1,5 @@
 //
-//  UIView+Additions.swift
+//  Quality.swift
 //  Movie Challenge
 //
 //  Created by Igor Gomes Arantes on 14/09/2018.
@@ -7,11 +7,9 @@
 //
 
 import Foundation
-import UIKit
 
-extension UIView{
-    func setCornerRadius(){
-        layer.cornerRadius = 4
-        layer.masksToBounds = true
-    }
+enum Quality : String{
+    case low = "w200"
+    case medium = "w500"
+    case high = "original"
 }

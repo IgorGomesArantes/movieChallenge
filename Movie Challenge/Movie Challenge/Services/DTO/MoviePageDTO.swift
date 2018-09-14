@@ -12,6 +12,7 @@ struct MoviePageDTO : Codable{
     var page: Int?
     var total_results: Int?
     var total_pages: Int?
+    var label: String?
     var results: [MovieDTO]
     
     init() {

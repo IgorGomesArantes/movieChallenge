@@ -14,5 +14,6 @@ class BestMovieCategoryCollectionViewCell: UICollectionViewCell{
     
     func setUp(name: String?){
         nameViewLabel.text = name ?? "Genero"
+        nameViewLabel.adjustsFontSizeToFitWidth = true
     }
 }

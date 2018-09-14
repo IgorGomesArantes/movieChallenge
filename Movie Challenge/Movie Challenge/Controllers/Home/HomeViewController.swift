@@ -22,6 +22,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var bestMovieCategoryCollectionViewHeightConstraint: NSLayoutConstraint!
     
     private var bestMovie: MovieDTO!
+    private var moviePages = [MoviePageDTO]()
     
     override func viewDidLoad() {
         suggestionTableView.delegate = self
@@ -29,6 +30,33 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         bestMovieCategoryCollectionView.delegate = self
         bestMovieCategoryCollectionView.dataSource = self
+        
+        bestMovieTitleLabelView.setCornerRadius()
+        
+        for i in 0...1{
+            switch i{
+            case 0:
+                _ = MovieService.shared().getMoviePage(sort: Sort.popularity, order: Order.descending){ newMoviePage, response, error in
+                    var moviePage = newMoviePage
+                    moviePage.label = "Populares"
+                    self.moviePages.append(moviePage)
+                    DispatchQueue.main.async(){
+                        self.suggestionTableView.reloadData()
+                    }
+                }
+                break
+            default:
+                _ = MovieService.shared().getMoviePage(sort: Sort.voteAverage, order: Order.descending){ newMoviePage, response, error in
+                    var moviePage = newMoviePage
+                    moviePage.label = "Melhores pontuações"
+                    self.moviePages.append(moviePage)
+                    DispatchQueue.main.async(){
+                        self.suggestionTableView.reloadData()
+                    }
+                }
+            }
+
+        }
         
         _ = MovieService.shared().getMovieDetail(id: 76341){ movie, response, error in
             self.bestMovie = movie
@@ -79,21 +107,23 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let categoryList = bestMovie.genres else{ return UICollectionViewCell() }
         cell.setUp(name: categoryList[indexPath.row].name)
         
+        cell.setCornerRadius()
+        
         return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return moviePages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
         
-        cell.setUp()
+        cell.setUp(moviePage: moviePages[indexPath.row])
         
         return cell
     }

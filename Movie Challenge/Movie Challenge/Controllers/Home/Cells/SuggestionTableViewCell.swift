@@ -13,11 +13,28 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     @IBOutlet weak var categoryLabelView: UILabel!
     @IBOutlet weak var suggestionMoviesCollectionView: UICollectionView!
     
-    func setUp(){
+    private var moviePage = MoviePageDTO()
+    private var sort: Sort!
+    private var posters = [UIImage]()
+    
+    func setUp(moviePage: MoviePageDTO){
         suggestionMoviesCollectionView.delegate = self
         suggestionMoviesCollectionView.dataSource = self
         
-        categoryLabelView.text = "Melhores filmes"
+        self.moviePage = moviePage
+        
+        categoryLabelView.text = moviePage.label
+        
+        for movie in moviePage.results{
+            if let posterPath = movie.poster_path{
+                _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low){ poster, response, error in
+                    self.posters.append(poster)
+                    DispatchQueue.main.async(){
+                        self.suggestionMoviesCollectionView.reloadData()
+                    }
+                }
+            }
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -25,11 +42,13 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return posters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "suggestionMovieCollectionViewCell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "suggestionMovieCollectionViewCell", for: indexPath) as! SuggestionCollectionViewCell
+        
+        cell.setUp(poster: posters[indexPath.row])
         
         return cell
     }

@@ -9,12 +9,6 @@
 import Foundation
 import UIKit
 
-enum Quality : String{
-    case low = "w200"
-    case medium = "w500"
-    case high = "original"
-}
-
 class MovieService{
     private let apiKey: String = "423a7efcc5851107f96bc25a3b0c3f28"
     private let language: String = "pt-BR"
@@ -100,6 +94,25 @@ class MovieService{
         return task
     }
     
+    public func getMoviePage(sort: Sort, order: Order, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+        let url = URL(string: baseURL + "/discover/movie?sort_by=" + sort.rawValue + "." + order.rawValue + "&api_key=" + apiKey + "&language=" + language)
+        
+        let task = getDataFromUrl(url: url!){ data, response, error in
+            if let data = data{
+                do{
+                    let decoder = JSONDecoder()
+                    let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
+                    
+                    completion(moviePage, response, error)
+                }catch let parsingError{
+                    print("Decoder Exception: ", parsingError)
+                }
+            }
+        }
+        
+        return task
+    }
+    
     public func getPoster(path: String, quality: Quality, completion: @escaping (UIImage, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
         
@@ -111,4 +124,5 @@ class MovieService{
         
         return task
     }
+    
 }
