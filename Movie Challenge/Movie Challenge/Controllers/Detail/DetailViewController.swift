@@ -25,6 +25,7 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var favoriteButtonView: UIButton!
+    @IBOutlet weak var categoryCollectionViewHeightConstraint: NSLayoutConstraint!
     
     @IBAction func favoriteMovie(_ sender: Any) {
         if(favorite){
@@ -76,6 +77,8 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
         categoryCollectionView.delegate = self
         categoryCollectionView.dataSource = self
         
+        self.movieId = movieId ?? 76341
+        
         do{
             self.movie = try MovieRepository.shared().getOne(by: movieId)
             self.favorite = true
@@ -114,6 +117,7 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
     
     func fillFields(){
         DispatchQueue.main.async(){
+            
             self.titleLabelView.text = self.movie.title
             self.pointsLabelView.text = String(self.movie.vote_average!)
             self.numberOfVotesLabelView.text = "(" + String(self.movie.vote_count!) + ")"
@@ -132,6 +136,9 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
             }
             
             self.categoryCollectionView.reloadData()
+            
+            let height = self.categoryCollectionView.collectionViewLayout.collectionViewContentSize.height
+            self.categoryCollectionViewHeightConstraint.constant = height
         }
         
         if let poster = self.movie.poster{
