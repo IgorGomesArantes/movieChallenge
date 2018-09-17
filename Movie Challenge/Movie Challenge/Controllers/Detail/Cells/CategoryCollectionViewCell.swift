@@ -13,6 +13,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var nameLabelView: UILabel!
     
     func setUp(name: String?){
+        setCornerRadius()
         self.nameLabelView.text = name ?? "Genero"
     }
 }

@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Detail/DetailViewController.swift"
-            timestampString = "558883152.87217"
+            timestampString = "558901551.999263"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "fillFields()"
             landmarkType = "7">
          </BreakpointContent>
@@ -362,7 +362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323505"
+            timestampString = "558901551.999383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -378,7 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323603"
+            timestampString = "558901551.999447"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
@@ -394,12 +394,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323673"
+            timestampString = "558901551.999521"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "42"
             endingLineNumber = "42"
-            landmarkName = "setUp(moviePage:)"
+            landmarkName = "setUp(moviePage:delegate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -410,7 +410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323742"
+            timestampString = "558901551.999573"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
@@ -426,12 +426,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323806"
+            timestampString = "558901551.999624"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "29"
             endingLineNumber = "29"
-            landmarkName = "setUp(moviePage:)"
+            landmarkName = "setUp(moviePage:delegate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -442,11 +442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Extension/UIView+Additions.swift"
-            timestampString = "558886381.323872"
+            timestampString = "558901551.999687"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30">
+            startingLineNumber = "35"
+            endingLineNumber = "35">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -456,12 +456,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "558886381.323936"
+            timestampString = "558901551.999735"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "setUp(moviePage:)"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "setUp(moviePage:delegate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

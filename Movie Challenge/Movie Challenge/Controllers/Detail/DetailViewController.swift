@@ -26,6 +26,8 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var favoriteButtonView: UIButton!
     @IBOutlet weak var categoryCollectionViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var posterView: UIView!
     
     @IBAction func favoriteMovie(_ sender: Any) {
         if(favorite){
@@ -62,13 +64,15 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
     private func setButtonState(){
         if(favorite){
             DispatchQueue.main.async(){
-                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 0.9330000281, green: 0.3219999969, blue: 0.3249999881, alpha: 1)
                 self.favoriteButtonView.setTitle("Remover", for: UIControlState.normal)
+                self.favoriteButtonView.setTitleColor(#colorLiteral(red: 0.9959999919, green: 0.7919999957, blue: 0.3409999907, alpha: 1), for: UIControlState.normal)
             }
         }else{
             DispatchQueue.main.async(){
-                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 1, green: 0.6116010603, blue: 0.006196474039, alpha: 1)
+                self.favoriteButtonView.backgroundColor = #colorLiteral(red: 0.06300000101, green: 0.6750000119, blue: 0.5180000067, alpha: 1)
                 self.favoriteButtonView.setTitle("Favoritar", for: UIControlState.normal)
+                self.favoriteButtonView.setTitleColor(#colorLiteral(red: 0.2039999962, green: 0.1220000014, blue: 0.5920000076, alpha: 1), for: UIControlState.normal)
             }
         }
     }
@@ -78,6 +82,10 @@ class DetailViewController : UIViewController, UICollectionViewDelegate, UIColle
         categoryCollectionView.dataSource = self
         
         self.movieId = movieId ?? 76341
+        
+        posterImageView.setBorderFeatured()
+        overviewLabelView.setBigBorderFeatured()
+        posterView.setBigBorderFeatured()
         
         do{
             self.movie = try MovieRepository.shared().getOne(by: movieId)

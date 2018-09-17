@@ -26,4 +26,9 @@ extension UIView{
         layer.borderWidth = 2
         layer.borderColor = #colorLiteral(red: 0.1333333333, green: 0.1843137255, blue: 0.2431372549, alpha: 1)
     }
+    
+    func setBigBorderFeatured(){
+        layer.borderWidth = 2
+        layer.borderColor = #colorLiteral(red: 0.1333333333, green: 0.1843137255, blue: 0.2431372549, alpha: 1)
+    }
 }

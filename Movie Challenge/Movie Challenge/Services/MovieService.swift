@@ -125,4 +125,16 @@ class MovieService{
         return task
     }
     
+    public func getPosterData(path: String, quality: Quality, completion: @escaping (Data?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+        let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
+        
+        let task = getDataFromUrl(url: url!){ data, response, error in
+            if let data = data{
+                completion(data, response, error)
+            }
+        }
+        
+        return task
+    }
+    
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDataSource, UICollectionViewDelegate{
+class HomeViewController: UIViewController {
     
     @IBOutlet weak var suggestionTableView: UITableView!
     @IBOutlet weak var bestMovieView: UIView!
@@ -24,6 +24,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var bestMovie: MovieDTO!
     private var moviePages = [MoviePageDTO]()
     
+    //MARK: - Primitive fuctions
     override func viewDidLoad() {
         suggestionTableView.delegate = self
         suggestionTableView.dataSource = self
@@ -33,25 +34,28 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         bestMovieImageView.setBorderFeatured()
         bestMovieTitleLabelView.setCornerRadius()
+        bestMovieView.setBigBorderFeatured()
         
+        //Transfer this code to a function:
         for i in 0...2{
             switch i{
-                case 0:
-                    searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
-                    break
-                case 1:
-                    searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
-                    break
-                case 2:
-                    searchMoviePage(sort: Sort.voteAverage, order: Order.descending, label: "Melhores médias de pontuação", isBestMovieHere: false)
-                    break
-                default:
-                    break
+            case 0:
+                searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
+                break
+            case 1:
+                searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
+                break
+            case 2:
+                searchMoviePage(sort: Sort.voteAverage, order: Order.descending, label: "Melhores médias de pontuação", isBestMovieHere: false)
+                break
+            default:
+                break
             }
-
+            
         }
     }
     
+    //MARK: Utils Methods
     func setBestMovie(movie: MovieDTO){
         
         bestMovie = movie
@@ -85,40 +89,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let movie = bestMovie else { return 0 }
-        guard let genres = movie.genres else { return 0 }
-        
-        return genres.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bestMovieCategoryCollectionViewCell", for: indexPath) as! BestMovieCategoryCollectionViewCell
-        
-        guard let categoryList = bestMovie.genres else{ return UICollectionViewCell() }
-        cell.setUp(name: categoryList[indexPath.row].name)
-        
-        cell.setCornerRadius()
-        
-        return cell
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moviePages.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
-        
-        cell.setUp(moviePage: moviePages[indexPath.row])
-        
-        return cell
-    }
-    
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
         _ = MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
             var moviePage = newMoviePage
@@ -135,5 +105,57 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.suggestionTableView.reloadData()
             }
         }
+    }
+}
+
+//MARK: - HomeDelegate
+extension HomeViewController: HomeDelegate {
+    func changeToMovieDetail(movieId: Int) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
+            viewController.setUp(movieId: movieId)
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
+}
+
+//MARK:- Table View Methods
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return moviePages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
+        
+        cell.setUp(moviePage: moviePages[indexPath.row], delegate: self)
+        
+        return cell
+    }
+}
+
+//MARK: - Collection View Methods
+extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let movie = bestMovie else { return 0 }
+        guard let genres = movie.genres else { return 0 }
+        
+        return genres.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bestMovieCategoryCollectionViewCell", for: indexPath) as! BestMovieCategoryCollectionViewCell
+        
+        guard let categoryList = bestMovie.genres else{ return UICollectionViewCell() }
+        cell.setUp(name: categoryList[indexPath.row].name)
+        
+        cell.setCornerRadius()
+        
+        return cell
     }
 }
