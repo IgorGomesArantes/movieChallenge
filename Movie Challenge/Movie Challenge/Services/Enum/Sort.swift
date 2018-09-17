@@ -11,4 +11,5 @@ import Foundation
 enum Sort: String{
     case popularity = "popularity"
     case voteAverage = "vote_average"
+    case voteCount = "vote_count"
 }

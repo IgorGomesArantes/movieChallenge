@@ -13,6 +13,10 @@ class SearchCollectionViewCell : UICollectionViewCell{
     
     @IBOutlet weak var posterImageView: UIImageView!
     
+    override func awakeFromNib() {
+        posterImageView.setLittleBorderFeatured()
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         

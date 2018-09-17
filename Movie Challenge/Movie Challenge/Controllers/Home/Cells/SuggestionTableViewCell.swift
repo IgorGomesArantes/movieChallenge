@@ -12,10 +12,17 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     
     @IBOutlet weak var categoryLabelView: UILabel!
     @IBOutlet weak var suggestionMoviesCollectionView: UICollectionView!
+    @IBOutlet weak var suggestionHeaderView: UIView!
     
     private var moviePage = MoviePageDTO()
     private var sort: Sort!
     private var posters = [UIImage]()
+    private var getPosterTasks: [URLSessionDataTask]!
+    
+    override func awakeFromNib() {
+        getPosterTasks = [URLSessionDataTask]()
+        categoryLabelView.setCornerRadius()
+    }
     
     func setUp(moviePage: MoviePageDTO){
         suggestionMoviesCollectionView.delegate = self
@@ -23,16 +30,26 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
         
         self.moviePage = moviePage
         
+        if(getPosterTasks != nil){
+            for task in getPosterTasks{
+                task.cancel()
+            }
+            getPosterTasks.removeAll()
+        }
+        
+        self.posters.removeAll()
+
         categoryLabelView.text = moviePage.label
         
         for movie in moviePage.results{
             if let posterPath = movie.poster_path{
-                _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low){ poster, response, error in
+                let task = MovieService.shared().getPoster(path: posterPath, quality: Quality.low){ poster, response, error in
                     self.posters.append(poster)
                     DispatchQueue.main.async(){
                         self.suggestionMoviesCollectionView.reloadData()
                     }
                 }
+                getPosterTasks.append(task)
             }
         }
     }

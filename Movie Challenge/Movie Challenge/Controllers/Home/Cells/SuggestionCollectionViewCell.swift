@@ -14,8 +14,9 @@ class SuggestionCollectionViewCell: UICollectionViewCell{
     @IBOutlet weak var posterImageView: UIImageView!
     
     func setUp(poster: UIImage){
-        DispatchQueue.main.async(){
-            self.posterImageView.image = poster
-        }
+        posterImageView.setLittleBorderFeatured()
+        posterImageView.image = poster
     }
+    
+    
 }
