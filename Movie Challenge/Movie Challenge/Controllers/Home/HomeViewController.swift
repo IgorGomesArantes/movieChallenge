@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
         
         bestMovie = movie
         
-        _ = MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
+        MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
             DispatchQueue.main.async(){
                 self.bestMovieImage.image = poster
             }
@@ -97,10 +97,22 @@ class HomeViewController: UIViewController {
         }
     }
     
+    private func searchTrendingMoviePage(label: String){
+        _ = MovieService.shared().getTrendingMovies(){ newMoviePage, response, error in
+            var moviePage = newMoviePage
+            moviePage?.label = label
+            self.moviePageList.append(moviePage!)
+            
+            DispatchQueue.main.async(){
+                self.suggestionTable.reloadData()
+            }
+        }
+    }
+    
     private func setMoviePageList(){
         moviePageList = [MoviePageDTO]()
         
-        for i in 0...2{
+        for i in 0...3{
             switch i{
             case 0:
                 searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
@@ -110,6 +122,9 @@ class HomeViewController: UIViewController {
                 break
             case 2:
                 searchMoviePage(sort: Sort.voteAverage, order: Order.descending, label: "Melhores médias de pontuação", isBestMovieHere: false)
+                break
+            case 3:
+                searchTrendingMoviePage(label: "Melhores do dia")
                 break
             default:
                 break

@@ -34,6 +34,7 @@ class MovieService{
     private func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
+            
         }
         task.resume()
         return task
@@ -113,7 +114,8 @@ class MovieService{
         return task
     }
     
-    public func getPoster(path: String, quality: Quality, completion: @escaping (UIImage, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+    @discardableResult
+    public func getPoster(path: String, quality: Quality, completion: @escaping (UIImage, URLResponse?, Error?) -> ()) ->  URLSessionDataTask{
         let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
         
         let task = getDataFromUrl(url: url!){ data, response, error in
@@ -131,6 +133,25 @@ class MovieService{
         let task = getDataFromUrl(url: url!){ data, response, error in
             if let data = data{
                 completion(data, response, error)
+            }
+        }
+        
+        return task
+    }
+    
+    public func getTrendingMovies(completion: @escaping (MoviePageDTO?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+        let url = URL(string: baseURL + "/trending/movie/day?api_key=" + apiKey + "&language=" + language)
+        
+        let task = getDataFromUrl(url: url!){ (data, response, error) in
+            if let data = data{
+                do{
+                    let decoder = JSONDecoder()
+                    let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
+                    
+                    completion(moviePage, response, error)
+                }catch let parsingError{
+                    print("Decoder Exception: ", parsingError)
+                }
             }
         }
         
