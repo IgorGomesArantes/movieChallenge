@@ -9,20 +9,8 @@
 import Foundation
 
 class MovieHelper{
-    static func movieDTOToEntity(movieDTO: MovieDTO) -> MovieEntity{
-        
-        let movieEntity = MovieEntity()
-        
-        movieEntity.setValue(movieDTO.overview, forKey: "overview")
-        movieEntity.setValue(movieDTO.poster_path, forKey: "poster_path")
-        movieEntity.setValue(movieDTO.title, forKey: "title")
-        movieEntity.setValue(movieDTO.vote_average, forKey: "vote_average")
-        movieEntity.setValue(Int32(movieDTO.id!), forKey: "id")
-        movieEntity.setValue(Int32(movieDTO.vote_count!), forKey: "vote_count")
-        
-        return movieEntity
-    }
     
+    //MARK:- Movie helpers
     static func movieEntityToDTO(movieEntity: MovieEntity) -> MovieDTO{
         var movieDTO = MovieDTO()
         movieDTO.id = Int(movieEntity.id)
@@ -38,10 +26,21 @@ class MovieHelper{
         if let categories = movieEntity.categoriesOfMovie{
             movieDTO.genres = categoryEntityListToGenreList(categoryEntityList: Array(categories) as! [CategoryEntity])
         }
-
+        
         return movieDTO
     }
     
+    static func movieEntityListToDTOList(movieEntityList: [MovieEntity]) -> [MovieDTO]{
+        var movieDTOList = [MovieDTO]()
+        
+        movieEntityList.forEach{ movieEntity in
+            movieDTOList.append(movieEntityToDTO(movieEntity: movieEntity))
+        }
+        
+        return movieDTOList
+    }
+    
+    //MARK:- Category helpers
     static func categoryEntityToGenre(categoryEntity: CategoryEntity) -> Genre{
         let genre = Genre(id: Int(categoryEntity.id), name: categoryEntity.name ?? "Genero")
         
@@ -78,15 +77,5 @@ class MovieHelper{
         }
         
         return categoryDTOList
-    }
-    
-    static func movieEntityListToDTOList(movieEntityList: [MovieEntity]) -> [MovieDTO]{
-        var movieDTOList = [MovieDTO]()
-        
-        movieEntityList.forEach{ movieEntity in
-            movieDTOList.append(movieEntityToDTO(movieEntity: movieEntity))
-        }
-        
-        return movieDTOList
     }
 }

@@ -10,10 +10,12 @@ import UIKit
 
 class CategoryCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var nameLabelView: UILabel!
+    //MARK:- View variables
+    @IBOutlet weak var nameLabel: UILabel!
     
-    func setUp(name: String?){
+    //MARK:- Public methods
+    func setUp(name: String){
         setCornerRadius()
-        self.nameLabelView.text = name ?? "Genero"
+        self.nameLabel.text = name
     }
 }

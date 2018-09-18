@@ -7,23 +7,29 @@
 //
 
 import UIKit
-//TODO: Make a protocol to call back the table view
-class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource{
+
+class SuggestionTableViewCell: UITableViewCell{
     
-    @IBOutlet weak var categoryLabelView: UILabel!
-    @IBOutlet weak var suggestionMoviesCollectionView: UICollectionView!
-    @IBOutlet weak var suggestionHeaderView: UIView!
-    
+    //MARK:- Private variables
     private var delegate:HomeDelegate!
     private var moviePage = MoviePageDTO()
     private var sort: Sort!
     private var getPosterTasks: [URLSessionDataTask]!
     
+    //MARK:- View variables
+    @IBOutlet weak var categoryLabelView: UILabel!
+    @IBOutlet weak var suggestionMoviesCollectionView: UICollectionView!
+    @IBOutlet weak var suggestionHeaderView: UIView!
+    
+    //MARK:- Primitive variables
     override func awakeFromNib() {
+        super.awakeFromNib()
+        
         getPosterTasks = [URLSessionDataTask]()
         categoryLabelView.setCornerRadius()
     }
     
+    //MARK:- Public methods
     func setUp(moviePage: MoviePageDTO, delegate: HomeDelegate){
         suggestionMoviesCollectionView.delegate = self
         suggestionMoviesCollectionView.dataSource = self
@@ -32,7 +38,7 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
         
         self.moviePage = moviePage
         
-        if(getPosterTasks != nil){
+        if getPosterTasks != nil{
             for task in getPosterTasks{
                 task.cancel()
             }
@@ -53,7 +59,10 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
             }
         }
     }
-    
+}
+
+//MARK: Collection view methods
+extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -70,7 +79,7 @@ class SuggestionTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
         } else{
             cell.setUp(poster: UIImage(named: "placeholder-image")!)
         }
-
+        
         return cell
     }
     

@@ -10,33 +10,96 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    @IBOutlet weak var suggestionTableView: UITableView!
-    @IBOutlet weak var bestMovieView: UIView!
-    @IBOutlet weak var bestMovieImageView: UIImageView!
-    @IBOutlet weak var bestMovieTitleLabelView: UILabel!
-    @IBOutlet weak var bestMoviePointsLabelView: UILabel!
-    @IBOutlet weak var bestMovieVotesLabelView: UILabel!
-    @IBOutlet weak var bestMovieYearLabelView: UILabel!
-    @IBOutlet weak var bestMovieRuntimeLabelView: UILabel!
-    @IBOutlet weak var bestMovieCategoryCollectionView: UICollectionView!
-    @IBOutlet weak var bestMovieCategoryCollectionViewHeightConstraint: NSLayoutConstraint!
-    
+    //MARK:- Private variables
     private var bestMovie: MovieDTO!
-    private var moviePages = [MoviePageDTO]()
+    private var moviePageList: [MoviePageDTO]!
     
-    //MARK: - Primitive fuctions
+    //MARK:- View variables
+    @IBOutlet weak var suggestionTable: UITableView!
+    @IBOutlet weak var bestMovieView: UIView!
+    @IBOutlet weak var bestMovieImage: UIImageView!
+    @IBOutlet weak var bestMovieTitleLabel: UILabel!
+    @IBOutlet weak var bestMovieVotesAverageLabel: UILabel!
+    @IBOutlet weak var bestMovieVotesCountLabel: UILabel!
+    @IBOutlet weak var bestMovieYearLabel: UILabel!
+    @IBOutlet weak var bestMovieRuntimeLabel: UILabel!
+    @IBOutlet weak var bestMovieCategoryCollection: UICollectionView!
+    @IBOutlet weak var bestMovieCategoryCollectionHeightConstraint: NSLayoutConstraint!
+    
+    //MARK:- Primitive methods
     override func viewDidLoad() {
-        suggestionTableView.delegate = self
-        suggestionTableView.dataSource = self
+        super.viewDidLoad()
         
-        bestMovieCategoryCollectionView.delegate = self
-        bestMovieCategoryCollectionView.dataSource = self
+        suggestionTable.delegate = self
+        suggestionTable.dataSource = self
         
-        bestMovieImageView.setBorderFeatured()
-        bestMovieTitleLabelView.setCornerRadius()
+        bestMovieCategoryCollection.delegate = self
+        bestMovieCategoryCollection.dataSource = self
+        
+        bestMovieImage.setBorderFeatured()
+        bestMovieTitleLabel.setCornerRadius()
         bestMovieView.setBigBorderFeatured()
         
-        //Transfer this code to a function:
+        setMoviePageList()
+    }
+    
+    //MARK:- Private methods
+    private func setBestMovie(movie: MovieDTO){
+        
+        bestMovie = movie
+        
+        _ = MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
+            DispatchQueue.main.async(){
+                self.bestMovieImage.image = poster
+            }
+        }
+        
+        self.bestMovieTitleLabel.text = movie.title
+        self.bestMovieVotesAverageLabel.text = String(movie.vote_average!)
+        self.bestMovieVotesCountLabel.text = "(" + String(movie.vote_count!) + ")"
+        
+        if let releaseDate = movie.release_date{
+            if !releaseDate.isEmpty{
+                self.bestMovieYearLabel.text = String((releaseDate.split(separator: "-").first)!)
+            }
+        }
+        
+        if let runtime = movie.runtime{
+            self.bestMovieRuntimeLabel.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
+        } else{
+            self.bestMovieRuntimeLabel.text = "Duração indefinida"
+        }
+        
+        self.bestMovieCategoryCollection.reloadData()
+        let height = self.bestMovieCategoryCollection.collectionViewLayout.collectionViewContentSize.height
+        self.bestMovieCategoryCollectionHeightConstraint.constant = height
+    }
+    
+    private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
+        _ = MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
+            var moviePage = newMoviePage
+            moviePage.label = label
+            self.moviePageList.append(moviePage)
+            
+            if isBestMovieHere{
+                if let bestMovie = moviePage.results.first{
+                    _ = MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
+                        DispatchQueue.main.async(){
+                            self.setBestMovie(movie: movie)
+                        }
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async(){
+                self.suggestionTable.reloadData()
+            }
+        }
+    }
+    
+    private func setMoviePageList(){
+        moviePageList = [MoviePageDTO]()
+        
         for i in 0...2{
             switch i{
             case 0:
@@ -51,64 +114,11 @@ class HomeViewController: UIViewController {
             default:
                 break
             }
-            
-        }
-    }
-    
-    //MARK: Utils Methods
-    func setBestMovie(movie: MovieDTO){
-        
-        bestMovie = movie
-        
-        _ = MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
-            DispatchQueue.main.async(){
-                self.bestMovieImageView.image = poster
-            }
-        }
-        
-        DispatchQueue.main.async(){
-            self.bestMovieTitleLabelView.text = movie.title
-            self.bestMoviePointsLabelView.text = String(movie.vote_average!)
-            self.bestMovieVotesLabelView.text = "(" + String(movie.vote_count!) + ")"
-            
-            if let releaseDate = movie.release_date{
-                if(!releaseDate.isEmpty){
-                    self.bestMovieYearLabelView.text = String((releaseDate.split(separator: "-").first)!)
-                }
-            }
-            
-            if let runtime = movie.runtime{
-                self.bestMovieRuntimeLabelView.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
-            } else{
-                self.bestMovieRuntimeLabelView.text = "Duração indefinida"
-            }
-            
-            self.bestMovieCategoryCollectionView.reloadData()
-            let height = self.bestMovieCategoryCollectionView.collectionViewLayout.collectionViewContentSize.height
-            self.bestMovieCategoryCollectionViewHeightConstraint.constant = height
-        }
-    }
-    
-    private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        _ = MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
-            var moviePage = newMoviePage
-            moviePage.label = label
-            self.moviePages.append(moviePage)
-            DispatchQueue.main.async(){
-                if(isBestMovieHere){
-                    if let bestMovie = moviePage.results.first{
-                        _ = MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
-                            self.setBestMovie(movie: movie)
-                        }
-                    }
-                }
-                self.suggestionTableView.reloadData()
-            }
         }
     }
 }
 
-//MARK: - HomeDelegate
+//MARK:- HomeDelegate methods
 extension HomeViewController: HomeDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
@@ -120,26 +130,26 @@ extension HomeViewController: HomeDelegate {
     }
 }
 
-//MARK:- Table View Methods
+//MARK:- Table view methods
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moviePages.count
+        return moviePageList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
         
-        cell.setUp(moviePage: moviePages[indexPath.row], delegate: self)
+        cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self)
         
         return cell
     }
 }
 
-//MARK: - Collection View Methods
+//MARK:- Collection view methods
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let movie = bestMovie else { return 0 }

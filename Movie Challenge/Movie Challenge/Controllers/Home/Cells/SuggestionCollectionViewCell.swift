@@ -11,12 +11,12 @@ import UIKit
 
 class SuggestionCollectionViewCell: UICollectionViewCell{
     
+    //MARK:- View variables
     @IBOutlet weak var posterImageView: UIImageView!
     
+    //MARK:- Public methods
     func setUp(poster: UIImage){
         posterImageView.setLittleBorderFeatured()
         posterImageView.image = poster
     }
-    
-    
 }

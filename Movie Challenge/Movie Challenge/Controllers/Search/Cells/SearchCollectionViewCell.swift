@@ -11,19 +11,18 @@ import UIKit
 
 class SearchCollectionViewCell : UICollectionViewCell{
     
-    @IBOutlet weak var posterImageView: UIImageView!
+    //MARK:- View variables
+    @IBOutlet weak var posterImage: UIImageView!
     
+    //MARK:- Primitive functions
     override func awakeFromNib() {
-        posterImageView.setLittleBorderFeatured()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
+        super.awakeFromNib()
         
-        posterImageView.image = nil
+        posterImage.setLittleBorderFeatured()
     }
     
+    //MARK:- Public functions
     func setUp(poster: UIImage?){
-        posterImageView.image = poster ?? UIImage(named: "placeholder-image")
+        posterImage.image = poster ?? UIImage(named: "placeholder-image")
     }
 }

@@ -10,11 +10,14 @@ import Foundation
 import UIKit
 
 class MovieService{
+    
+    //MARK:- Private constants
     private let apiKey: String = "423a7efcc5851107f96bc25a3b0c3f28"
     private let language: String = "pt-BR"
     private let baseURL: String = "https://api.themoviedb.org/3"
     private let imageBaseURL: String = "https://image.tmdb.org/t/p"
     
+    //MARK:- Singleton implementation
     private static var sharedInstance: MovieService = {
         let instance = MovieService()
         
@@ -27,6 +30,7 @@ class MovieService{
         return sharedInstance
     }
     
+    //MARK:- Private methods
     private func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
@@ -35,11 +39,7 @@ class MovieService{
         return task
     }
     
-//    public func getPoster(path: String, quality: Quality, completion: @escaping (Data?, URLResponse?, Error?) -> ()) throws -> URLSessionDataTask{
-//        let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
-//        return getDataFromUrl(url: url!, completion: completion)
-//    }
-    
+    //MARK:- Public methods
     public func getMovie(id: Int, completion: @escaping (Data?, URLResponse?, Error?) -> ()) throws -> URLSessionDataTask{
         let url = URL(string: baseURL + "/movie/" + String(id) + "?api_key=" +
         apiKey + "&language=" + language)
@@ -136,5 +136,4 @@ class MovieService{
         
         return task
     }
-    
 }
