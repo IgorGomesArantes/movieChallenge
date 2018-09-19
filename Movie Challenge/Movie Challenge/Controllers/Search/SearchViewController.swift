@@ -45,7 +45,7 @@ class SearchViewController : UIViewController{
 
     //MARK:- Private Functions
     private func searchMovies(by searchText: String){
-        _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
+        MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
             self.moviePage = newMoviePage
             
             DispatchQueue.main.async() {
@@ -80,10 +80,8 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let movie: MovieDTO = moviePage.results[indexPath.row]
         
         if let posterPath = movie.poster_path{
-            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
-                DispatchQueue.main.async() {
-                    cell.setUp(poster: image)
-                }
+            MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
+                cell.setUp(poster: image)
             }
         }
         

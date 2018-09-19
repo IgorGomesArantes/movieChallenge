@@ -40,19 +40,8 @@ class MovieService{
         return task
     }
     
-    //MARK:- Public methods
-    public func getMovie(id: Int, completion: @escaping (Data?, URLResponse?, Error?) -> ()) throws -> URLSessionDataTask{
-        let url = URL(string: baseURL + "/movie/" + String(id) + "?api_key=" +
-        apiKey + "&language=" + language)
-        return getDataFromUrl(url: url!, completion: completion)
-    }
-    
-    public func getMovies(query: String, completion: @escaping (Data?, URLResponse?, Error?) -> ()) throws -> URLSessionDataTask{
-        let formatedQuery: String = query.replacingOccurrences(of: " ", with: "+")
-        let url = URL(string: baseURL + "/search/movie?api_key=" + apiKey + "&query=" + formatedQuery + "&language=" + language)
-        return getDataFromUrl(url: url!, completion: completion)
-    }
-    
+    //MARK:- Public metho
+    @discardableResult
     public func getMovieDetail(id: Int, completion: @escaping (MovieDTO, URLResponse?, Error?) -> ()) -> URLSessionTask{
         
         let url = URL(string: baseURL + "/movie/" + String(id) + "?api_key=" + apiKey + "&language=" + language)
@@ -63,7 +52,9 @@ class MovieService{
                     let decoder = JSONDecoder()
                     let movie = try decoder.decode(MovieDTO.self, from: data)
                     
-                     completion(movie, response, error)
+                    DispatchQueue.main.async(){
+                        completion(movie, response, error)
+                    }
                 }catch let parsingError{
                     print("Decoder Exception: ", parsingError)
                 }
@@ -73,6 +64,7 @@ class MovieService{
         return task
     }
     
+    @discardableResult
     public func getMoviePageByName(query: String, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         
         let formatedQuery: String = query.replacingOccurrences(of: " ", with: "+")
@@ -84,7 +76,9 @@ class MovieService{
                     let decoder = JSONDecoder()
                     let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
                     
-                    completion(moviePage, response, error)
+                    DispatchQueue.main.async(){
+                        completion(moviePage, response, error)
+                    }
                 } catch let parsingError {
                     completion(MoviePageDTO(), response, error)
                     
@@ -95,6 +89,7 @@ class MovieService{
         return task
     }
     
+    @discardableResult
     public func getMoviePage(sort: Sort, order: Order, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let url = URL(string: baseURL + "/discover/movie?sort_by=" + sort.rawValue + "." + order.rawValue + "&api_key=" + apiKey + "&language=" + language)
         
@@ -104,7 +99,9 @@ class MovieService{
                     let decoder = JSONDecoder()
                     let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
                     
-                    completion(moviePage, response, error)
+                    DispatchQueue.main.async(){
+                        completion(moviePage, response, error)
+                    }
                 }catch let parsingError{
                     print("Decoder Exception: ", parsingError)
                 }
@@ -120,25 +117,31 @@ class MovieService{
         
         let task = getDataFromUrl(url: url!){ data, response, error in
             if let data = data, let image = UIImage(data: data){
-                completion(image, response, error)
+                DispatchQueue.main.async(){
+                    completion(image, response, error)
+                }
             }
         }
         
         return task
     }
     
+    @discardableResult
     public func getPosterData(path: String, quality: Quality, completion: @escaping (Data?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let url = URL(string: imageBaseURL + "/" + quality.rawValue + "/" + path)
         
         let task = getDataFromUrl(url: url!){ data, response, error in
             if let data = data{
-                completion(data, response, error)
+                DispatchQueue.main.async(){
+                    completion(data, response, error)
+                }
             }
         }
         
         return task
     }
     
+    @discardableResult
     public func getTrendingMovies(completion: @escaping (MoviePageDTO?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         let url = URL(string: baseURL + "/trending/movie/day?api_key=" + apiKey + "&language=" + language)
         
@@ -148,7 +151,10 @@ class MovieService{
                     let decoder = JSONDecoder()
                     let moviePage = try decoder.decode(MoviePageDTO.self, from: data)
                     
-                    completion(moviePage, response, error)
+                    DispatchQueue.main.async(){
+                        completion(moviePage, response, error)
+                    }
+                    
                 }catch let parsingError{
                     print("Decoder Exception: ", parsingError)
                 }

@@ -49,9 +49,7 @@ class HomeViewController: UIViewController {
         bestMovie = movie
         
         MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
-            DispatchQueue.main.async(){
-                self.bestMovieImage.image = poster
-            }
+            self.bestMovieImage.image = poster
         }
         
         self.bestMovieTitleLabel.text = movie.title
@@ -76,17 +74,15 @@ class HomeViewController: UIViewController {
     }
     
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        _ = MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
+        MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
             var moviePage = newMoviePage
             moviePage.label = label
             self.moviePageList.append(moviePage)
             
             if isBestMovieHere{
                 if let bestMovie = moviePage.results.first{
-                    _ = MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
-                        DispatchQueue.main.async(){
-                            self.setBestMovie(movie: movie)
-                        }
+                    MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
+                        self.setBestMovie(movie: movie)
                     }
                 }
             }
@@ -98,7 +94,7 @@ class HomeViewController: UIViewController {
     }
     
     private func searchTrendingMoviePage(label: String){
-        _ = MovieService.shared().getTrendingMovies(){ newMoviePage, response, error in
+        MovieService.shared().getTrendingMovies(){ newMoviePage, response, error in
             var moviePage = newMoviePage
             moviePage?.label = label
             self.moviePageList.append(moviePage!)

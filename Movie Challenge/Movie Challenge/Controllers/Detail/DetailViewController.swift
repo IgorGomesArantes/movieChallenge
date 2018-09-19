@@ -76,7 +76,7 @@ class DetailViewController : UIViewController{
         }catch{
             self.favorite = false
             
-            _ = MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
+            MovieService.shared().getMovieDetail(id: movieId){ movie, response, error in
                 self.movie = movie
                 DispatchQueue.main.async {
                     self.setButtonState()
@@ -130,11 +130,9 @@ class DetailViewController : UIViewController{
         if let poster = self.movie.poster{
             setPoster(poster: UIImage(data: poster)!)
         }else if let posterPath = self.movie.poster_path{
-            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
+            MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
                 self.movie.poster = UIImagePNGRepresentation(image)
-                DispatchQueue.main.async(){
-                    self.setPoster(poster: image)
-                }
+                self.setPoster(poster: image)
             }
         }
     }
