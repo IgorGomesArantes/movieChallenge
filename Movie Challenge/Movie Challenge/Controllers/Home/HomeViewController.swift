@@ -108,7 +108,7 @@ class HomeViewController: UIViewController {
     private func setMoviePageList(){
         moviePageList = [MoviePageDTO]()
         
-        for i in 0...3{
+        for i in 0...2{
             switch i{
             case 0:
                 searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
@@ -117,9 +117,6 @@ class HomeViewController: UIViewController {
                 searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
                 break
             case 2:
-                searchMoviePage(sort: Sort.voteAverage, order: Order.descending, label: "Melhores médias de pontuação", isBestMovieHere: false)
-                break
-            case 3:
                 searchTrendingMoviePage(label: "Melhores do dia")
                 break
             default:

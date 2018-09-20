@@ -13,6 +13,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
     private var movie: MovieDTO!
+    private var delegate: SendToDetailDelegate!
     
     //MARK:- View variables
     @IBOutlet weak var posterImage: UIImageView!
@@ -23,6 +24,16 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     @IBOutlet weak var categoryCollection: UICollectionView!
     @IBOutlet weak var voteAverageProgressBar: UIProgressView!
     @IBOutlet weak var categoryCollectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var voteAverageLabel: UILabel!
+    @IBOutlet weak var voteCountLabel: UILabel!
+    
+    //MARK:- View actions
+    @IBAction func sendToDetailClick(_ sender: Any) {
+        if let id = movie.id{
+            delegate.changeToMovieDetail(movieId: id)
+        }
+    }
+    
     
     //MARK:- Primitive methods
     override func awakeFromNib() {
@@ -36,9 +47,16 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     private func setFields(){
         titleLabel.text = movie.title
         yearLabel.text = String(movie.release_date!)
-        creationDateLabel.text = "Hoje"//String(movie.creation_date!)
-        voteAverageProgressBar.progress = movie.vote_average! / 10.0
+        creationDateLabel.text = movie.creation_date != nil ? movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
         posterImage.image = movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image")
+        voteAverageLabel.text = String(self.movie.vote_average!)
+        voteCountLabel.text = "(" + String(self.movie.vote_count!) + ")"
+        
+        voteAverageProgressBar.progress = movie.vote_average != nil ? movie.vote_average! / 10.0 : 0.0
+        
+        if let voteAverage = movie.vote_average{
+            voteAverageProgressBar.progress = voteAverage / 10.0
+        }
     
         let height = self.categoryCollection.collectionViewLayout.collectionViewContentSize.height
         self.categoryCollectionHeightConstraint.constant = height
@@ -47,16 +65,18 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(movie: MovieDTO){
+    func setUp(movie: MovieDTO, delegate: SendToDetailDelegate){
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
         
         self.movie = movie
+        self.delegate = delegate
         
         setFields()
     }
 }
 
+//MARK:- Collection methods
 extension FavoriteMovieTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

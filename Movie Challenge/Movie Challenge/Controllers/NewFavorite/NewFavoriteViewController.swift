@@ -42,6 +42,9 @@ class NewFavoriteViewController : UIViewController{
         favoriteMoviesTable.dataSource = self
         
         favoriteMoviesView.setBorderFeatured()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         selectedCategoryLabel.text = "Todos os filmes"
         
         setMovieLists()
@@ -66,6 +69,8 @@ class NewFavoriteViewController : UIViewController{
             }
             
             selectedList = allMovieList
+            favoriteMoviesTable.reloadData()
+            categoriesCollection.reloadData()
         }catch let error{
             print("Erro ao carregar dados: ", error)
         }
@@ -139,15 +144,9 @@ extension NewFavoriteViewController: UITableViewDataSource, UITableViewDelegate{
         
         guard let movies = selectedList else { return UITableViewCell() }
         
-        cell.setUp(movie: movies[indexPath.row])
+        cell.setUp(movie: movies[indexPath.row], delegate: self)
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let movies = selectedList{
-            changeToMovieDetail(movieId: movies[indexPath.row].id!)
-        }
     }
 }
 

@@ -68,7 +68,7 @@ class MovieService{
     public func getMoviePageByName(query: String, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
         
         let formatedQuery: String = query.replacingOccurrences(of: " ", with: "+")
-        let url = URL(string: baseURL + "/search/movie?api_key=" + apiKey + "&query=" + formatedQuery + "&language=" + language)
+        let url = URL(string: baseURL + "/search/movie?api_key=" + apiKey + "&query=" + formatedQuery + "&language=" + language + "&sort_by=" + Sort.popularity.rawValue)
         
         let task = getDataFromUrl(url: url!){ data, response, error in
             if let data = data{
