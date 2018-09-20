@@ -11,7 +11,7 @@ import UIKit
 class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
-    private var delegate:HomeDelegate!
+    private var delegate:SendToDetailDelegate!
     private var moviePage = MoviePageDTO()
     private var sort: Sort!
     private var getPosterTasks: [URLSessionDataTask]!
@@ -30,7 +30,7 @@ class SuggestionTableViewCell: UITableViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(moviePage: MoviePageDTO, delegate: HomeDelegate){
+    func setUp(moviePage: MoviePageDTO, delegate: SendToDetailDelegate){
         suggestionMoviesCollectionView.delegate = self
         suggestionMoviesCollectionView.dataSource = self
         

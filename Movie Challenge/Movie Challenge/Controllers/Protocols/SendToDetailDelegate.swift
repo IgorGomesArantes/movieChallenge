@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol  HomeDelegate {
+protocol  SendToDetailDelegate {
     func changeToMovieDetail(movieId: Int)
 }

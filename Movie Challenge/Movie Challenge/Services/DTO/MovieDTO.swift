@@ -61,4 +61,5 @@ struct MovieDTO : Codable{
     var vote_average: Float?
     var vote_count: Int?
     var poster: Data?
+    var creation_date: Date?
 }

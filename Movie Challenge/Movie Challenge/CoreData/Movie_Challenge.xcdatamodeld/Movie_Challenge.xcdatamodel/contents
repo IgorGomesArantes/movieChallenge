@@ -11,6 +11,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="MovieEntity" representedClassName="MovieEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="creation_date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="overview" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="poster" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -29,6 +30,6 @@
     </entity>
     <elements>
         <element name="CategoryEntity" positionX="-63" positionY="54" width="128" height="90"/>
-        <element name="MovieEntity" positionX="-387" positionY="-51" width="128" height="195"/>
+        <element name="MovieEntity" positionX="-387" positionY="-51" width="128" height="210"/>
     </elements>
 </model>

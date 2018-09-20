@@ -22,6 +22,7 @@ class MovieHelper{
         movieDTO.poster = movieEntity.poster
         movieDTO.runtime = Int(movieEntity.runtime)
         movieDTO.release_date = movieEntity.release_date
+        movieDTO.creation_date = movieEntity.creation_date
         
         if let categories = movieEntity.categoriesOfMovie{
             movieDTO.genres = categoryEntityListToGenreList(categoryEntityList: Array(categories) as! [CategoryEntity])

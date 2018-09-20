@@ -75,6 +75,7 @@ class MovieRepository{
         movieEntity.setValue(movie.poster_path, forKey: "poster_path")
         movieEntity.setValue(movie.release_date, forKey: "release_date")
         movieEntity.setValue(movie.runtime, forKey: "runtime")
+        movieEntity.setValue(Date(), forKey: "creation_date")
         
         if movie.poster != nil{
             movieEntity.setValue(movie.poster!, forKey: "poster")

@@ -129,8 +129,8 @@ class HomeViewController: UIViewController {
     }
 }
 
-//MARK:- HomeDelegate methods
-extension HomeViewController: HomeDelegate {
+//MARK:- SendToDetailDelegate methods
+extension HomeViewController: SendToDetailDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
             viewController.setUp(movieId: movieId)
