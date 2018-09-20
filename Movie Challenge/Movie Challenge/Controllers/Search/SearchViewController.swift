@@ -13,8 +13,7 @@ class SearchViewController : UIViewController{
     
     //MARK:- Private variables
     private var moviePage = MoviePageDTO()
-    private var searchNewMoviesTask: DispatchWorkItem!
-    
+
     //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var movieCollection: UICollectionView!
@@ -24,8 +23,6 @@ class SearchViewController : UIViewController{
         super.viewDidLoad()
         
         self.hideKeyboardWhenTappedAround()
-        
-        searchNewMoviesTask = DispatchWorkItem { }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -57,10 +54,9 @@ class SearchViewController : UIViewController{
 
 //MARK:- Search View Methods
 extension SearchViewController: UISearchBarDelegate{
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
-        searchNewMoviesTask.cancel()
-        searchNewMoviesTask = DispatchWorkItem { self.searchMovies(by: searchText) }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchNewMoviesTask)
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchMovies(by: searchBar.text ?? "")
     }
 }
 

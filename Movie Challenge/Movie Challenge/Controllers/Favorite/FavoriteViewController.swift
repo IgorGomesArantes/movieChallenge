@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class NewFavoriteViewController : UIViewController{
+class FavoriteViewController : UIViewController{
     
     //MARK:- Private variables
     private var allMovieList: [MovieDTO]!
@@ -78,7 +78,7 @@ class NewFavoriteViewController : UIViewController{
 }
 
 //MARK:- SendToDetailDegate methods
-extension NewFavoriteViewController: SendToDetailDelegate{
+extension FavoriteViewController: SendToDetailDelegate{
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
             viewController.setUp(movieId: movieId)
@@ -90,7 +90,7 @@ extension NewFavoriteViewController: SendToDetailDelegate{
 }
 
 //MARK:- Collection methods
-extension NewFavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate{
+extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -128,7 +128,7 @@ extension NewFavoriteViewController: UICollectionViewDataSource, UICollectionVie
 }
 
 //MARK:- Table methods
-extension NewFavoriteViewController: UITableViewDataSource, UITableViewDelegate{
+extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

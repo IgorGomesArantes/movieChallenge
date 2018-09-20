@@ -62,8 +62,7 @@ class DetailViewController : UIViewController{
         categoryCollection.dataSource = self
 
         posterImage.setBorderFeatured()
-        overviewLabel.setBigBorderFeatured()
-        posterView.setBigBorderFeatured()
+        titleLabel.setCornerRadius()
         
         do{
             self.movie = try MovieRepository.shared().getMovie(by: movieId)
@@ -94,13 +93,13 @@ class DetailViewController : UIViewController{
     
     private func setButtonState(){
         if favorite{
-            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.9330000281, green: 0.3219999969, blue: 0.3249999881, alpha: 1)
+            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.9058823529, green: 0.2980392157, blue: 0.2352941176, alpha: 1)
             self.favoriteButton.setTitle("Remover", for: UIControlState.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9959999919, green: 0.7919999957, blue: 0.3409999907, alpha: 1), for: UIControlState.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9449999928, green: 0.7689999938, blue: 0.05900000036, alpha: 1), for: UIControlState.normal)
         }else{
-            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.06300000101, green: 0.6750000119, blue: 0.5180000067, alpha: 1)
+            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.6274509804, blue: 0.5215686275, alpha: 1)
             self.favoriteButton.setTitle("Favoritar", for: UIControlState.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.2039999962, green: 0.1220000014, blue: 0.5920000076, alpha: 1), for: UIControlState.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.1609999985, green: 0.5019999743, blue: 0.7250000238, alpha: 1), for: UIControlState.normal)
         }
     }
     
