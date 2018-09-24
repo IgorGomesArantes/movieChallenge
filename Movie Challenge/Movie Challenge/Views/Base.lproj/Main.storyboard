@@ -12,16 +12,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Search-->
+        <!--Busca-->
         <scene sceneID="vSz-l9-neL">
             <objects>
-                <viewController title="Search" id="ufg-ql-cPh" customClass="SearchViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Busca" id="ufg-ql-cPh" customClass="SearchViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gkE-WA-o7j">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar clearsContextBeforeDrawing="NO" contentMode="redraw" searchBarStyle="prominent" text="" placeholder="Buscar filmes" showsSearchResultsButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yst-9i-gyS">
-                                <rect key="frame" x="0.0" y="64" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="60"/>
                                 <color key="backgroundColor" name="BackgroundPattern"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="h4d-rE-yjN"/>
@@ -38,7 +38,7 @@
                                 </connections>
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pvd-FU-6qN">
-                                <rect key="frame" x="0.0" y="124" width="414" height="563"/>
+                                <rect key="frame" x="0.0" y="80" width="414" height="607"/>
                                 <color key="backgroundColor" name="BackgroundPattern"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="2" id="2KM-fw-BrZ">
                                     <size key="itemSize" width="96" height="144"/>
@@ -95,6 +95,7 @@
                     <tabBarItem key="tabBarItem" systemItem="search" id="9SP-4g-lKU">
                         <color key="badgeColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </tabBarItem>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="movieCollection" destination="pvd-FU-6qN" id="aO9-Pu-vHA"/>
                         <outlet property="searchBar" destination="yst-9i-gyS" id="0Az-ld-VWj"/>
@@ -104,19 +105,19 @@
             </objects>
             <point key="canvasLocation" x="541" y="170"/>
         </scene>
-        <!--Favorite View Controller-->
+        <!--Favoritos-->
         <scene sceneID="dX4-EB-k0m">
             <objects>
-                <viewController id="uTp-Wt-k4y" customClass="FavoriteViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favoritos" id="uTp-Wt-k4y" customClass="FavoriteViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2iE-Z5-Puy">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qaH-Ln-a6N">
-                                <rect key="frame" x="0.0" y="64" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="50"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1TK-Hd-p11">
-                                        <rect key="frame" x="0.0" y="0.0" width="324" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                         <color key="backgroundColor" name="BackgroundSecondary"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="5" id="fIW-3S-YdW">
                                             <size key="itemSize" width="100" height="30"/>
@@ -153,50 +154,24 @@
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Did-re-Dda">
-                                        <rect key="frame" x="324" y="0.0" width="90" height="50"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mun-c6-zuT">
-                                                <rect key="frame" x="0.0" y="0.0" width="90" height="50"/>
-                                                <color key="backgroundColor" name="BackgroundFeatured"/>
-                                                <state key="normal" title="Todos">
-                                                    <color key="titleColor" name="TextPattern"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="selectAllMovies:" destination="uTp-Wt-k4y" eventType="touchUpInside" id="1b4-Re-sx9"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="mun-c6-zuT" secondAttribute="bottom" id="SPO-uk-xVD"/>
-                                            <constraint firstAttribute="trailing" secondItem="mun-c6-zuT" secondAttribute="trailing" id="VcY-h5-fsi"/>
-                                            <constraint firstItem="mun-c6-zuT" firstAttribute="top" secondItem="Did-re-Dda" secondAttribute="top" id="mzj-Qw-JQl"/>
-                                            <constraint firstItem="mun-c6-zuT" firstAttribute="leading" secondItem="Did-re-Dda" secondAttribute="leading" id="sP8-Mm-zex"/>
-                                            <constraint firstAttribute="width" constant="90" id="skE-r6-cg1"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="1TK-Hd-p11" secondAttribute="bottom" id="7nx-ea-H9I"/>
-                                    <constraint firstItem="Did-re-Dda" firstAttribute="top" secondItem="qaH-Ln-a6N" secondAttribute="top" id="7z1-6f-wkK"/>
-                                    <constraint firstItem="Did-re-Dda" firstAttribute="leading" secondItem="1TK-Hd-p11" secondAttribute="trailing" id="8Cf-6h-WaG"/>
-                                    <constraint firstAttribute="bottom" secondItem="Did-re-Dda" secondAttribute="bottom" id="EDU-6V-w9D"/>
+                                    <constraint firstAttribute="trailing" secondItem="1TK-Hd-p11" secondAttribute="trailing" id="8Gr-Zs-uvj"/>
                                     <constraint firstItem="1TK-Hd-p11" firstAttribute="leading" secondItem="qaH-Ln-a6N" secondAttribute="leading" id="b5e-Sy-RKb"/>
                                     <constraint firstAttribute="height" constant="50" id="k6p-WT-9DE"/>
                                     <constraint firstItem="1TK-Hd-p11" firstAttribute="top" secondItem="qaH-Ln-a6N" secondAttribute="top" id="l6i-6F-3x9"/>
-                                    <constraint firstAttribute="trailing" secondItem="Did-re-Dda" secondAttribute="trailing" id="rEH-A7-Zgr"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="esA-uV-Rp0">
-                                <rect key="frame" x="8" y="122" width="398" height="557"/>
+                                <rect key="frame" x="8" y="78" width="398" height="601"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I9j-4J-FlB">
                                         <rect key="frame" x="0.0" y="0.0" width="398" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categoria selecionada" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nl0-zS-7x1">
-                                                <rect key="frame" x="93.666666666666686" y="8.6666666666666572" width="211" height="24"/>
+                                                <rect key="frame" x="93.666666666666686" y="8.6666666666666714" width="211" height="24"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <color key="textColor" name="TextFeatured"/>
                                                 <nil key="highlightedColor"/>
@@ -210,7 +185,7 @@
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="166" estimatedRowHeight="166" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nw3-nJ-Cka">
-                                        <rect key="frame" x="0.0" y="40" width="398" height="517"/>
+                                        <rect key="frame" x="0.0" y="40" width="398" height="561"/>
                                         <color key="backgroundColor" name="BackgroundPattern"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="favoriteMovieTableCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="favoriteMovieTableCell" rowHeight="166" id="2Eo-qT-zq2" customClass="FavoriteMovieTableViewCell" customModule="Movie_Challenge" customModuleProvider="target">
@@ -408,6 +383,7 @@
                         <viewLayoutGuide key="safeArea" id="2Id-Qf-XFO"/>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="w3T-XZ-Qc5"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="categoriesCollection" destination="1TK-Hd-p11" id="qSq-Iz-Ny5"/>
@@ -420,37 +396,37 @@
             </objects>
             <point key="canvasLocation" x="540.57971014492762" y="-505.43478260869568"/>
         </scene>
-        <!--Home View Controller-->
+        <!--Sugestões-->
         <scene sceneID="WYV-xP-b7c">
             <objects>
-                <viewController id="Cxz-kS-d65" customClass="HomeViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Sugestões" id="Cxz-kS-d65" customClass="HomeViewController" customModule="Movie_Challenge" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="SED-ng-5Fx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="183" estimatedRowHeight="183" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YbY-HS-o0W">
-                                <rect key="frame" x="0.0" y="64" width="414" height="623"/>
-                                <color key="backgroundColor" name="BackgroundSecondary"/>
+                                <rect key="frame" x="8" y="28" width="398" height="651"/>
+                                <color key="backgroundColor" name="BackgroundPattern"/>
                                 <color key="sectionIndexBackgroundColor" name="BackgroundPattern"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="gA6-FP-djV">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="398" height="256"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder-image" translatesAutoresizingMaskIntoConstraints="NO" id="ejc-YM-D2G">
-                                            <rect key="frame" x="8" y="0.0" width="160" height="240"/>
+                                            <rect key="frame" x="8" y="8" width="160" height="240"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="160" id="bmf-C7-CSH"/>
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0W-KP-rFS">
-                                            <rect key="frame" x="176" y="8" width="230" height="24"/>
+                                            <rect key="frame" x="176" y="8" width="214" height="24"/>
                                             <color key="backgroundColor" name="BackgroundFeatured"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="textColor" name="TextPattern"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Oak-20-aos">
-                                            <rect key="frame" x="301.33333333333331" y="196" width="104.66666666666669" height="36"/>
+                                            <rect key="frame" x="285.33333333333331" y="212" width="104.66666666666669" height="36"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9.6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTN-we-uc9">
                                                     <rect key="frame" x="0.0" y="0.0" width="44.333333333333336" height="36"/>
@@ -484,7 +460,7 @@
                                             </subviews>
                                         </stackView>
                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BgA-rA-s5l">
-                                            <rect key="frame" x="176" y="68" width="230" height="22"/>
+                                            <rect key="frame" x="176" y="68" width="214" height="22"/>
                                             <color key="backgroundColor" name="BackgroundPattern"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="JQ1-bX-nKm"/>
@@ -530,8 +506,8 @@
                                         <constraint firstAttribute="trailing" secondItem="BgA-rA-s5l" secondAttribute="trailing" constant="8" id="Ibf-DM-kQ7"/>
                                         <constraint firstItem="BgA-rA-s5l" firstAttribute="leading" secondItem="ejc-YM-D2G" secondAttribute="trailing" constant="8" id="JKJ-UX-EeA"/>
                                         <constraint firstItem="I0W-KP-rFS" firstAttribute="leading" secondItem="ejc-YM-D2G" secondAttribute="trailing" constant="8" id="Lhd-uJ-WQ7"/>
-                                        <constraint firstAttribute="bottom" secondItem="ejc-YM-D2G" secondAttribute="bottom" id="O58-qY-ddQ"/>
-                                        <constraint firstItem="ejc-YM-D2G" firstAttribute="top" secondItem="gA6-FP-djV" secondAttribute="top" id="UxH-kV-Laq"/>
+                                        <constraint firstAttribute="bottom" secondItem="ejc-YM-D2G" secondAttribute="bottom" constant="8" id="O58-qY-ddQ"/>
+                                        <constraint firstItem="ejc-YM-D2G" firstAttribute="top" secondItem="gA6-FP-djV" secondAttribute="top" constant="8" id="UxH-kV-Laq"/>
                                         <constraint firstItem="WJP-Ld-leu" firstAttribute="top" secondItem="I0W-KP-rFS" secondAttribute="bottom" constant="8" id="Yev-aW-0Sl"/>
                                         <constraint firstAttribute="bottom" secondItem="Oak-20-aos" secondAttribute="bottom" constant="8" id="ZyD-wQ-n2p"/>
                                         <constraint firstItem="ejc-YM-D2G" firstAttribute="leading" secondItem="gA6-FP-djV" secondAttribute="leading" constant="8" id="g0I-Fz-UTq"/>
@@ -543,14 +519,14 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="suggestionTableViewCell" rowHeight="183" id="DOO-a3-xNa" customClass="SuggestionTableViewCell" customModule="Movie_Challenge" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="268" width="414" height="183"/>
+                                        <rect key="frame" x="0.0" y="284" width="398" height="183"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DOO-a3-xNa" id="b7A-cK-Mgb">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="183"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="398" height="183"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SlO-Qa-Nu4">
-                                                    <rect key="frame" x="0.0" y="40" width="414" height="142.66666666666666"/>
+                                                    <rect key="frame" x="0.0" y="40" width="398" height="142.66666666666666"/>
                                                     <color key="backgroundColor" name="BackgroundPattern"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="2" id="Zh2-dx-rJU">
                                                         <size key="itemSize" width="96" height="143"/>
@@ -581,27 +557,67 @@
                                                                 <outlet property="posterImageView" destination="ajs-oI-FEi" id="PAI-CC-rmW"/>
                                                             </connections>
                                                         </collectionViewCell>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="moreMoviesCollectionViewCell" id="N7W-Cr-Ags" customClass="MoreMoviesCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
+                                                            <rect key="frame" x="112" y="-0.33333333333333331" width="96" height="143"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="96" height="143"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9c-6v-Iw8">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="96" height="143"/>
+                                                                        <color key="tintColor" name="TextFeatured"/>
+                                                                        <state key="normal">
+                                                                            <color key="titleColor" name="TextPattern"/>
+                                                                        </state>
+                                                                        <connections>
+                                                                            <action selector="searchMoreMovies:" destination="N7W-Cr-Ags" eventType="touchUpInside" id="SLF-Lk-G1s"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="bottom" secondItem="i9c-6v-Iw8" secondAttribute="bottom" id="3nX-Hj-flR"/>
+                                                                <constraint firstAttribute="trailing" secondItem="i9c-6v-Iw8" secondAttribute="trailing" id="LOv-7z-Iup"/>
+                                                                <constraint firstItem="i9c-6v-Iw8" firstAttribute="top" secondItem="N7W-Cr-Ags" secondAttribute="top" id="fmW-iX-aeN"/>
+                                                                <constraint firstItem="i9c-6v-Iw8" firstAttribute="leading" secondItem="N7W-Cr-Ags" secondAttribute="leading" id="xrM-9O-U7E"/>
+                                                            </constraints>
+                                                            <connections>
+                                                                <outlet property="searchMoreMoviesButton" destination="i9c-6v-Iw8" id="HxR-zI-kHs"/>
+                                                            </connections>
+                                                        </collectionViewCell>
                                                     </cells>
                                                 </collectionView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xM6-45-GOH">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="40"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Feh-sN-XRo">
-                                                            <rect key="frame" x="8" y="8" width="398" height="24"/>
+                                                            <rect key="frame" x="8" y="8" width="382" height="24"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categoria" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtg-du-qdQ">
-                                                                    <rect key="frame" x="8" y="0.0" width="382" height="24"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <color key="textColor" name="TextPattern"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="gwY-mM-XaY">
+                                                                    <rect key="frame" x="8" y="0.0" width="366" height="24"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categoria" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtg-du-qdQ">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="286" height="24"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                            <color key="textColor" name="TextPattern"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="usm-QE-rve">
+                                                                            <rect key="frame" x="286" y="0.0" width="80" height="24"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                            <color key="textColor" name="TextPattern"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                </stackView>
                                                             </subviews>
                                                             <color key="backgroundColor" name="BackgroundFeatured"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="mtg-du-qdQ" secondAttribute="bottom" id="QCv-Dk-OsR"/>
-                                                                <constraint firstItem="mtg-du-qdQ" firstAttribute="top" secondItem="Feh-sN-XRo" secondAttribute="top" id="hzl-9j-469"/>
-                                                                <constraint firstAttribute="trailing" secondItem="mtg-du-qdQ" secondAttribute="trailing" constant="8" id="nsG-VP-F8X"/>
-                                                                <constraint firstItem="mtg-du-qdQ" firstAttribute="leading" secondItem="Feh-sN-XRo" secondAttribute="leading" constant="8" id="qPs-9J-eNE"/>
+                                                                <constraint firstAttribute="trailing" secondItem="gwY-mM-XaY" secondAttribute="trailing" constant="8" id="Cfe-pT-Uka"/>
+                                                                <constraint firstItem="gwY-mM-XaY" firstAttribute="leading" secondItem="Feh-sN-XRo" secondAttribute="leading" constant="8" id="FiS-hc-VSc"/>
+                                                                <constraint firstItem="gwY-mM-XaY" firstAttribute="top" secondItem="Feh-sN-XRo" secondAttribute="top" id="NK3-Vf-RhC"/>
+                                                                <constraint firstAttribute="bottom" secondItem="gwY-mM-XaY" secondAttribute="bottom" id="Rxe-9b-JQS"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
@@ -628,6 +644,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="categoryLabelView" destination="mtg-du-qdQ" id="s04-1g-Xhc"/>
+                                            <outlet property="numberOfMoviesLabel" destination="usm-QE-rve" id="wgL-yB-LIm"/>
                                             <outlet property="suggestionCategoryView" destination="Feh-sN-XRo" id="eVf-Qf-WFa"/>
                                             <outlet property="suggestionHeaderView" destination="xM6-45-GOH" id="3X7-Uw-Igs"/>
                                             <outlet property="suggestionMoviesCollectionView" destination="SlO-Qa-Nu4" id="mQg-E4-uzp"/>
@@ -636,16 +653,17 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="BackgroundSecondary"/>
+                        <color key="backgroundColor" name="BackgroundPattern"/>
                         <constraints>
-                            <constraint firstItem="YbY-HS-o0W" firstAttribute="top" secondItem="wdy-hu-6Qu" secondAttribute="top" id="Fbg-pP-pcv"/>
-                            <constraint firstItem="wdy-hu-6Qu" firstAttribute="bottom" secondItem="YbY-HS-o0W" secondAttribute="bottom" id="nRL-ZO-JDw"/>
-                            <constraint firstItem="wdy-hu-6Qu" firstAttribute="trailing" secondItem="YbY-HS-o0W" secondAttribute="trailing" id="rq6-Ak-l8h"/>
-                            <constraint firstItem="YbY-HS-o0W" firstAttribute="leading" secondItem="wdy-hu-6Qu" secondAttribute="leading" id="tQN-iD-MYW"/>
+                            <constraint firstItem="YbY-HS-o0W" firstAttribute="top" secondItem="wdy-hu-6Qu" secondAttribute="top" constant="8" id="Fbg-pP-pcv"/>
+                            <constraint firstItem="wdy-hu-6Qu" firstAttribute="bottom" secondItem="YbY-HS-o0W" secondAttribute="bottom" constant="8" id="nRL-ZO-JDw"/>
+                            <constraint firstItem="wdy-hu-6Qu" firstAttribute="trailing" secondItem="YbY-HS-o0W" secondAttribute="trailing" constant="8" id="rq6-Ak-l8h"/>
+                            <constraint firstItem="YbY-HS-o0W" firstAttribute="leading" secondItem="wdy-hu-6Qu" secondAttribute="leading" constant="8" id="tQN-iD-MYW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="wdy-hu-6Qu"/>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="mostViewed" id="G0S-3j-zlX"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="bestMovieCategoryCollection" destination="BgA-rA-s5l" id="6ix-Q9-N8j"/>
@@ -662,7 +680,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mRs-tM-Q7D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="541" y="845"/>
+            <point key="canvasLocation" x="540.57971014492762" y="844.56521739130437"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="J6P-ZL-W29">
@@ -692,7 +710,7 @@
                                             <constraint firstItem="yzi-Zn-arg" firstAttribute="centerX" secondItem="rDW-Eb-dYf" secondAttribute="centerX" id="vUn-8p-k2g"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mad Max Fury Road" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FFE-Mu-0Zg">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FFE-Mu-0Zg">
                                         <rect key="frame" x="8" y="458" width="398" height="28.666666666666686"/>
                                         <color key="backgroundColor" name="BackgroundFeatured"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
@@ -700,7 +718,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="DNq-HS-dm6">
-                                        <rect key="frame" x="8" y="494.66666666666663" width="286.66666666666669" height="20.333333333333371"/>
+                                        <rect key="frame" x="8" y="494.33333333333337" width="286.66666666666669" height="20.333333333333371"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2015" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5f1-ww-Lre">
                                                 <rect key="frame" x="0.0" y="0.0" width="38" height="20.333333333333332"/>
@@ -734,7 +752,7 @@
                                         </subviews>
                                     </stackView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="L0s-Xl-76c">
-                                        <rect key="frame" x="8" y="523" width="398" height="29"/>
+                                        <rect key="frame" x="8" y="522.66666666666663" width="398" height="29"/>
                                         <color key="backgroundColor" name="BackgroundPattern"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="29" id="KUm-Gw-fB9"/>
@@ -777,14 +795,14 @@
                                         </cells>
                                     </collectionView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resumo" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eu4-7f-LnF">
-                                        <rect key="frame" x="16" y="560" width="382" height="20.333333333333371"/>
+                                        <rect key="frame" x="16" y="559.66666666666663" width="382" height="20.333333333333371"/>
                                         <color key="backgroundColor" name="BackgroundPattern"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" name="TextFeatured"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-na-TUc">
-                                        <rect key="frame" x="8" y="588.33333333333337" width="398" height="33"/>
+                                        <rect key="frame" x="8" y="588" width="398" height="33"/>
                                         <color key="backgroundColor" name="buttonAdd"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="33" id="Trb-gd-fSD"/>
@@ -903,9 +921,6 @@
         <namedColor name="BackgroundFeatured">
             <color red="0.17299999296665192" green="0.24300000071525574" blue="0.31400001049041748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="BackgroundFeatured">
-            <color red="0.17299999296665192" green="0.24300000071525574" blue="0.31400001049041748" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="BackgroundPattern">
             <color red="0.92500001192092896" green="0.94099998474121094" blue="0.94499999284744263" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -932,9 +947,6 @@
         </namedColor>
         <namedColor name="TextPattern">
             <color red="0.94499999284744263" green="0.76899999380111694" blue="0.059000000357627869" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="buttonAdd">
-            <color red="0.086000002920627594" green="0.62699997425079346" blue="0.5220000147819519" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="buttonAdd">
             <color red="0.086000002920627594" green="0.62699997425079346" blue="0.5220000147819519" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

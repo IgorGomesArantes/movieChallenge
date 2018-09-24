@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
         
         bestMovieImage.setBorderFeatured()
         bestMovieTitleLabel.setCornerRadius()
-        bestMovieView.setBigBorderFeatured()
+        suggestionTable.setBorderFeatured()
         
         setMoviePageList()
     }
@@ -151,7 +151,19 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
         
-        cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self)
+        switch indexPath.row{
+            case 0:
+                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: true, sort: Sort.popularity)
+                break
+            case 1:
+                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: true, sort: Sort.voteCount)
+                break
+            case 2:
+                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: false)
+                break
+            default:
+                break
+        }
         
         return cell
     }

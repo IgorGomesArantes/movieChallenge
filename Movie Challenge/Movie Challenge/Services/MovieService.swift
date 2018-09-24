@@ -90,8 +90,8 @@ class MovieService{
     }
     
     @discardableResult
-    public func getMoviePage(sort: Sort, order: Order, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
-        let url = URL(string: baseURL + "/discover/movie?sort_by=" + sort.rawValue + "." + order.rawValue + "&api_key=" + apiKey + "&language=" + language)
+    public func getMoviePage(page: Int = 1, sort: Sort, order: Order, completion: @escaping (MoviePageDTO, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+        let url = URL(string: baseURL + "/discover/movie?sort_by=" + sort.rawValue + "." + order.rawValue + "&api_key=" + apiKey + "&language=" + language + "&page=" + String(page))
         
         let task = getDataFromUrl(url: url!){ data, response, error in
             if let data = data{
@@ -142,8 +142,8 @@ class MovieService{
     }
     
     @discardableResult
-    public func getTrendingMovies(completion: @escaping (MoviePageDTO?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
-        let url = URL(string: baseURL + "/trending/movie/day?api_key=" + apiKey + "&language=" + language)
+    public func getTrendingMovies(page: Int = 1, completion: @escaping (MoviePageDTO?, URLResponse?, Error?) -> ()) -> URLSessionDataTask{
+        let url = URL(string: baseURL + "/trending/movie/day?api_key=" + apiKey + "&language=" + language + "&page=" + String(page))
         
         let task = getDataFromUrl(url: url!){ (data, response, error) in
             if let data = data{

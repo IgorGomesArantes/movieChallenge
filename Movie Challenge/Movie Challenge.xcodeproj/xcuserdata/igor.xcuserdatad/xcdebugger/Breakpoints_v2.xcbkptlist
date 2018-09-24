@@ -329,13 +329,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Movie Challenge/Controllers/Favorite/FavoriteViewController.swift"
-            timestampString = "559143242.952515"
+            filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
+            timestampString = "559491174.1567219"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "viewWillAppear(_:)"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "setUp(moviePage:delegate:canSearchMore:sort:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -346,12 +346,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "559168618.824901"
+            timestampString = "559491174.156842"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "setUp(moviePage:delegate:)"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "setUp(moviePage:delegate:canSearchMore:sort:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -362,28 +362,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "559168618.824967"
+            timestampString = "559491174.156911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "setUp(moviePage:delegate:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Movie Challenge/Controllers/Home/Cells/SuggestionTableViewCell.swift"
-            timestampString = "559168618.825013"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
-            landmarkName = "setUp(moviePage:delegate:)"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "setUp(moviePage:delegate:canSearchMore:sort:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

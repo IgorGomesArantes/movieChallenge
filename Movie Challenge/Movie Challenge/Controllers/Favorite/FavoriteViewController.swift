@@ -22,15 +22,6 @@ class FavoriteViewController : UIViewController{
     @IBOutlet weak var favoriteMoviesView: UIView!
     @IBOutlet weak var selectedCategoryLabel: UILabel!
     
-    //MARK:- View actions
-    @IBAction func selectAllMovies(_ sender: Any) {
-        selectedList = allMovieList
-        
-        selectedCategoryLabel.text = "Todos os filmes"
-        
-        favoriteMoviesTable.reloadData()
-    }
-    
     //MARK:- Primitive methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,29 +89,38 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let categories = categoryList else { return 0 }
         
-        return categories.count
+        return categories.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "categoryOptionCollectionViewCell", for: indexPath) as! CategoryOptionCollectionViewCell
         
-        guard let categoryName = categoryList[indexPath.row].name else { return UICollectionViewCell() }
-        
-        cell.setUp(name: categoryName)
+        if indexPath.row == 0{
+            cell.setUp(name: "Todos")
+        }else{
+            guard let categoryName = categoryList[indexPath.row - 1].name else { return UICollectionViewCell() }
+            
+            cell.setUp(name: categoryName)
+        }
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let categoryName = categoryList[indexPath.row].name{
-            selectedCategoryLabel.text = categoryName
-        }
-        
-        if let movies = categoryList[indexPath.row].movies{
-            selectedList = movies
+        if indexPath.row == 0{
+            selectedCategoryLabel.text = "Todos os filmes"
+            selectedList = allMovieList
         }else{
-            selectedList = [MovieDTO]()
+            if let categoryName = categoryList[indexPath.row - 1].name{
+                selectedCategoryLabel.text = categoryName
+            }
+            
+            if let movies = categoryList[indexPath.row - 1].movies{
+                selectedList = movies
+            }else{
+                selectedList = [MovieDTO]()
+            }
         }
         
         favoriteMoviesTable.reloadData()
