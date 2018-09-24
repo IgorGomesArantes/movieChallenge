@@ -40,6 +40,11 @@ class HomeViewController: UIViewController {
         bestMovieTitleLabel.setCornerRadius()
         suggestionTable.setBorderFeatured()
         
+        let screenSize = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        
+        bestMovieView.frame = CGRect(x: bestMovieView.frame.origin.x, y: bestMovieView.frame.origin.y, width: bestMovieView.frame.width, height: (screenWidth * 5.0) / 8.0)
+        
         setMoviePageList()
     }
     

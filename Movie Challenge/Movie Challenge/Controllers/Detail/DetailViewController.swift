@@ -61,7 +61,7 @@ class DetailViewController : UIViewController{
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
 
-        posterImage.setBorderFeatured()
+        //posterImage.setBorderFeatured()
         titleLabel.setCornerRadius()
         
         do{

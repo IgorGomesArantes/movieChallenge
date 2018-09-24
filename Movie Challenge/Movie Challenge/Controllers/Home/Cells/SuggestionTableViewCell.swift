@@ -23,7 +23,6 @@ class SuggestionTableViewCell: UITableViewCell{
     @IBOutlet weak var suggestionMoviesCollectionView: UICollectionView!
     @IBOutlet weak var suggestionHeaderView: UIView!
     @IBOutlet weak var suggestionCategoryView: UIView!
-    @IBOutlet weak var numberOfMoviesLabel: UILabel!
     
     //MARK:- Primitive variables
     override func awakeFromNib() {
@@ -35,8 +34,6 @@ class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private methods
     private func updateData(){
-        numberOfMoviesLabel.text = "(" + String(moviePage.results.count) + ")"
-        
         for i in 0 ... moviePage.results.count - 1{
             if let posterPath = moviePage.results[i].poster_path, moviePage.results[i].poster == nil{
                 let task = MovieService.shared().getPosterData(path: posterPath, quality: Quality.low){ poster, response, error in
