@@ -16,19 +16,19 @@ extension UIView{
     }
     
     func setCornerRadius(){
-        layer.cornerRadius = 5
+        layer.cornerRadius = 3
         layer.masksToBounds = true
     }
     
     func setBorderFeatured(){
-        setCornerRadius()
-        layer.borderWidth = 4
+        //setCornerRadius()
+        layer.borderWidth = 2
         layer.borderColor = getColor()
     }
     
     func setLittleBorderFeatured(){
-        setCornerRadius()
-        layer.borderWidth = 2
+        //setCornerRadius()
+        layer.borderWidth = 1
         layer.borderColor = getColor()
     }
     

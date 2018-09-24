@@ -35,7 +35,7 @@ class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private methods
     private func updateData(){
-        numberOfMoviesLabel.text = String(moviePage.results.count)
+        numberOfMoviesLabel.text = "(" + String(moviePage.results.count) + ")"
         
         for i in 0 ... moviePage.results.count - 1{
             if let posterPath = moviePage.results[i].poster_path, moviePage.results[i].poster == nil{

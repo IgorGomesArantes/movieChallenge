@@ -36,7 +36,7 @@ class HomeViewController: UIViewController {
         bestMovieCategoryCollection.delegate = self
         bestMovieCategoryCollection.dataSource = self
         
-        bestMovieImage.setBorderFeatured()
+        bestMovieImage.setBigBorderFeatured()
         bestMovieTitleLabel.setCornerRadius()
         suggestionTable.setBorderFeatured()
         

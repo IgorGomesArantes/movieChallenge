@@ -595,16 +595,16 @@
                                                             <rect key="frame" x="8" y="8" width="382" height="24"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="gwY-mM-XaY">
-                                                                    <rect key="frame" x="8" y="0.0" width="366" height="24"/>
+                                                                    <rect key="frame" x="8" y="0.0" width="96.333333333333329" height="24"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categoria" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtg-du-qdQ">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="286" height="24"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="66.666666666666671" height="24"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" name="TextPattern"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="usm-QE-rve">
-                                                                            <rect key="frame" x="286" y="0.0" width="80" height="24"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(30)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="usm-QE-rve">
+                                                                            <rect key="frame" x="66.666666666666671" y="0.0" width="29.666666666666671" height="24"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" name="TextPattern"/>
                                                                             <nil key="highlightedColor"/>
@@ -614,7 +614,7 @@
                                                             </subviews>
                                                             <color key="backgroundColor" name="BackgroundFeatured"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="gwY-mM-XaY" secondAttribute="trailing" constant="8" id="Cfe-pT-Uka"/>
+                                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gwY-mM-XaY" secondAttribute="trailing" constant="8" id="Cfe-pT-Uka"/>
                                                                 <constraint firstItem="gwY-mM-XaY" firstAttribute="leading" secondItem="Feh-sN-XRo" secondAttribute="leading" constant="8" id="FiS-hc-VSc"/>
                                                                 <constraint firstItem="gwY-mM-XaY" firstAttribute="top" secondItem="Feh-sN-XRo" secondAttribute="top" id="NK3-Vf-RhC"/>
                                                                 <constraint firstAttribute="bottom" secondItem="gwY-mM-XaY" secondAttribute="bottom" id="Rxe-9b-JQS"/>
