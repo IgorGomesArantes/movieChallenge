@@ -132,7 +132,7 @@ class HomeViewController: UIViewController {
 }
 
 //MARK:- SendToDetailDelegate methods
-extension HomeViewController: SendToDetailDelegate {
+extension HomeViewController: SuggestionTableViewCellDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
             viewController.setUp(movieId: movieId)

@@ -8,10 +8,14 @@
 
 import UIKit
 
+protocol SuggestionTableViewCellDelegate{
+    func changeToMovieDetail(movieId: Int)
+}
+
 class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
-    private var delegate:SendToDetailDelegate!
+    private var delegate: SuggestionTableViewCellDelegate!
     private var moviePage = MoviePageDTO()
     private var getPosterTasks: [URLSessionDataTask]!
     private var page = 2
@@ -48,7 +52,7 @@ class SuggestionTableViewCell: UITableViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(moviePage: MoviePageDTO, delegate: SendToDetailDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
+    func setUp(moviePage: MoviePageDTO, delegate: SuggestionTableViewCellDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
         suggestionMoviesCollectionView.delegate = self
         suggestionMoviesCollectionView.dataSource = self
         
@@ -70,9 +74,9 @@ class SuggestionTableViewCell: UITableViewCell{
     }
 }
 
-//MARK:- SearchMoreMoviesDelegate methods
-extension SuggestionTableViewCell: SearchMoreMoviesDelegate{
-    func searchMovies(completion: @escaping () -> ()) {
+//MARK:- MoreMoviesCollectionViewCellDelegate methods
+extension SuggestionTableViewCell: MoreMoviesCollectionViewCellDelegate{
+    func searchMoreMovies(completion: @escaping () -> ()) {
         MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ newMoviePage, response, error in
             
             self.moviePage.results.append(contentsOf: newMoviePage.results)

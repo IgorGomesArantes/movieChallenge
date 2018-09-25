@@ -30,6 +30,7 @@ class DetailViewController : UIViewController{
     @IBOutlet weak var categoryCollectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var posterView: UIView!
+    @IBOutlet weak var overviewView: UIView!
     
     //MARK:- View actions
     @IBAction func favoriteMovie(_ sender: Any) {
@@ -61,7 +62,9 @@ class DetailViewController : UIViewController{
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
 
-        //posterImage.setBorderFeatured()
+        categoryCollection.setBorderFeatured()
+        favoriteButton.setCornerRadius()
+        overviewView.setBorderFeatured()
         titleLabel.setCornerRadius()
         
         do{
@@ -94,12 +97,12 @@ class DetailViewController : UIViewController{
     private func setButtonState(){
         if favorite{
             self.favoriteButton.backgroundColor = #colorLiteral(red: 0.9058823529, green: 0.2980392157, blue: 0.2352941176, alpha: 1)
-            self.favoriteButton.setTitle("Remover", for: UIControlState.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9449999928, green: 0.7689999938, blue: 0.05900000036, alpha: 1), for: UIControlState.normal)
+            self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9449999928, green: 0.7689999938, blue: 0.05900000036, alpha: 1), for: UIControl.State.normal)
         }else{
             self.favoriteButton.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.6274509804, blue: 0.5215686275, alpha: 1)
-            self.favoriteButton.setTitle("Favoritar", for: UIControlState.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.1609999985, green: 0.5019999743, blue: 0.7250000238, alpha: 1), for: UIControlState.normal)
+            self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.1609999985, green: 0.5019999743, blue: 0.7250000238, alpha: 1), for: UIControl.State.normal)
         }
     }
     
@@ -130,7 +133,7 @@ class DetailViewController : UIViewController{
             setPoster(poster: UIImage(data: poster)!)
         }else if let posterPath = self.movie.poster_path{
             MovieService.shared().getPoster(path: posterPath, quality: Quality.high) { image, response, error in
-                self.movie.poster = UIImagePNGRepresentation(image)
+                self.movie.poster = image.pngData()
                 self.setPoster(poster: image)
             }
         }

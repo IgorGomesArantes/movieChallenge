@@ -9,11 +9,16 @@
 import Foundation
 import UIKit
 
+protocol FavoriteMovieTableViewCellDelegate{
+    func removeFavoriteMovie(id: Int)
+    func changeToMovieDetail(movieId: Int)
+}
+
 class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
     private var movie: MovieDTO!
-    private var delegate: SendToDetailDelegate!
+    private var delegate: FavoriteMovieTableViewCellDelegate!
     
     //MARK:- View variables
     @IBOutlet weak var posterImage: UIImageView!
@@ -34,6 +39,11 @@ class FavoriteMovieTableViewCell: UITableViewCell{
         }
     }
     
+    @IBAction func removeFavoriteClick(_ sender: Any) {
+        if let id = movie.id{
+            delegate.removeFavoriteMovie(id: id)
+        }
+    }
     
     //MARK:- Primitive methods
     override func awakeFromNib() {
@@ -65,7 +75,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(movie: MovieDTO, delegate: SendToDetailDelegate){
+    func setUp(movie: MovieDTO, delegate: FavoriteMovieTableViewCellDelegate){
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
         

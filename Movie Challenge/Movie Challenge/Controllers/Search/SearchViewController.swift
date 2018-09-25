@@ -58,11 +58,26 @@ extension SearchViewController: UISearchBarDelegate{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchMovies(by: searchBar.text ?? "")
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchText.isEmpty){
+            searchMovies(by: "")
+        }
+    }
 }
 
 //MARK:- Collection view methods
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        
+        if moviePage.results.isEmpty{
+            movieCollection.showEmptyCell(string: "Busque por filmes")
+            
+            return 0
+        }
+        
+        movieCollection.hideEmptyCell()
+        
         return 1
     }
     

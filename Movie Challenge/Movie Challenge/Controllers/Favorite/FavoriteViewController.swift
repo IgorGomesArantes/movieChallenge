@@ -68,8 +68,8 @@ class FavoriteViewController : UIViewController{
     }
 }
 
-//MARK:- SendToDetailDegate methods
-extension FavoriteViewController: SendToDetailDelegate{
+//MARK:- FavoriteMovieTableViewCellDelegate methods
+extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
             viewController.setUp(movieId: movieId)
@@ -78,11 +78,29 @@ extension FavoriteViewController: SendToDetailDelegate{
             }
         }
     }
+    
+    func removeFavoriteMovie(id: Int) {
+        do{
+            try MovieRepository.shared().removeMovie(id: id)
+            
+            setMovieLists()
+        }catch let error{
+            print("Não foi possivel remover o filme", error)
+        }
+    }
 }
 
 //MARK:- Collection methods
 extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if categoryList.isEmpty{
+            categoriesCollection.showEmptyCell(string: "Ainda não há categorias cadastradas")
+            
+            return 0
+        }
+        
+        categoriesCollection.hideEmptyCell()
+        
         return 1
     }
     
@@ -130,6 +148,14 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
 //MARK:- Table methods
 extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
+        if selectedList.isEmpty{
+            favoriteMoviesTable.showEmptyCell(string: "Ainda não há filmes favoritos")
+            
+            return 0
+        }
+        
+        favoriteMoviesTable.hideEmptyCell()
+        
         return 1
     }
     

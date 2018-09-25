@@ -9,23 +9,27 @@
 import Foundation
 import UIKit
 
+protocol MoreMoviesCollectionViewCellDelegate {
+    func searchMoreMovies(completion: @escaping () -> ())
+}
+
 class MoreMoviesCollectionViewCell: UICollectionViewCell{
     
     //MARK:- Private variables
-    private var delegate: SearchMoreMoviesDelegate!
+    private var delegate: MoreMoviesCollectionViewCellDelegate!
     @IBOutlet weak var searchMoreMoviesButton: UIButton!
     
     //MARK:- View actions
     @IBAction func searchMoreMovies(_ sender: Any) {
         searchMoreMoviesButton.isEnabled = false
         
-        delegate.searchMovies(){
+        delegate.searchMoreMovies(){
             self.searchMoreMoviesButton.isEnabled = true
         }
     }
     
     //MARK:- Public methods
-    func setUp(delegate: SearchMoreMoviesDelegate){
+    func setUp(delegate: MoreMoviesCollectionViewCellDelegate){
         self.delegate = delegate
     }
 }
