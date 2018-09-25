@@ -130,6 +130,11 @@ extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDat
         if moviePage.results.count > indexPath.row{
             delegate.changeToMovieDetail(movieId: moviePage.results[indexPath.row].id!)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+        print("Teste: " + String(indexPath.row))
         
+        return true
     }
 }

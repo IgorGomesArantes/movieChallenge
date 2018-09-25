@@ -80,13 +80,21 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     }
     
     func removeFavoriteMovie(id: Int) {
-        do{
-            try MovieRepository.shared().removeMovie(id: id)
+        
+        let alert = UIAlertController(title: "Deseja mesmo remover este filme dos favoritos?", message: "", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Sim", style: .default, handler: {action in
+            do{
+                try MovieRepository.shared().removeMovie(id: id)
             
-            setMovieLists()
-        }catch let error{
-            print("Não foi possivel remover o filme", error)
-        }
+                self.setMovieLists()
+            }catch let error{
+                print("Não foi possivel remover o filme", error)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Não", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true)
     }
 }
 

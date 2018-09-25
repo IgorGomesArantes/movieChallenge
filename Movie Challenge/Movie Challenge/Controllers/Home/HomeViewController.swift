@@ -40,10 +40,7 @@ class HomeViewController: UIViewController {
         bestMovieTitleLabel.setCornerRadius()
         suggestionTable.setBorderFeatured()
         
-        let screenSize = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        bestMovieView.frame = CGRect(x: bestMovieView.frame.origin.x, y: bestMovieView.frame.origin.y, width: bestMovieView.frame.width, height: (screenWidth * 5.0) / 8.0)
+        resizeBestMovieView()
         
         setMoviePageList()
     }
@@ -129,9 +126,16 @@ class HomeViewController: UIViewController {
             }
         }
     }
+    
+    private func resizeBestMovieView(){
+        let screenSize = UIScreen.main.bounds
+        let screenWidth = screenSize.width
+        
+        bestMovieView.frame = CGRect(x: bestMovieView.frame.origin.x, y: bestMovieView.frame.origin.y, width: bestMovieView.frame.width, height: (screenWidth * 5.0) / 8.0)
+    }
 }
 
-//MARK:- SendToDetailDelegate methods
+//MARK:- SuggestionTableViewCellDelegate methods
 extension HomeViewController: SuggestionTableViewCellDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
