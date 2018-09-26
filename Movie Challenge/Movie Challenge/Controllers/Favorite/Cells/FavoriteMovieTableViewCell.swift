@@ -24,7 +24,6 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var creationDateLabel: UILabel!
     @IBOutlet weak var categoryCollection: UICollectionView!
     @IBOutlet weak var voteAverageProgressBar: UIProgressView!
@@ -51,12 +50,12 @@ class FavoriteMovieTableViewCell: UITableViewCell{
         
         posterImage.setLittleBorderFeatured()
         titleView.setCornerRadius()
+        setLittleBorderFeatured()
     }
     
     //MARK:- Private methods
     private func setFields(){
         titleLabel.text = movie.title
-        yearLabel.text = String(movie.release_date!)
         creationDateLabel.text = movie.creation_date != nil ? movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
         posterImage.image = movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image")
         voteAverageLabel.text = String(self.movie.vote_average!)

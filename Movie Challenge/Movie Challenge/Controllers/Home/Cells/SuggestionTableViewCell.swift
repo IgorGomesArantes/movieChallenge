@@ -28,12 +28,16 @@ class SuggestionTableViewCell: UITableViewCell{
     @IBOutlet weak var suggestionHeaderView: UIView!
     @IBOutlet weak var suggestionCategoryView: UIView!
     
+    
     //MARK:- Primitive variables
     override func awakeFromNib() {
         super.awakeFromNib()
         
         getPosterTasks = [URLSessionDataTask]()
         suggestionCategoryView.setCornerRadius()
+        
+        suggestionMoviesCollectionView.setLittleBorderFeatured()
+        suggestionCategoryView.setLittleBorderFeatured()
     }
     
     //MARK:- Private methods

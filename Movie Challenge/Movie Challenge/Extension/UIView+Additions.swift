@@ -12,7 +12,7 @@ import UIKit
 extension UIView{
     
     func getColor() -> CGColor{
-        return #colorLiteral(red: 0.7411764706, green: 0.7647058824, blue: 0.7803921569, alpha: 1)
+        return #colorLiteral(red: 0.1725490196, green: 0.2431372549, blue: 0.3137254902, alpha: 1)
     }
     
     func setCornerRadius(){
@@ -21,7 +21,7 @@ extension UIView{
     }
     
     func setBorderFeatured(){
-        //setCornerRadius()
+        setCornerRadius()
         layer.borderWidth = 2
         layer.borderColor = getColor()
     }

@@ -13,7 +13,7 @@ extension UICollectionView{
     func showEmptyCell(string: String){
         let emptyCell: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height))
         emptyCell.text = string
-        emptyCell.textColor = UIColor(named: "TextFeatured")
+        emptyCell.textColor = UIColor(named: "TextPattern")
         emptyCell.textAlignment = .center
         backgroundView  = emptyCell
     }

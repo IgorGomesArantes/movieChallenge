@@ -15,7 +15,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     //MARK:- Public methods
     func setUp(name: String){
-        setCornerRadius()
+        //setCornerRadius()
+        setBorderFeatured()
         self.nameLabel.text = name
     }
 }

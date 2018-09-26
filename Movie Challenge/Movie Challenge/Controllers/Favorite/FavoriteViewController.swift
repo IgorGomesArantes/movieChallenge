@@ -32,7 +32,7 @@ class FavoriteViewController : UIViewController{
         favoriteMoviesTable.delegate = self
         favoriteMoviesTable.dataSource = self
         
-        favoriteMoviesView.setBorderFeatured()
+        selectedCategoryLabel.setLittleBorderFeatured()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +82,7 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     func removeFavoriteMovie(id: Int) {
         
         let alert = UIAlertController(title: "Deseja mesmo remover este filme dos favoritos?", message: "", preferredStyle: .alert)
-        
+
         alert.addAction(UIAlertAction(title: "Sim", style: .default, handler: {action in
             do{
                 try MovieRepository.shared().removeMovie(id: id)

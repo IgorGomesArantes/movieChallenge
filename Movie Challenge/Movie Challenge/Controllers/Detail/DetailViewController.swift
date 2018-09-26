@@ -62,9 +62,9 @@ class DetailViewController : UIViewController{
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
 
-        categoryCollection.setBorderFeatured()
-        favoriteButton.setCornerRadius()
-        overviewView.setBorderFeatured()
+        titleLabel.setLittleBorderFeatured()
+        favoriteButton.setBorderFeatured()
+        overviewView.setLittleBorderFeatured()
         titleLabel.setCornerRadius()
         
         do{
@@ -96,13 +96,13 @@ class DetailViewController : UIViewController{
     
     private func setButtonState(){
         if favorite{
-            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.9058823529, green: 0.2980392157, blue: 0.2352941176, alpha: 1)
+            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.1725490196, green: 0.2392156863, blue: 0.3137254902, alpha: 1)
             self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9449999928, green: 0.7689999938, blue: 0.05900000036, alpha: 1), for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.9215686275, green: 0.937254902, blue: 0.9411764706, alpha: 1), for: UIControl.State.normal)
         }else{
-            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.0862745098, green: 0.6274509804, blue: 0.5215686275, alpha: 1)
+            self.favoriteButton.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.937254902, blue: 0.9411764706, alpha: 1)
             self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
-            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.1609999985, green: 0.5019999743, blue: 0.7250000238, alpha: 1), for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(#colorLiteral(red: 0.1725490196, green: 0.2392156863, blue: 0.3137254902, alpha: 1), for: UIControl.State.normal)
         }
     }
     

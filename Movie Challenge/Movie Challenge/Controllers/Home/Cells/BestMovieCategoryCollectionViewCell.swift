@@ -15,6 +15,7 @@ class BestMovieCategoryCollectionViewCell: UICollectionViewCell{
     
     //MARK:- Public variables
     func setUp(name: String?){
+        setLittleBorderFeatured()
         nameViewLabel.text = name ?? "Genero"
         nameViewLabel.adjustsFontSizeToFitWidth = true
     }

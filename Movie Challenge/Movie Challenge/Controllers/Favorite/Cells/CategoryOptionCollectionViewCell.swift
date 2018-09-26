@@ -18,7 +18,7 @@ class CategoryOptionCollectionViewCell: UICollectionViewCell{
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.setCornerRadius()
+        self.setLittleBorderFeatured()
     }
     
     //MARK:- Public methods
