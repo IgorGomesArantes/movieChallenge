@@ -169,7 +169,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categoria selecionada" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nl0-zS-7x1">
-                                                <rect key="frame" x="8" y="8" width="398" height="24"/>
+                                                <rect key="frame" x="8" y="0.0" width="398" height="40"/>
                                                 <color key="backgroundColor" name="TextFeatured"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <color key="textColor" name="TextPattern"/>
@@ -178,11 +178,11 @@
                                         </subviews>
                                         <color key="backgroundColor" name="BackgroundPattern"/>
                                         <constraints>
-                                            <constraint firstItem="Nl0-zS-7x1" firstAttribute="centerX" secondItem="I9j-4J-FlB" secondAttribute="centerX" id="7Sf-fU-kaI"/>
                                             <constraint firstItem="Nl0-zS-7x1" firstAttribute="leading" secondItem="I9j-4J-FlB" secondAttribute="leading" constant="8" id="Bgn-GN-czw"/>
+                                            <constraint firstItem="Nl0-zS-7x1" firstAttribute="top" secondItem="I9j-4J-FlB" secondAttribute="top" id="Dk7-0N-mpm"/>
                                             <constraint firstAttribute="height" constant="40" id="GEv-vV-mYx"/>
-                                            <constraint firstItem="Nl0-zS-7x1" firstAttribute="centerY" secondItem="I9j-4J-FlB" secondAttribute="centerY" id="H9F-Ly-3Eg"/>
                                             <constraint firstAttribute="trailing" secondItem="Nl0-zS-7x1" secondAttribute="trailing" constant="8" id="KAV-LX-87Y"/>
+                                            <constraint firstAttribute="bottom" secondItem="Nl0-zS-7x1" secondAttribute="bottom" id="bWL-Qa-QAz"/>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="166" estimatedRowHeight="166" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nw3-nJ-Cka">
@@ -787,7 +787,7 @@
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-na-TUc">
                                         <rect key="frame" x="8" y="775.33333333333337" width="398" height="33"/>
-                                        <color key="backgroundColor" name="buttonAdd"/>
+                                        <color key="backgroundColor" name="TextPattern"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="33" id="Trb-gd-fSD"/>
                                         </constraints>
@@ -939,9 +939,6 @@
         </namedColor>
         <namedColor name="TextPattern">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="buttonAdd">
-            <color red="0.086000002920627594" green="0.62699997425079346" blue="0.5220000147819519" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

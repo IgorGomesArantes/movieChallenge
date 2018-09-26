@@ -12,7 +12,7 @@ import UIKit
 extension UIView{
     
     func getColor() -> CGColor{
-        return #colorLiteral(red: 0.1725490196, green: 0.2431372549, blue: 0.3137254902, alpha: 1)
+        return #colorLiteral(red: 0.1882352941, green: 0.2588235294, blue: 0.3294117647, alpha: 1)
     }
     
     func setCornerRadius(){
