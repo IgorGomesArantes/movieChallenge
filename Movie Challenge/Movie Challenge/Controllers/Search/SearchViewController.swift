@@ -9,15 +9,16 @@
 import Foundation
 import UIKit
 
-class SearchViewController : UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchBarDelegate{
+class SearchViewController : UIViewController{
     
+    //MARK:- Private variables
     private var moviePage = MoviePageDTO()
-    
+
+    //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var movieCollectionView: UICollectionView!
+    @IBOutlet weak var movieCollection: UICollectionView!
     
-    var searchNewMoviesTask = DispatchWorkItem { }
-    
+    //MARK:- Primitive functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,9 +26,11 @@ class SearchViewController : UIViewController, UICollectionViewDelegate, UIColle
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
         if segue.identifier == "searchCollectionToMovieDetail"{
             
-            let indexPathArray = movieCollectionView.indexPathsForSelectedItems! as NSArray
+            let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
             let indexPath = indexPathArray.firstObject as! NSIndexPath
             
             let selectedMovie = self.moviePage.results[indexPath.row]
@@ -36,8 +39,45 @@ class SearchViewController : UIViewController, UICollectionViewDelegate, UIColle
             detailViewController.setUp(movieId: selectedMovie.id)
         }
     }
+
+    //MARK:- Private Functions
+    private func searchMovies(by searchText: String){
+        MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
+            self.moviePage = newMoviePage
+            
+            DispatchQueue.main.async() {
+                self.movieCollection.reloadData()
+            }
+        }
+    }
+}
+
+//MARK:- Search View Methods
+extension SearchViewController: UISearchBarDelegate{
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchMovies(by: searchBar.text ?? "")
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchText.isEmpty){
+            searchMovies(by: "")
+        }
+    }
+}
+
+//MARK:- Collection view methods
+extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        
+        if moviePage.results.isEmpty{
+            movieCollection.showEmptyCell(string: "Busque por filmes")
+            
+            return 0
+        }
+        
+        movieCollection.hideEmptyCell()
+        
         return 1
     }
     
@@ -51,29 +91,11 @@ class SearchViewController : UIViewController, UICollectionViewDelegate, UIColle
         let movie: MovieDTO = moviePage.results[indexPath.row]
         
         if let posterPath = movie.poster_path{
-            _ = MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
-                DispatchQueue.main.async() {
-                    cell.setUp(poster: image)
-                }
+            MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
+                cell.setUp(poster: image)
             }
         }
-
+        
         return cell
-    }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String){
-        searchNewMoviesTask.cancel()
-        searchNewMoviesTask = DispatchWorkItem { self.searchMovies(by: searchText) }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchNewMoviesTask)
-    }
-    
-    private func searchMovies(by searchText: String){
-        _ = MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
-            self.moviePage = newMoviePage
-            
-            DispatchQueue.main.async() {
-                self.movieCollectionView.reloadData()
-            }
-        }
     }
 }

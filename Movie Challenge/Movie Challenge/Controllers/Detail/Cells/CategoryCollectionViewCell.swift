@@ -10,9 +10,13 @@ import UIKit
 
 class CategoryCollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var nameLabelView: UILabel!
+    //MARK:- View variables
+    @IBOutlet weak var nameLabel: UILabel!
     
-    func setUp(name: String?){
-        self.nameLabelView.text = name ?? "Genero"
+    //MARK:- Public methods
+    func setUp(name: String){
+        //setCornerRadius()
+        setBorderFeatured()
+        self.nameLabel.text = name
     }
 }

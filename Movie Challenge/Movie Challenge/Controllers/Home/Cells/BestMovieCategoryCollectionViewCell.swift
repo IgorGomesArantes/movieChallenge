@@ -10,9 +10,12 @@ import UIKit
 
 class BestMovieCategoryCollectionViewCell: UICollectionViewCell{
     
+    //MARK:- View variables
     @IBOutlet weak var nameViewLabel: UILabel!
     
+    //MARK:- Public variables
     func setUp(name: String?){
+        setLittleBorderFeatured()
         nameViewLabel.text = name ?? "Genero"
         nameViewLabel.adjustsFontSizeToFitWidth = true
     }
