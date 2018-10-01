@@ -9,10 +9,7 @@
 import Foundation
 import UIKit
 
-class SearchViewController : UIViewController{
-    
-    //MARK:- Private variables
-    private var moviePage = MoviePageDTO()
+class SearchViewController : BaseMovieViewController{
 
     //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
@@ -22,9 +19,26 @@ class SearchViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.hideKeyboardWhenTappedAround()
+        hideKeyboardWhenTappedAround()
     }
     
+    override func viewModelStateChange(change: MovieListState.Change) {
+        switch change {
+        case .success:
+            movieCollection.reloadData()
+            break
+        case .error:
+            movieCollection.showEmptyCell(string: "Erro ao buscar os filmes")
+            break
+        }
+    }
+    
+    override func bindViewModel(){
+        viewModel = SearchViewModel()
+        viewModel.onChange = viewModelStateChange
+    }
+    
+    //TODO Coordinator
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
@@ -33,21 +47,10 @@ class SearchViewController : UIViewController{
             let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
             let indexPath = indexPathArray.firstObject as! NSIndexPath
             
-            let selectedMovie = self.moviePage.results[indexPath.row]
+            let selectedMovie = self.viewModel.state!.moviePage.results[indexPath.row]
             
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.setUp(movieId: selectedMovie.id)
-        }
-    }
-
-    //MARK:- Private Functions
-    private func searchMovies(by searchText: String){
-        MovieService.shared().getMoviePageByName(query: searchText){ newMoviePage, reponse, error in
-            self.moviePage = newMoviePage
-            
-            DispatchQueue.main.async() {
-                self.movieCollection.reloadData()
-            }
         }
     }
 }
@@ -56,12 +59,14 @@ class SearchViewController : UIViewController{
 extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchMovies(by: searchBar.text ?? "")
+        if let searchViewModel = viewModel as? SearchViewModel{
+            searchViewModel.searchQuery = searchBar.text
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if(searchText.isEmpty){
-            searchMovies(by: "")
+        if let searchViewModel = viewModel as? SearchViewModel{
+            searchViewModel.searchQuery = ""
         }
     }
 }
@@ -70,7 +75,7 @@ extension SearchViewController: UISearchBarDelegate{
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
-        if moviePage.results.isEmpty{
+        if viewModel.state!.moviePage.results.isEmpty{
             movieCollection.showEmptyCell(string: "Busque por filmes")
             
             return 0
@@ -82,19 +87,15 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return moviePage.results.count
+        return viewModel.state!.moviePage.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
         
-        let movie: MovieDTO = moviePage.results[indexPath.row]
+        let movie: MovieDTO = viewModel.state!.moviePage.results[indexPath.row]
         
-        if let posterPath = movie.poster_path{
-            MovieService.shared().getPoster(path: posterPath, quality: Quality.low) { image, response, error in
-                cell.setUp(poster: image)
-            }
-        }
+        cell.setUp(posterURL: movie.poster_path ?? "")
         
         return cell
     }

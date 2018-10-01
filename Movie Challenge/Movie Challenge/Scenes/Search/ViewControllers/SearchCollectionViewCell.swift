@@ -6,8 +6,8 @@
 //  Copyright © 2018 igor gomes arantes. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import SDWebImage
 
 class SearchCollectionViewCell : UICollectionViewCell{
     
@@ -22,7 +22,7 @@ class SearchCollectionViewCell : UICollectionViewCell{
     }
     
     //MARK:- Public functions
-    func setUp(poster: UIImage?){
-        posterImage.image = poster ?? UIImage(named: "placeholder-image")
+    func setUp(posterURL: String){
+        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + posterURL), placeholderImage: UIImage(named: AppConstants.placeHolder))
     }
 }
