@@ -35,7 +35,7 @@ class MovieRepository{
     //MARK:- Private movie methods
     private func findOneMovieEntity(by id: Int) throws -> MovieEntity{
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieEntity")
-        
+
         request.predicate = NSPredicate(format: "id = " + String(id))
         
         let fetchedMovies = try context.fetch(request) as! [MovieEntity]
@@ -96,7 +96,7 @@ class MovieRepository{
     }
     
     public func getMovie(by id: Int) throws -> MovieDTO{
-        
+
         let movieEntity = try findOneMovieEntity(by: id)
         
         let movieDTO = MovieHelper.movieEntityToDTO(movieEntity: movieEntity)

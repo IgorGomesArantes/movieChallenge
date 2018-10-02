@@ -8,39 +8,42 @@
 
 import Foundation
 
-class SearchViewModel : BaseMovieViewModel{
-    var state: MovieListState? = MovieListState(moviePage: MoviePageDTO())
+class SearchViewModel : MovieViewModel{
+
+    var state: MovieState = MovieState(moviePage: MoviePageDTO())
     
-    var onChange: ((MovieListState.Change) -> ())?
+    var onChange: ((MovieState.Change) -> ())
     
-    func loadMoreMovies() {
-        return
+    init(onChange: @escaping ((MovieState.Change) -> ())){
+        self.onChange = onChange
     }
     
     //MARK:- Public variables
     var searchQuery: String?{
         didSet{
-            if let query = searchQuery{
-                if query.isEmpty{
-                    self.state?.moviePage = MoviePageDTO()
-                }else{
-                    reloadMovies()
-                }
-            }
+            reload()
         }
     }
     
     //MARK:- Private methods
-    func reloadMovies(){
+    func reload(){
         guard let query = searchQuery else { return }
         
-        MovieService.shared().getMoviePageByName(query: query){ moviePage, reponse, requestError in
-            if requestError != nil{
-                self.onChange!(MovieListState.Change.error)
-            }else{
-                self.state?.moviePage = moviePage
-                
-                self.onChange!(MovieListState.Change.success)
+        if query.isEmpty{
+            self.state.moviePage = MoviePageDTO()
+            self.onChange(MovieState.Change.emptyResult)
+        }else{
+            MovieService.shared().getMoviePageByName(query: query){ moviePage, reponse, requestError in
+                if requestError != nil{
+                    self.state.moviePage = MoviePageDTO()
+                    self.onChange(MovieState.Change.error)
+                }else if moviePage.results.isEmpty{
+                    self.state.moviePage = MoviePageDTO()
+                    self.onChange(MovieState.Change.emptyResult)
+                }else{
+                    self.state.moviePage = moviePage
+                    self.onChange(MovieState.Change.success)
+                }
             }
         }
     }

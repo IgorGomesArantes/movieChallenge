@@ -57,7 +57,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     private func setFields(){
         titleLabel.text = movie.title
         creationDateLabel.text = movie.creation_date != nil ? movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
-        posterImage.image = movie.poster != nil ? UIImage(data: movie.poster!) : UIImage(named: "placeholder-image")
+        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + movie.poster_path!), placeholderImage: UIImage(named: AppConstants.placeHolder))
         voteAverageLabel.text = String(self.movie.vote_average!)
         voteCountLabel.text = "(" + String(self.movie.vote_count!) + ")"
         

@@ -62,4 +62,5 @@ struct MovieDTO : Codable{
     var vote_count: Int?
     var poster: Data?
     var creation_date: Date?
+    var favorite: Bool?
 }

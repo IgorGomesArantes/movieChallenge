@@ -787,7 +787,7 @@
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-na-TUc">
                                         <rect key="frame" x="8" y="775.33333333333337" width="398" height="33"/>
-                                        <color key="backgroundColor" name="TextPattern"/>
+                                        <color key="backgroundColor" name="ButtonRemove"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="33" id="Trb-gd-fSD"/>
                                         </constraints>

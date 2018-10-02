@@ -9,8 +9,11 @@
 import Foundation
 import UIKit
 
-class SearchViewController : BaseMovieViewController{
-
+class SearchViewController : UIViewController, MovieViewController{
+    
+    //MARK:- MovieViewController variables
+    var viewModel: MovieViewModel!
+    
     //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var movieCollection: UICollectionView!
@@ -19,23 +22,29 @@ class SearchViewController : BaseMovieViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        movieCollection.showEmptyCell(string: "Buscar filmes")
+        bindViewModel()
         hideKeyboardWhenTappedAround()
     }
     
-    override func viewModelStateChange(change: MovieListState.Change) {
+    func bindViewModel() {
+        viewModel = SearchViewModel(onChange: viewModelStateChange)
+    }
+    
+    func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:
-            movieCollection.reloadData()
+            movieCollection.hideEmptyCell()
             break
         case .error:
             movieCollection.showEmptyCell(string: "Erro ao buscar os filmes")
             break
+        case .emptyResult:
+            movieCollection.showEmptyCell(string: "Buscar filmes")
+            break
         }
-    }
-    
-    override func bindViewModel(){
-        viewModel = SearchViewModel()
-        viewModel.onChange = viewModelStateChange
+        
+        movieCollection.reloadData()
     }
     
     //TODO Coordinator
@@ -47,7 +56,7 @@ class SearchViewController : BaseMovieViewController{
             let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
             let indexPath = indexPathArray.firstObject as! NSIndexPath
             
-            let selectedMovie = self.viewModel.state!.moviePage.results[indexPath.row]
+            let selectedMovie = self.viewModel.getMovie(row: indexPath.row)
             
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.setUp(movieId: selectedMovie.id)
@@ -65,8 +74,10 @@ extension SearchViewController: UISearchBarDelegate{
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if let searchViewModel = viewModel as? SearchViewModel{
-            searchViewModel.searchQuery = ""
+        if searchText.isEmpty{
+            if let searchViewModel = self.viewModel as? SearchViewModel{
+                searchViewModel.searchQuery = searchText
+            }
         }
     }
 }
@@ -74,26 +85,17 @@ extension SearchViewController: UISearchBarDelegate{
 //MARK:- Collection view methods
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
-        if viewModel.state!.moviePage.results.isEmpty{
-            movieCollection.showEmptyCell(string: "Busque por filmes")
-            
-            return 0
-        }
-        
-        movieCollection.hideEmptyCell()
-        
-        return 1
+        return viewModel.numberOfSections()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.state!.moviePage.results.count
+        return viewModel.numberOfRows()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
         
-        let movie: MovieDTO = viewModel.state!.moviePage.results[indexPath.row]
+        let movie: MovieDTO = viewModel.getMovie(row: indexPath.row)
         
         cell.setUp(posterURL: movie.poster_path ?? "")
         
