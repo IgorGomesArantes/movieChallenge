@@ -12,7 +12,7 @@ import UIKit
 class SearchViewController : UIViewController, MovieViewController{
     
     //MARK:- MovieViewController variables
-    var viewModel: MovieViewModel!
+    var viewModel: SearchViewModel!
     
     //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
@@ -56,7 +56,7 @@ class SearchViewController : UIViewController, MovieViewController{
             let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
             let indexPath = indexPathArray.firstObject as! NSIndexPath
             
-            let selectedMovie = self.viewModel.getMovie(row: indexPath.row)
+            let selectedMovie = self.viewModel.movie(row: indexPath.row)
             
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.setUp(movieId: selectedMovie.id)
@@ -68,16 +68,12 @@ class SearchViewController : UIViewController, MovieViewController{
 extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let searchViewModel = viewModel as? SearchViewModel{
-            searchViewModel.searchQuery = searchBar.text
-        }
+        viewModel.searchQuery = searchBar.text
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty{
-            if let searchViewModel = self.viewModel as? SearchViewModel{
-                searchViewModel.searchQuery = searchText
-            }
+            viewModel.searchQuery = searchText
         }
     }
 }
@@ -95,7 +91,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
         
-        let movie: MovieDTO = viewModel.getMovie(row: indexPath.row)
+        let movie: MovieDTO = viewModel.movie(row: indexPath.row)
         
         cell.setUp(posterURL: movie.poster_path ?? "")
         

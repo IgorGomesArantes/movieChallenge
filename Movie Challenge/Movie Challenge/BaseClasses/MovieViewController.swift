@@ -9,9 +9,13 @@
 import UIKit
 
 protocol MovieViewController{
-    
-    var viewModel: MovieViewModel! { get set }
-    
     func viewModelStateChange(change: MovieState.Change)
     func bindViewModel()
+}
+
+extension MovieViewController{
+    //TODO: Nao precisa
+    func bindViewModel( viewModel: inout MovieViewModel){
+        viewModel.onChange = viewModelStateChange
+    }
 }

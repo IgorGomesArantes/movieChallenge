@@ -8,9 +8,10 @@
 
 import Foundation
 
-class DetailViewModel: MovieViewModel{
+class DetailViewModel: MovieViewModel, FavoriteViewModel{
     
-    internal var state: MovieState = MovieState()
+    var state: MovieState = MovieState()
+    var movie: MovieDTO!
     
     var movieId: Int?{
         didSet{
@@ -26,8 +27,9 @@ class DetailViewModel: MovieViewModel{
     
     func reload() {
         do{
-            state.movieDetail = try MovieRepository.shared().getMovie(by: movieId!)
-            state.movieDetail?.favorite = true
+            movie = try MovieRepository.shared().getMovie(by: movieId!)
+            movie?.favorite = true
+            state.settedUp = true
             
             onChange(MovieState.Change.success)
         }catch{
@@ -35,8 +37,9 @@ class DetailViewModel: MovieViewModel{
                 if requestError != nil{
                     self.onChange(MovieState.Change.error)
                 }else{
-                    self.state.movieDetail = movie
-                    self.state.movieDetail?.favorite = false
+                    self.state.settedUp = true
+                    self.movie = movie
+                    self.movie?.favorite = false
                     
                     self.onChange(MovieState.Change.success)
                 }
@@ -44,17 +47,45 @@ class DetailViewModel: MovieViewModel{
         }
     }
     
+    private func save(){
+        if let movie = movie{
+            do{
+                try MovieRepository.shared().saveMovie(movie: movie)
+            }catch let error{
+                print("Erro ao salvar o filme", error)
+            }
+        }else{
+            print("O filme não pode ser nulo")
+        }
+    }
+    
     func saveMovieOrRemoveFavorite(){
         
-        guard let movieDetail = state.movieDetail else { return }
-        guard let favorite = movieDetail.favorite else { return }
+        guard let movie = movie else { return }
+        guard let favorite = movie.favorite else { return }
         
         if(favorite){
-            removeMovieDetail()
-            state.movieDetail?.favorite = false
+            self.remove(movieId: movieId!)
+            self.movie?.favorite = false
         }else{
-            saveMovieDetail()
-            state.movieDetail?.favorite = true
+            save()
+            self.movie?.favorite = true
         }
+    }
+    
+    func numberOfGenres() -> Int {
+        if state.settedUp{
+            guard let genres = movie.genres else { return 0 }
+            
+            return genres.count
+        }
+        
+        return 0
+    }
+    
+    func getGenre(index: Int) -> Genre{
+        guard let genres = movie.genres else { return Genre() }
+        
+        return genres[index]
     }
 }

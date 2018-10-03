@@ -12,7 +12,7 @@ import UIKit
 class DetailViewController : UIViewController, MovieViewController{
     
     //MARK:- MovieViewController variables
-    var viewModel: MovieViewModel!
+    var viewModel: DetailViewModel!
     
     //MARK:- Private variables
     private var movieId: Int!
@@ -34,10 +34,12 @@ class DetailViewController : UIViewController, MovieViewController{
     
     //MARK:- View actions
     @IBAction func favoriteMovie(_ sender: Any) {
-        if let viewModel = viewModel as? DetailViewModel{
-            viewModel.saveMovieOrRemoveFavorite()
-            self.setButtonState()
-        }
+        viewModel.saveMovieOrRemoveFavorite()
+        self.setButtonState()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
     }
     
     //MARK:- Primitive functions
@@ -54,15 +56,7 @@ class DetailViewController : UIViewController, MovieViewController{
         overviewView.setLittleBorderFeatured()
         titleLabel.setCornerRadius()
         
-        if let viewModel = viewModel as? DetailViewModel{
-            viewModel.movieId = movieId
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        
-        setButtonState()
+        viewModel.movieId = movieId
     }
     
     func bindViewModel(){
@@ -82,36 +76,42 @@ class DetailViewController : UIViewController, MovieViewController{
     }
     
     //MARK:- Private Functions
+    //TODO:- Misterio
     private func setButtonState(){
-        let movieDetail = viewModel.getMovie()
-        guard let favorite = movieDetail.favorite else { return }
-        
-        if favorite{
-            self.favoriteButton.backgroundColor = AppConstants.colorPattern
-            self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
-            self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
+        if viewModel.state.settedUp{
+            favoriteButton.isEnabled = true
+            
+            if (viewModel.movie?.favorite)!{
+                self.favoriteButton.backgroundColor = AppConstants.colorPattern
+                self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
+                self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
+            }else{
+                self.favoriteButton.backgroundColor = AppConstants.colorFeatured
+                self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
+                self.favoriteButton.setTitleColor(AppConstants.colorPattern, for: UIControl.State.normal)
+            }
         }else{
-            self.favoriteButton.backgroundColor = AppConstants.colorFeatured
-            self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
-            self.favoriteButton.setTitleColor(AppConstants.colorPattern, for: UIControl.State.normal)
+            favoriteButton.isEnabled = false
         }
     }
     
     func setFields(){
-        let movieDetail = viewModel.getMovie()
+        if let posterPath = viewModel.movie.poster_path{
+            posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
+        }
         
-        titleLabel.text = movieDetail.title
-        votesAverageLabel.text = String(movieDetail.vote_average!)
-        votesCountLabel.text = "(" + String(movieDetail.vote_count!) + ")"
-        overviewLabel.text = movieDetail.overview
+        titleLabel.text = viewModel.movie.title
+        votesAverageLabel.text = String(viewModel.movie.vote_average!)
+        votesCountLabel.text = "(" + String(viewModel.movie.vote_count!) + ")"
+        overviewLabel.text = viewModel.movie.overview
         
-        if let releaseDate = movieDetail.release_date{
+        if let releaseDate = viewModel.movie.release_date{
             if !releaseDate.isEmpty{
-                yearLabel.text = String((movieDetail.release_date?.split(separator: "-").first)!)
+                yearLabel.text = String((viewModel.movie.release_date?.split(separator: "-").first)!)
             }
         }
         
-        if let runtime = movieDetail.runtime{
+        if let runtime = viewModel.movie.runtime{
             runtimeLabel.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
         } else{
             runtimeLabel.text = "Duração indefinida"
@@ -122,9 +122,7 @@ class DetailViewController : UIViewController, MovieViewController{
         let height = categoryCollection.collectionViewLayout.collectionViewContentSize.height
         categoryCollectionHeightConstraint.constant = height
         
-        if let posterPath = movieDetail.poster_path{
-            posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
-        }
+        setButtonState()
     }
     
     //MARK:- Public functions
@@ -136,19 +134,13 @@ class DetailViewController : UIViewController, MovieViewController{
 //MARK:- Collection View Methods
 extension DetailViewController :  UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let movieDetail = viewModel.getMovie()
-        guard let genres = movieDetail.genres else { return 0 }
-        
-        return genres.count
+        return viewModel.numberOfGenres()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCollectionViewCell
         
-        let movieDetail = viewModel.getMovie()
-        guard let categoryList = movieDetail.genres, let categoryName = categoryList[indexPath.row].name else{ return UICollectionViewCell() }
-
-        cell.setUp(name: categoryName)
+        cell.setUp(genre: viewModel.getGenre(index: indexPath.row))
         
         return cell
     }

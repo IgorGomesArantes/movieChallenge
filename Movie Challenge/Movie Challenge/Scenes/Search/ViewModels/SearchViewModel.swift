@@ -8,9 +8,10 @@
 
 import Foundation
 
-class SearchViewModel : MovieViewModel{
+class SearchViewModel : MovieViewModel, ScrollViewModel{
 
-    var state: MovieState = MovieState(moviePage: MoviePageDTO())
+    var state: MovieState = MovieState()
+    private var moviePage: MoviePageDTO!
     
     var onChange: ((MovieState.Change) -> ())
     
@@ -30,21 +31,40 @@ class SearchViewModel : MovieViewModel{
         guard let query = searchQuery else { return }
         
         if query.isEmpty{
-            self.state.moviePage = MoviePageDTO()
+            self.moviePage = MoviePageDTO()
+            state.settedUp = true
             self.onChange(MovieState.Change.emptyResult)
         }else{
             MovieService.shared().getMoviePageByName(query: query){ moviePage, reponse, requestError in
                 if requestError != nil{
-                    self.state.moviePage = MoviePageDTO()
+                    self.moviePage = MoviePageDTO()
                     self.onChange(MovieState.Change.error)
                 }else if moviePage.results.isEmpty{
-                    self.state.moviePage = MoviePageDTO()
+                    self.moviePage = MoviePageDTO()
+                    self.state.settedUp = true
                     self.onChange(MovieState.Change.emptyResult)
                 }else{
-                    self.state.moviePage = moviePage
+                    self.moviePage = moviePage
+                    self.state.settedUp = true
                     self.onChange(MovieState.Change.success)
                 }
             }
         }
+    }
+    
+    func numberOfSections() -> Int {
+        return 1
+    }
+    
+    func numberOfRows() -> Int{
+        if state.settedUp{
+            return moviePage.results.count
+        }
+        
+        return 0
+    }
+    
+    func movie(row: Int, section: Int = 1) -> MovieDTO{
+        return moviePage.results[row]
     }
 }
