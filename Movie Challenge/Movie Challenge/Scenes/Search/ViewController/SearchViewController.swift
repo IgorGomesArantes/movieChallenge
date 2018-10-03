@@ -11,7 +11,7 @@ import UIKit
 
 class SearchViewController : UIViewController, MovieViewController{
     
-    //MARK:- MovieViewController variables
+    //MARK:- ViewModel
     var viewModel: SearchViewModel!
     
     //MARK:- View variables

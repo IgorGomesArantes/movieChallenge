@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SearchViewModel : MovieViewModel, ScrollViewModel{
+class SearchViewModel : MovieViewModel, BaseScrollViewModel{
 
     var state: MovieState = MovieState()
     private var moviePage: MoviePageDTO!

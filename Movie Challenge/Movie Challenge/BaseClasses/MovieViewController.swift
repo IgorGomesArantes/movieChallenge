@@ -12,10 +12,10 @@ protocol MovieViewController{
     func viewModelStateChange(change: MovieState.Change)
     func bindViewModel()
 }
-
-extension MovieViewController{
-    //TODO: Nao precisa
-    func bindViewModel( viewModel: inout MovieViewModel){
-        viewModel.onChange = viewModelStateChange
-    }
-}
+//Nao precisa
+//extension MovieViewController{
+//
+//    func bindViewModel( viewModel: inout MovieViewModel){
+//        viewModel.onChange = viewModelStateChange
+//    }
+//}

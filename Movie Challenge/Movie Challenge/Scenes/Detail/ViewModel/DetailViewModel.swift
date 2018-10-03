@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DetailViewModel: MovieViewModel, FavoriteViewModel{
+class DetailViewModel: MovieViewModel, BaseFavoriteViewModel{
     
     var state: MovieState = MovieState()
     var movie: MovieDTO!
@@ -53,9 +53,11 @@ class DetailViewModel: MovieViewModel, FavoriteViewModel{
                 try MovieRepository.shared().saveMovie(movie: movie)
             }catch let error{
                 print("Erro ao salvar o filme", error)
+                self.onChange(MovieState.Change.error)
             }
         }else{
             print("O filme não pode ser nulo")
+            self.onChange(MovieState.Change.emptyResult)
         }
     }
     

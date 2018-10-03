@@ -24,11 +24,11 @@ protocol MovieViewModel{
     func reload()
 }
 
-protocol FavoriteViewModel{
+protocol BaseFavoriteViewModel{
     func remove(movieId: Int)
 }
 
-extension FavoriteViewModel{
+extension BaseFavoriteViewModel{
     func remove(movieId: Int){
         do{
             try MovieRepository.shared().removeMovie(id: movieId)
@@ -38,7 +38,7 @@ extension FavoriteViewModel{
     }
 }
 
-protocol ScrollViewModel{
+protocol BaseScrollViewModel{
     func numberOfSections() -> Int
     func numberOfRows() -> Int
     func movie(row: Int, section: Int) -> MovieDTO

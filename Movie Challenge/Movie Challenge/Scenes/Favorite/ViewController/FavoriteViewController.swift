@@ -9,12 +9,18 @@
 import Foundation
 import UIKit
 
-class FavoriteViewController : UIViewController{
+class FavoriteViewController : UIViewController, MovieViewController{
     
-    //MARK:- Private variables
-    private var allMovieList: [MovieDTO]!
-    private var categoryList: [CategoryDTO]!
-    private var selectedList: [MovieDTO]!
+     var viewModel : FavoriteViewModel!
+    
+    func viewModelStateChange(change: MovieState.Change) {
+        selectedCategoryLabel.text = viewModel.selectedCategoryName!
+        favoriteMoviesTable.reloadData()
+    }
+    
+    func bindViewModel() {
+        viewModel = FavoriteViewModel(onChange: viewModelStateChange)
+    }
     
     //MARK:- View variables
     @IBOutlet weak var categoriesCollection: UICollectionView!
@@ -33,38 +39,18 @@ class FavoriteViewController : UIViewController{
         favoriteMoviesTable.dataSource = self
         
         selectedCategoryLabel.setLittleBorderFeatured()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        selectedCategoryLabel.text = "Todos os filmes"
         
-        setMovieLists()
+        bindViewModel()
+        
+        favoriteMoviesTable.reloadData()
+        categoriesCollection.reloadData()
     }
     
-    //TODO:- Ordenar no repositorio
-    //MARK:- Private methods
-    func setMovieLists(){
-        do{
-            allMovieList = try MovieRepository.shared().getAllMovies()
-            categoryList = try MovieRepository.shared().getAllCategories()
-            
-            categoryList.sort(by: { $0.name! < $1.name! })
-            allMovieList.sort(by: { $0.title! < $1.title! })
-
-            if(categoryList.count > 0){
-                for i  in 0...categoryList.count - 1{
-                    if categoryList[i].movies != nil{
-                        categoryList[i].movies?.sort(by: { $0.title! < $1.title! })
-                    }
-                }
-            }
-            
-            selectedList = allMovieList
-            favoriteMoviesTable.reloadData()
-            categoriesCollection.reloadData()
-        }catch let error{
-            print("Erro ao carregar dados: ", error)
-        }
+    //TODO: Atualizar listas
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        bindViewModel()
     }
 }
 
@@ -87,7 +73,7 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
             do{
                 try MovieRepository.shared().removeMovie(id: id)
             
-                self.setMovieLists()
+                //self.setMovieLists()
             }catch let error{
                 print("Não foi possivel remover o filme", error)
             }
@@ -101,82 +87,45 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
 //MARK:- Collection methods
 extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if categoryList.isEmpty{
-            categoriesCollection.showEmptyCell(string: "Ainda não há categorias cadastradas")
-            
-            return 0
-        }
-        
-        categoriesCollection.hideEmptyCell()
-        
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let categories = categoryList else { return 0 }
-        
-        return categories.count + 1
+        return viewModel.numberOfCategories()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "categoryOptionCollectionViewCell", for: indexPath) as! CategoryOptionCollectionViewCell
         
-        if indexPath.row == 0{
-            cell.setUp(name: "Todos")
-        }else{
-            guard let categoryName = categoryList[indexPath.row - 1].name else { return UICollectionViewCell() }
-            
-            cell.setUp(name: categoryName)
-        }
+        let category = viewModel.category(index: indexPath.row)
+        
+        cell.setUp(name: category.name!)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if indexPath.row == 0{
-            selectedCategoryLabel.text = "Todos os filmes"
-            selectedList = allMovieList
-        }else{
-            if let categoryName = categoryList[indexPath.row - 1].name{
-                selectedCategoryLabel.text = categoryName
-            }
-            
-            if let movies = categoryList[indexPath.row - 1].movies{
-                selectedList = movies
-            }else{
-                selectedList = [MovieDTO]()
-            }
-        }
+        viewModel.selectedCategoryIndex = indexPath.row
         
-        favoriteMoviesTable.reloadData()
+        print(indexPath.row)
     }
 }
 
 //MARK:- Table methods
 extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
-        if selectedList.isEmpty{
-            favoriteMoviesTable.showEmptyCell(string: "Ainda não há filmes favoritos")
-            
-            return 0
-        }
-        
-        favoriteMoviesTable.hideEmptyCell()
-        
-        return 1
+        return viewModel.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let movies = selectedList else { return 0 }
-        
-        return movies.count
+        return viewModel.numberOfRows()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteMovieTableCell", for: indexPath) as! FavoriteMovieTableViewCell
         
-        guard let movies = selectedList else { return UITableViewCell() }
+        guard let movies = viewModel.selectedList else { return UITableViewCell() }
         
         cell.setUp(movie: movies[indexPath.row], delegate: self)
         
