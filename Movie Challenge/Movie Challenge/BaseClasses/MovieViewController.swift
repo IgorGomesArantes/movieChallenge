@@ -12,10 +12,7 @@ protocol MovieViewController{
     func viewModelStateChange(change: MovieState.Change)
     func bindViewModel()
 }
-//Nao precisa
-//extension MovieViewController{
-//
-//    func bindViewModel( viewModel: inout MovieViewModel){
-//        viewModel.onChange = viewModelStateChange
-//    }
-//}
+
+protocol DataBaseViewController{
+    func viewModelDataBaseChange(change: MovieState.Change)
+}

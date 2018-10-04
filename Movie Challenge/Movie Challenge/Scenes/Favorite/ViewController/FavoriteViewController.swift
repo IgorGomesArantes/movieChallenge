@@ -9,19 +9,11 @@
 import Foundation
 import UIKit
 
-class FavoriteViewController : UIViewController, MovieViewController{
-    
-     var viewModel : FavoriteViewModel!
-    
-    func viewModelStateChange(change: MovieState.Change) {
-        selectedCategoryLabel.text = viewModel.selectedCategoryName!
-        favoriteMoviesTable.reloadData()
-    }
-    
-    func bindViewModel() {
-        viewModel = FavoriteViewModel(onChange: viewModelStateChange)
-    }
-    
+class FavoriteViewController : UIViewController{
+
+    //Private variables
+    private var viewModel : FavoriteViewModel!
+
     //MARK:- View variables
     @IBOutlet weak var categoriesCollection: UICollectionView!
     @IBOutlet weak var favoriteMoviesTable: UITableView!
@@ -50,7 +42,7 @@ class FavoriteViewController : UIViewController, MovieViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        bindViewModel()
+        viewModel.selectedCategoryIndex = 0
     }
 }
 
@@ -58,7 +50,7 @@ class FavoriteViewController : UIViewController, MovieViewController{
 extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
-            viewController.setUp(movieId: movieId)
+            viewController.setup(movieId: movieId)
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }
@@ -66,21 +58,46 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     }
     
     func removeFavoriteMovie(id: Int) {
-        
         let alert = UIAlertController(title: "Deseja mesmo remover este filme dos favoritos?", message: "", preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "Sim", style: .default, handler: {action in
-            do{
-                try MovieRepository.shared().removeMovie(id: id)
-            
-                //self.setMovieLists()
-            }catch let error{
-                print("Não foi possivel remover o filme", error)
-            }
+            self.viewModel.remove(movieId: id)
         }))
         alert.addAction(UIAlertAction(title: "Não", style: .cancel, handler: nil))
         
         self.present(alert, animated: true)
+    }
+}
+
+//MARK:- MovieViewController methods
+extension FavoriteViewController: MovieViewController{
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            selectedCategoryLabel.text = viewModel.selectedCategoryName!
+            favoriteMoviesTable.reloadData()
+            break
+        default:
+            break
+        }
+    }
+    
+    func bindViewModel() {
+        viewModel = FavoriteViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+    }
+}
+
+//Mark:- DataBaseController methods
+extension FavoriteViewController: DataBaseViewController{
+    func viewModelDataBaseChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            favoriteMoviesTable.reloadData()
+            categoriesCollection.reloadData()
+            break
+        default:
+            break
+        }
     }
 }
 

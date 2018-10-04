@@ -9,14 +9,12 @@
 import Foundation
 import UIKit
 
-class DetailViewController : UIViewController, MovieViewController{
-    
-    //MARK:- MovieViewController variables
-    var viewModel: DetailViewModel!
+class DetailViewController : UIViewController{
     
     //MARK:- Private variables
     private var movieId: Int!
-
+    private var viewModel: DetailViewModel!
+    
     //MARK:- View variables
     @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var votesCountLabel: UILabel!
@@ -35,11 +33,6 @@ class DetailViewController : UIViewController, MovieViewController{
     //MARK:- View actions
     @IBAction func favoriteMovie(_ sender: Any) {
         viewModel.saveMovieOrRemoveFavorite()
-        self.setButtonState()
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
     }
     
     //MARK:- Primitive functions
@@ -57,30 +50,13 @@ class DetailViewController : UIViewController, MovieViewController{
         titleLabel.setCornerRadius()
         
         viewModel.movieId = movieId
-    }
-    
-    func bindViewModel(){
-        viewModel = DetailViewModel(onChange: viewModelStateChange)
-    }
-    
-    func viewModelStateChange(change: MovieState.Change) {
-        switch change {
-        case .success:
-            setFields()
-            break
-        case .error:
-            break
-        case .emptyResult:
-            break
-        }
+        setButtonState()
     }
     
     //MARK:- Private Functions
     //TODO:- Misterio
     private func setButtonState(){
         if viewModel.state.settedUp{
-            favoriteButton.isEnabled = true
-            
             if (viewModel.movie?.favorite)!{
                 self.favoriteButton.backgroundColor = AppConstants.colorPattern
                 self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
@@ -90,15 +66,11 @@ class DetailViewController : UIViewController, MovieViewController{
                 self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorPattern, for: UIControl.State.normal)
             }
-        }else{
-            favoriteButton.isEnabled = false
         }
     }
     
     func setFields(){
-        if let posterPath = viewModel.movie.poster_path{
-            posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
-        }
+        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + (viewModel.movie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
         titleLabel.text = viewModel.movie.title
         votesAverageLabel.text = String(viewModel.movie.vote_average!)
@@ -126,8 +98,45 @@ class DetailViewController : UIViewController, MovieViewController{
     }
     
     //MARK:- Public functions
-    public func setUp(movieId: Int?){
+    public func setup(movieId: Int?){
         self.movieId = movieId
+    }
+}
+
+//MARK:- MovieViewController methods
+extension DetailViewController: MovieViewController{
+    func bindViewModel(){
+        viewModel = DetailViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+    }
+    
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            setFields()
+            break
+        case .error:
+            break
+        case .emptyResult:
+            break
+        }
+    }
+}
+
+//MARK:- DataBaseViewController methods
+extension DetailViewController: DataBaseViewController{
+    func viewModelDataBaseChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            setButtonState()
+            break
+        case .error:
+            //Erro ao acessar o banco
+            //Erro ao remover
+            break
+        case .emptyResult:
+            //O filme não está setado
+            break
+        }
     }
 }
 
@@ -140,7 +149,7 @@ extension DetailViewController :  UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCollectionViewCell
         
-        cell.setUp(genre: viewModel.getGenre(index: indexPath.row))
+        cell.setup(genre: viewModel.getGenre(index: indexPath.row))
         
         return cell
     }

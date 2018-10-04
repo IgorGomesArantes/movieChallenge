@@ -8,22 +8,59 @@
 
 import Foundation
 
-class DetailViewModel: MovieViewModel, BaseFavoriteViewModel{
+class DetailViewModel: MovieViewModel, DataBaseViewModel{
     
-    var state: MovieState = MovieState()
-    var movie: MovieDTO!
+    //MARK:- Private variables
+    private(set) var movie: MovieDTO!
     
+    //MARK:- Public variables
     var movieId: Int?{
         didSet{
             reload()
         }
     }
     
-    var onChange: ((MovieState.Change) -> ())
-    
-    init(onChange: @escaping ((MovieState.Change) -> ())){
+    //MARK:- Public methods
+    init(onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
+        state = MovieState()
+        
         self.onChange = onChange
+        self.onChangeDataBase = onChangeDataBase
     }
+    
+    func saveMovieOrRemoveFavorite(){
+        
+        guard let movie = movie else { return }
+        guard let favorite = movie.favorite else { return }
+        
+        if(favorite){
+            self.movie?.favorite = false
+            self.remove(movieId: movieId!)
+        }else{
+            self.movie?.favorite = true
+            save(movie: movie)
+        }
+    }
+    
+    func numberOfGenres() -> Int {
+        if state.settedUp{
+            guard let genres = movie.genres else { return 0 }
+            
+            return genres.count
+        }
+        
+        return 0
+    }
+    
+    func getGenre(index: Int) -> Genre{
+        guard let genres = movie.genres else { return Genre() }
+        
+        return genres[index]
+    }
+    
+    //MARK:- MovieViewModel methods and variables
+    var state: MovieState
+    var onChange: ((MovieState.Change) -> ())
     
     func reload() {
         do{
@@ -47,47 +84,10 @@ class DetailViewModel: MovieViewModel, BaseFavoriteViewModel{
         }
     }
     
-    private func save(){
-        if let movie = movie{
-            do{
-                try MovieRepository.shared().saveMovie(movie: movie)
-            }catch let error{
-                print("Erro ao salvar o filme", error)
-                self.onChange(MovieState.Change.error)
-            }
-        }else{
-            print("O filme não pode ser nulo")
-            self.onChange(MovieState.Change.emptyResult)
-        }
-    }
+    //MARK:- DataBaseViewModel methods and variables
+    var onChangeDataBase: ((MovieState.Change) -> ())
     
-    func saveMovieOrRemoveFavorite(){
-        
-        guard let movie = movie else { return }
-        guard let favorite = movie.favorite else { return }
-        
-        if(favorite){
-            self.remove(movieId: movieId!)
-            self.movie?.favorite = false
-        }else{
-            save()
-            self.movie?.favorite = true
-        }
-    }
-    
-    func numberOfGenres() -> Int {
-        if state.settedUp{
-            guard let genres = movie.genres else { return 0 }
-            
-            return genres.count
-        }
-        
-        return 0
-    }
-    
-    func getGenre(index: Int) -> Genre{
-        guard let genres = movie.genres else { return Genre() }
-        
-        return genres[index]
+    func changeDataBase(change: MovieState.Change) { 
+        onChangeDataBase(change)
     }
 }

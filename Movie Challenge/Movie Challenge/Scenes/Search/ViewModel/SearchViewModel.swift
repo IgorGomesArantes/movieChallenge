@@ -8,25 +8,28 @@
 
 import Foundation
 
-class SearchViewModel : MovieViewModel, BaseScrollViewModel{
-
-    var state: MovieState = MovieState()
+class SearchViewModel : MovieViewModel, ScrollViewModel{
+    
+    //MARK:- Private
     private var moviePage: MoviePageDTO!
     
-    var onChange: ((MovieState.Change) -> ())
-    
-    init(onChange: @escaping ((MovieState.Change) -> ())){
-        self.onChange = onChange
-    }
-    
-    //MARK:- Public variables
+    //MARK:- Public
     var searchQuery: String?{
         didSet{
             reload()
         }
     }
     
-    //MARK:- Private methods
+    init(onChange: @escaping ((MovieState.Change) -> ())){
+        state = MovieState()
+        
+        self.onChange = onChange
+    }
+    
+    //MARK:- MovieViewModel
+    var state: MovieState
+    var onChange: ((MovieState.Change) -> ())
+    
     func reload(){
         guard let query = searchQuery else { return }
         
@@ -52,6 +55,7 @@ class SearchViewModel : MovieViewModel, BaseScrollViewModel{
         }
     }
     
+    //MARK:- ScrollViewModel
     func numberOfSections() -> Int {
         return 1
     }

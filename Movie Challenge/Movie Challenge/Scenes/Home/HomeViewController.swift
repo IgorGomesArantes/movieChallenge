@@ -139,7 +139,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: SuggestionTableViewCellDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
-            viewController.setUp(movieId: movieId)
+            viewController.setup(movieId: movieId)
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }

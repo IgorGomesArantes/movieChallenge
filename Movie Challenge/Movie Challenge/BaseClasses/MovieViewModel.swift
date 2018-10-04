@@ -24,21 +24,34 @@ protocol MovieViewModel{
     func reload()
 }
 
-protocol BaseFavoriteViewModel{
+protocol DataBaseViewModel{
+    var onChangeDataBase: ((MovieState.Change) -> ()) { get set }
     func remove(movieId: Int)
+    func save(movie: MovieDTO)
+    func changeDataBase(change: MovieState.Change)
 }
 
-extension BaseFavoriteViewModel{
+extension DataBaseViewModel{
     func remove(movieId: Int){
         do{
             try MovieRepository.shared().removeMovie(id: movieId)
-        }catch let error{
-            print("Erro ao deletar o filme", error)
+            self.changeDataBase(change: MovieState.Change.success)
+        }catch{
+            self.changeDataBase(change: MovieState.Change.error)
+        }
+    }
+    
+    func save(movie: MovieDTO){
+        do{
+            try MovieRepository.shared().saveMovie(movie: movie)
+            self.changeDataBase(change: MovieState.Change.success)
+        }catch{
+            self.changeDataBase(change: MovieState.Change.error)
         }
     }
 }
 
-protocol BaseScrollViewModel{
+protocol ScrollViewModel{
     func numberOfSections() -> Int
     func numberOfRows() -> Int
     func movie(row: Int, section: Int) -> MovieDTO

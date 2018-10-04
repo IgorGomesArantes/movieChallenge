@@ -14,7 +14,7 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     
     //MARK:- Public methods
-    func setUp(genre: Genre){
+    func setup(genre: Genre){
         setBorderFeatured()
         self.nameLabel.text = genre.name
     }

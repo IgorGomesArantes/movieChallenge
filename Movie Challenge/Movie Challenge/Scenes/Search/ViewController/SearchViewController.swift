@@ -9,10 +9,10 @@
 import Foundation
 import UIKit
 
-class SearchViewController : UIViewController, MovieViewController{
+class SearchViewController : UIViewController{
     
-    //MARK:- ViewModel
-    var viewModel: SearchViewModel!
+    //MARK:- Private variables
+    private var viewModel: SearchViewModel!
     
     //MARK:- View variables
     @IBOutlet weak var searchBar: UISearchBar!
@@ -27,6 +27,25 @@ class SearchViewController : UIViewController, MovieViewController{
         hideKeyboardWhenTappedAround()
     }
     
+    //TODO Coordinator
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == "searchCollectionToMovieDetail"{
+            
+            let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
+            let indexPath = indexPathArray.firstObject as! NSIndexPath
+            
+            let selectedMovie = self.viewModel.movie(row: indexPath.row)
+            
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.setup(movieId: selectedMovie.id)
+        }
+    }
+}
+
+//MARK:- MovieViewController methods
+extension SearchViewController: MovieViewController{
     func bindViewModel() {
         viewModel = SearchViewModel(onChange: viewModelStateChange)
     }
@@ -45,22 +64,6 @@ class SearchViewController : UIViewController, MovieViewController{
         }
         
         movieCollection.reloadData()
-    }
-    
-    //TODO Coordinator
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        
-        if segue.identifier == "searchCollectionToMovieDetail"{
-            
-            let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
-            let indexPath = indexPathArray.firstObject as! NSIndexPath
-            
-            let selectedMovie = self.viewModel.movie(row: indexPath.row)
-            
-            let detailViewController = segue.destination as! DetailViewController
-            detailViewController.setUp(movieId: selectedMovie.id)
-        }
     }
 }
 
