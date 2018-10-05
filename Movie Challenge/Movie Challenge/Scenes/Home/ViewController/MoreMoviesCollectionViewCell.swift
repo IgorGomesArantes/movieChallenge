@@ -13,6 +13,7 @@ protocol MoreMoviesCollectionViewCellDelegate {
     func searchMoreMovies(completion: @escaping () -> ())
 }
 
+//Erro ao dar isEnableTrue
 class MoreMoviesCollectionViewCell: UICollectionViewCell{
     
     //MARK:- Private variables
@@ -21,7 +22,7 @@ class MoreMoviesCollectionViewCell: UICollectionViewCell{
     
     //MARK:- View actions
     @IBAction func searchMoreMovies(_ sender: Any) {
-        searchMoreMoviesButton.isEnabled = false
+        //searchMoreMoviesButton.isEnabled = false
         
         delegate.searchMoreMovies(){
             self.searchMoreMoviesButton.isEnabled = true

@@ -15,12 +15,13 @@ protocol SuggestionTableViewCellDelegate{
 class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
-    private var delegate: SuggestionTableViewCellDelegate!
-    private var moviePage = MoviePageDTO()
-    private var getPosterTasks: [URLSessionDataTask]!
-    private var page = 2
-    private var sort: Sort!
-    private var canSearchMore: Bool!
+//    private var delegate: SuggestionTableViewCellDelegate!
+//    private var moviePage = MoviePageDTO()
+//    private var getPosterTasks: [URLSessionDataTask]!
+//    private var page = 2
+//    private var sort: Sort!
+//    private var canSearchMore: Bool!
+    private var viewModel: SuggestionCellViewModel!
     
     //MARK:- View variables
     @IBOutlet weak var categoryLabelView: UILabel!
@@ -33,84 +34,62 @@ class SuggestionTableViewCell: UITableViewCell{
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        getPosterTasks = [URLSessionDataTask]()
+        //getPosterTasks = [URLSessionDataTask]()
         suggestionCategoryView.setCornerRadius()
         
         suggestionMoviesCollectionView.setLittleBorderFeatured()
         suggestionCategoryView.setLittleBorderFeatured()
     }
     
-    //MARK:- Private methods
-    private func updateData(){
-        for i in 0 ... moviePage.results.count - 1{
-            if let posterPath = moviePage.results[i].poster_path, moviePage.results[i].poster == nil{
-                let task = MovieService.shared().getPosterData(path: posterPath, quality: Quality.low){ poster, response, error in
-                    self.moviePage.results[i].poster = poster
-                    DispatchQueue.main.async(){
-                        self.suggestionMoviesCollectionView.reloadData()
-                    }
-                }
-                getPosterTasks.append(task)
-            }
-        }
-    }
-    
     //MARK:- Public methods
-    func setUp(moviePage: MoviePageDTO, delegate: SuggestionTableViewCellDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
+    func setup(viewModel: SuggestionCellViewModel){
         suggestionMoviesCollectionView.delegate = self
         suggestionMoviesCollectionView.dataSource = self
         
-        self.delegate = delegate
-        self.canSearchMore = canSearchMore
-        self.sort = sort
-        self.moviePage = moviePage
-        
-        if getPosterTasks != nil{
-            for task in getPosterTasks{
-                task.cancel()
-            }
-            getPosterTasks.removeAll()
-        }
-
-        categoryLabelView.text = moviePage.label
-        
-        updateData()
+        self.viewModel = viewModel
+        bindViewModel()
+        viewModel.reload()
     }
 }
 
 //MARK:- MoreMoviesCollectionViewCellDelegate methods
 extension SuggestionTableViewCell: MoreMoviesCollectionViewCellDelegate{
     func searchMoreMovies(completion: @escaping () -> ()) {
-        MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ newMoviePage, response, error in
-            
-            self.moviePage.results.append(contentsOf: newMoviePage.results)
-            
-            self.page += 1
-            
-            self.updateData()
-            
-            completion()
+        viewModel.searchMoreMovies()
+    }
+}
+
+//MARK:- MovieViewController methods
+extension SuggestionTableViewCell: MovieViewController{
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            categoryLabelView.text = viewModel.moviePage.label
+            self.suggestionMoviesCollectionView.reloadData()
+            break
+        default:
+            break
         }
+    }
+    
+    func bindViewModel() {
+        viewModel.onChange = viewModelStateChange
     }
 }
 
 //MARK: Collection view methods
 extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource{
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return viewModel.numberOfSections()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if(canSearchMore){
-            return moviePage.results.count + 1
-        }
-        
-        return moviePage.results.count
+        return viewModel.numberOfRows()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if indexPath.row == moviePage.results.count{
+        if viewModel.canSearchMore, indexPath.row == viewModel.numberOfRows() - 1{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "moreMoviesCollectionViewCell", for: indexPath) as! MoreMoviesCollectionViewCell
             
             cell.setUp(delegate: self)
@@ -119,21 +98,14 @@ extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDat
         }else{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "suggestionMovieCollectionViewCell", for: indexPath) as! SuggestionCollectionViewCell
             
-            if let poster = moviePage.results[indexPath.row].poster{
-                cell.setUp(poster: UIImage(data: poster)!)
-            } else{
-                cell.setUp(poster: UIImage(named: "placeholder-image")!)
-            }
+            cell.setup(movie: viewModel.movie(row: indexPath.row))
             
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if moviePage.results.count > indexPath.row{
-            delegate.changeToMovieDetail(movieId: moviePage.results[indexPath.row].id!)
-        }
+        viewModel.gotoMovieDetail(index: indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {

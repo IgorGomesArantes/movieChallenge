@@ -11,8 +11,7 @@ import UIKit
 class HomeViewController: UIViewController {
     
     //MARK:- Private variables
-    private var bestMovie: MovieDTO!
-    private var moviePageList: [MoviePageDTO]!
+    private var viewModel: HomeViewModel!
     
     //MARK:- View variables
     @IBOutlet weak var suggestionTable: UITableView!
@@ -38,33 +37,28 @@ class HomeViewController: UIViewController {
         
         bestMovieImage.setLittleBorderFeatured()
         bestMovieView.setLittleBorderFeatured()
-        //suggestionTable.setBorderFeatured()
         
-        resizeBestMovieView()
+        //resizeBestMovieView()
         
-        setMoviePageList()
+        bindViewModel()
+        viewModel.reload()
     }
     
     //MARK:- Private methods
-    private func setBestMovie(movie: MovieDTO){
+    private func setBestMovie(){
+        bestMovieImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.medium.rawValue + "/" + (viewModel.bestMovie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
-        bestMovie = movie
+        self.bestMovieTitleLabel.text = viewModel.bestMovie.title
+        self.bestMovieVotesAverageLabel.text = String(viewModel.bestMovie.vote_average!)
+        self.bestMovieVotesCountLabel.text = "(" + String(viewModel.bestMovie.vote_count!) + ")"
         
-        MovieService.shared().getPoster(path: movie.poster_path!, quality: Quality.high){ poster, response, error in
-            self.bestMovieImage.image = poster
-        }
-        
-        self.bestMovieTitleLabel.text = movie.title
-        self.bestMovieVotesAverageLabel.text = String(movie.vote_average!)
-        self.bestMovieVotesCountLabel.text = "(" + String(movie.vote_count!) + ")"
-        
-        if let releaseDate = movie.release_date{
+        if let releaseDate = viewModel.bestMovie.release_date{
             if !releaseDate.isEmpty{
                 self.bestMovieYearLabel.text = String((releaseDate.split(separator: "-").first)!)
             }
         }
         
-        if let runtime = movie.runtime{
+        if let runtime = viewModel.bestMovie.runtime{
             self.bestMovieRuntimeLabel.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
         } else{
             self.bestMovieRuntimeLabel.text = "Duração indefinida"
@@ -74,59 +68,7 @@ class HomeViewController: UIViewController {
         let height = self.bestMovieCategoryCollection.collectionViewLayout.collectionViewContentSize.height
         self.bestMovieCategoryCollectionHeightConstraint.constant = height
     }
-    
-    private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
-            var moviePage = newMoviePage
-            moviePage.label = label
-            self.moviePageList.append(moviePage)
-            
-            if isBestMovieHere{
-                if let bestMovie = moviePage.results.first{
-                    MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
-                        self.setBestMovie(movie: movie)
-                    }
-                }
-            }
-            
-            DispatchQueue.main.async(){
-                self.suggestionTable.reloadData()
-            }
-        }
-    }
-    
-    private func searchTrendingMoviePage(label: String){
-        MovieService.shared().getTrendingMovies(){ newMoviePage, response, error in
-            var moviePage = newMoviePage
-            moviePage?.label = label
-            self.moviePageList.append(moviePage!)
-            
-            DispatchQueue.main.async(){
-                self.suggestionTable.reloadData()
-            }
-        }
-    }
-    
-    private func setMoviePageList(){
-        moviePageList = [MoviePageDTO]()
-        
-        for i in 0...2{
-            switch i{
-            case 0:
-                searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
-                break
-            case 1:
-                searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
-                break
-            case 2:
-                searchTrendingMoviePage(label: "Melhores do dia")
-                break
-            default:
-                break
-            }
-        }
-    }
-    
+
     private func resizeBestMovieView(){
         let screenSize = UIScreen.main.bounds
         let screenWidth = screenSize.width
@@ -147,32 +89,41 @@ extension HomeViewController: SuggestionTableViewCellDelegate {
     }
 }
 
+//MARK:- MoviewViewController methods
+extension HomeViewController: MovieViewController{
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            if viewModel.bestMovie != nil{
+                self.setBestMovie()
+            }
+            
+            self.suggestionTable.reloadData()
+            break
+        default:
+            break
+        }
+    }
+    
+    func bindViewModel() {
+        viewModel = HomeViewModel(onChange: viewModelStateChange)
+    }
+}
+
 //MARK:- Table view methods
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return viewModel.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return moviePageList.count
+        return viewModel.numberOfRows()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
         
-        switch indexPath.row{
-            case 0:
-                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: true, sort: Sort.popularity)
-                break
-            case 1:
-                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: true, sort: Sort.voteCount)
-                break
-            case 2:
-                cell.setUp(moviePage: moviePageList[indexPath.row], delegate: self, canSearchMore: false)
-                break
-            default:
-                break
-        }
+        cell.setup(viewModel: viewModel.cellViewlModel(index: indexPath.row, delegate: self))
         
         return cell
     }
@@ -181,19 +132,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 //MARK:- Collection view methods
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let movie = bestMovie else { return 0 }
-        guard let genres = movie.genres else { return 0 }
-        
-        return genres.count
+        return viewModel.numberOfGenres()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bestMovieCategoryCollectionViewCell", for: indexPath) as! BestMovieCategoryCollectionViewCell
         
-        guard let categoryList = bestMovie.genres else{ return UICollectionViewCell() }
-        cell.setUp(name: categoryList[indexPath.row].name)
-        
-        cell.setCornerRadius()
+        cell.setup(genre: viewModel.getGenre(index: indexPath.row))
         
         return cell
     }

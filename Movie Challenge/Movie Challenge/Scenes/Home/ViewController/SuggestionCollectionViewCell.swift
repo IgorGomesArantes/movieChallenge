@@ -15,8 +15,8 @@ class SuggestionCollectionViewCell: UICollectionViewCell{
     @IBOutlet weak var posterImageView: UIImageView!
     
     //MARK:- Public methods
-    func setUp(poster: UIImage){
+    func setup(movie: MovieDTO){
         posterImageView.setLittleBorderFeatured()
-        posterImageView.image = poster
+        posterImageView.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + (movie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
     }
 }
