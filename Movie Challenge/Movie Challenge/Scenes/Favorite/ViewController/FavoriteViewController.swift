@@ -33,16 +33,13 @@ class FavoriteViewController : UIViewController{
         selectedCategoryLabel.setLittleBorderFeatured()
         
         bindViewModel()
-        
-        favoriteMoviesTable.reloadData()
-        categoriesCollection.reloadData()
     }
     
     //TODO: Atualizar listas
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewModel.selectedCategoryIndex = 0
+        viewModel.reload()
     }
 }
 
@@ -72,10 +69,20 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
 //MARK:- MovieViewController methods
 extension FavoriteViewController: MovieViewController{
     func viewModelStateChange(change: MovieState.Change) {
+        
+        favoriteMoviesTable.reloadData()
+        categoriesCollection.reloadData()
+        
+        selectedCategoryLabel.text = viewModel.selectedCategoryName!
+        
         switch change {
         case .success:
-            selectedCategoryLabel.text = viewModel.selectedCategoryName!
-            favoriteMoviesTable.reloadData()
+            favoriteMoviesTable.hideEmptyCell()
+            categoriesCollection.hideEmptyCell()
+            break
+        case .emptyResult:
+            favoriteMoviesTable.showEmptyCell(string: "Não há filmes")
+            categoriesCollection.showEmptyCell(string: "Não há categorias")
             break
         default:
             break
@@ -83,7 +90,8 @@ extension FavoriteViewController: MovieViewController{
     }
     
     func bindViewModel() {
-        viewModel = FavoriteViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+        self.viewModel = FavoriteViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+        print("")
     }
 }
 
@@ -92,8 +100,12 @@ extension FavoriteViewController: DataBaseViewController{
     func viewModelDataBaseChange(change: MovieState.Change) {
         switch change {
         case .success:
+            selectedCategoryLabel.text = viewModel.selectedCategoryName!
             favoriteMoviesTable.reloadData()
             categoriesCollection.reloadData()
+            break
+        case .error:
+            showAlert(title: "Ocorreu um erro ao acessar o banco de dados")
             break
         default:
             break
@@ -116,7 +128,7 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
         
         let category = viewModel.category(index: indexPath.row)
         
-        cell.setUp(name: category.name!)
+        cell.setup(category: category)
         
         return cell
     }
@@ -141,10 +153,10 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteMovieTableCell", for: indexPath) as! FavoriteMovieTableViewCell
+
+        let cellViewModel = FavoriteCellViewModel(delegate: self, movie: viewModel.movie(row: indexPath.row))
         
-        guard let movies = viewModel.selectedList else { return UITableViewCell() }
-        
-        cell.setUp(movie: movies[indexPath.row], delegate: self)
+        cell.setup(viewModel: cellViewModel)
         
         return cell
     }

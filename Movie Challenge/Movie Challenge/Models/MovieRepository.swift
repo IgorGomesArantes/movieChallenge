@@ -99,7 +99,7 @@ class MovieRepository{
 
         let movieEntity = try findOneMovieEntity(by: id)
         
-        var movieDTO = MovieHelper.movieEntityToDTO(movieEntity: movieEntity)
+        let movieDTO = MovieHelper.movieEntityToDTO(movieEntity: movieEntity)
         //movieDTO.favorite = true
         
         return movieDTO

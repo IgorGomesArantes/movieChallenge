@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DetailViewModel: MovieViewModel, DataBaseViewModel{
+class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
     private(set) var movie: MovieDTO!
@@ -60,7 +60,7 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel{
     
     //MARK:- MovieViewModel methods and variables
     var state: MovieState
-    var onChange: ((MovieState.Change) -> ())
+    var onChange: ((MovieState.Change) -> ())?
     
     func reload() {
         do{
@@ -68,17 +68,17 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel{
             movie?.favorite = true
             state.settedUp = true
             
-            onChange(MovieState.Change.success)
+            onChange!(MovieState.Change.success)
         }catch{
             MovieService.shared().getMovieDetail(id: movieId!){ movie, response, requestError in
                 if requestError != nil{
-                    self.onChange(MovieState.Change.error)
+                    self.onChange!(MovieState.Change.error)
                 }else{
                     self.state.settedUp = true
                     self.movie = movie
                     self.movie?.favorite = false
                     
-                    self.onChange(MovieState.Change.success)
+                    self.onChange!(MovieState.Change.success)
                 }
             }
         }

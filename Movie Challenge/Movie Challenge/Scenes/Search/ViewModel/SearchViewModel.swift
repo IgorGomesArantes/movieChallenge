@@ -28,7 +28,7 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
     
     //MARK:- MovieViewModel
     var state: MovieState
-    var onChange: ((MovieState.Change) -> ())
+    var onChange: ((MovieState.Change) -> ())?
     
     func reload(){
         guard let query = searchQuery else { return }
@@ -36,20 +36,20 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
         if query.isEmpty{
             self.moviePage = MoviePageDTO()
             state.settedUp = true
-            self.onChange(MovieState.Change.emptyResult)
+            self.onChange!(MovieState.Change.emptyResult)
         }else{
             MovieService.shared().getMoviePageByName(query: query){ moviePage, reponse, requestError in
                 if requestError != nil{
                     self.moviePage = MoviePageDTO()
-                    self.onChange(MovieState.Change.error)
+                    self.onChange!(MovieState.Change.error)
                 }else if moviePage.results.isEmpty{
                     self.moviePage = MoviePageDTO()
                     self.state.settedUp = true
-                    self.onChange(MovieState.Change.emptyResult)
+                    self.onChange!(MovieState.Change.emptyResult)
                 }else{
                     self.moviePage = moviePage
                     self.state.settedUp = true
-                    self.onChange(MovieState.Change.success)
+                    self.onChange!(MovieState.Change.success)
                 }
             }
         }

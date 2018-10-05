@@ -20,7 +20,7 @@ struct MovieState{
 
 protocol MovieViewModel{
     var state: MovieState { get }
-    var onChange: ((MovieState.Change) -> ()) { get set }
+    var onChange: ((MovieState.Change) -> ())? { get set }
     func reload()
 }
 
@@ -36,16 +36,18 @@ extension DataBaseViewModel{
         do{
             try MovieRepository.shared().removeMovie(id: movieId)
             self.changeDataBase(change: MovieState.Change.success)
-        }catch{
+        }catch let error{
+            print("Erro ao remover: ", error)
             self.changeDataBase(change: MovieState.Change.error)
         }
     }
     
-    func save(movie: MovieDTO){
+    func save( movie: MovieDTO){
         do{
             try MovieRepository.shared().saveMovie(movie: movie)
             self.changeDataBase(change: MovieState.Change.success)
-        }catch{
+        }catch let error{
+            print("Erro ao salvar: ", error)
             self.changeDataBase(change: MovieState.Change.error)
         }
     }
@@ -55,4 +57,9 @@ protocol ScrollViewModel{
     func numberOfSections() -> Int
     func numberOfRows() -> Int
     func movie(row: Int, section: Int) -> MovieDTO
+}
+
+protocol BaseDetailViewModel{
+    func numberOfGenres() -> Int
+    func getGenre(index: Int) -> Genre
 }

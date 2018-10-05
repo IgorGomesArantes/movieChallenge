@@ -9,16 +9,11 @@
 import Foundation
 import UIKit
 
-protocol FavoriteMovieTableViewCellDelegate{
-    func removeFavoriteMovie(id: Int)
-    func changeToMovieDetail(movieId: Int)
-}
-
+//TODO arrumar codigo
 class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
-    private var movie: MovieDTO!
-    private var delegate: FavoriteMovieTableViewCellDelegate!
+    private var viewModel: FavoriteCellViewModel!
     
     //MARK:- View variables
     @IBOutlet weak var posterImage: UIImageView!
@@ -33,15 +28,11 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- View actions
     @IBAction func sendToDetailClick(_ sender: Any) {
-        if let id = movie.id{
-            delegate.changeToMovieDetail(movieId: id)
-        }
+        viewModel.gotoDetailScene()
     }
     
     @IBAction func removeFavoriteClick(_ sender: Any) {
-        if let id = movie.id{
-            delegate.removeFavoriteMovie(id: id)
-        }
+        viewModel.removeFromFavorite()
     }
     
     //MARK:- Primitive methods
@@ -55,15 +46,15 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- Private methods
     private func setFields(){
-        titleLabel.text = movie.title
-        creationDateLabel.text = movie.creation_date != nil ? movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
-        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + movie.poster_path!), placeholderImage: UIImage(named: AppConstants.placeHolder))
-        voteAverageLabel.text = String(self.movie.vote_average!)
-        voteCountLabel.text = "(" + String(self.movie.vote_count!) + ")"
+        titleLabel.text = viewModel.movie.title
+        creationDateLabel.text = viewModel.movie.creation_date != nil ? viewModel.movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
+        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + viewModel.movie.poster_path!), placeholderImage: UIImage(named: AppConstants.placeHolder))
+        voteAverageLabel.text = String(self.viewModel.movie.vote_average!)
+        voteCountLabel.text = "(" + String(self.viewModel.movie.vote_count!) + ")"
         
-        voteAverageProgressBar.progress = movie.vote_average != nil ? movie.vote_average! / 10.0 : 0.0
+        voteAverageProgressBar.progress = viewModel.movie.vote_average != nil ? viewModel.movie.vote_average! / 10.0 : 0.0
         
-        if let voteAverage = movie.vote_average{
+        if let voteAverage = viewModel.movie.vote_average{
             voteAverageProgressBar.progress = voteAverage / 10.0
         }
     
@@ -74,36 +65,47 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(movie: MovieDTO, delegate: FavoriteMovieTableViewCellDelegate){
+    func setup(viewModel: FavoriteCellViewModel){
+        
         categoryCollection.delegate = self
         categoryCollection.dataSource = self
         
-        self.movie = movie
-        self.delegate = delegate
+        self.viewModel = viewModel
         
-        setFields()
+        bindViewModel()
+        
+        self.viewModel.reload()
+    }
+}
+
+extension FavoriteMovieTableViewCell: MovieViewController{
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            setFields()
+            break
+        default:
+            break
+        }
+    }
+    
+    func bindViewModel() {
+        viewModel.onChange = viewModelStateChange
     }
 }
 
 //MARK:- Collection methods
 extension FavoriteMovieTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let genres = movie.genres else{ return 0 }
-        
-        return genres.count
+        return viewModel.numberOfGenres()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "favoriteCategoryCollectionViewCell", for: indexPath) as! FavoriteCategoryCollectionViewCell
         
-        guard let genres = movie.genres else { return UICollectionViewCell()}
-        guard let category = genres[indexPath.row].name else { return UICollectionViewCell() }
+        let genre = viewModel.getGenre(index: indexPath.row)
         
-        cell.setUp(name: category)
+        cell.setup(genre: genre)
         
         return cell
     }

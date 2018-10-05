@@ -22,7 +22,7 @@ class FavoriteCategoryCollectionViewCell: UICollectionViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(name: String){
-        nameLabel.text = name
+    func setup(genre: Genre){
+        nameLabel.text = genre.name
     }
 }

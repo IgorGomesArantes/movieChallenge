@@ -22,7 +22,7 @@ class CategoryOptionCollectionViewCell: UICollectionViewCell{
     }
     
     //MARK:- Public methods
-    func setUp(name: String){
-        nameLabel.text = name
+    func setup(category: CategoryDTO){
+        nameLabel.text = category.name 
     }
 }

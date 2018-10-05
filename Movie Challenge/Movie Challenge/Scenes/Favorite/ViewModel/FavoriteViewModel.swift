@@ -24,44 +24,42 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     }
     
     //MARK:- Private methods
-    private func setSelectedList(index: Int){
-        if selectedCategoryIndex == 0{
-            selectedCategoryName = "Todos os filmes"
-            selectedList = allMoviesList
-            
-            
-        }else{
-            
-            if let categoryName = categoryList[selectedCategoryIndex! - 1].name{
-                selectedCategoryName = categoryName
-            }
-            
-            if let movies = categoryList[selectedCategoryIndex! - 1].movies{
-                selectedList = movies
-            }else{
-                selectedList = [MovieDTO]()
-            }
-        }
-    }
-    
     private func setMovieLists(){
         do{
             allMoviesList = try MovieRepository.shared().getAllMovies()
             categoryList = try MovieRepository.shared().getAllCategories()
             
-            categoryList.sort(by: { $0.name! < $1.name! })
-            allMoviesList.sort(by: { $0.title! < $1.title! })
-            
             if(categoryList.count > 0){
-                for i  in 0...categoryList.count - 1{
+                categoryList.sort(by: { $0.name! < $1.name! })
+                allMoviesList.sort(by: { $0.title! < $1.title! })
+                
+                for i in 0...categoryList.count - 1{
                     if categoryList[i].movies != nil{
                         categoryList[i].movies?.sort(by: { $0.title! < $1.title! })
                     }
                 }
+                
+                var allCategory = CategoryDTO()
+                allCategory.id = -1
+                allCategory.name = "Todos os filmes"
+                allCategory.movies = allMoviesList
+                
+                categoryList.insert(allCategory, at: 0)
             }
-            
-        }catch let error{
-            print("Erro ao carregar dados: ", error)
+        }catch{
+            onChangeDataBase(MovieState.Change.error)
+        }
+    }
+    
+    private func setSelectedList(index: Int){
+        if categoryList.count > index{
+            selectedCategoryName =  categoryList[index].name
+            selectedList = categoryList[index].movies
+            onChange!(MovieState.Change.success)
+        }else{
+            selectedList = [MovieDTO]()
+            selectedCategoryName = "Vazio"
+            onChange!(MovieState.Change.emptyResult)
         }
     }
     
@@ -70,44 +68,40 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
         self.onChange = onChange
         self.onChangeDataBase = onChangeDataBase
         self.setMovieLists()
-        selectedList = allMoviesList
     }
     
     func numberOfCategories() -> Int{
-        return categoryList.count + 1
+        return categoryList.count
     }
     
-    //TODO:- Adicionar categoria 0(Todos) na lista de categorias
     func category(index: Int) -> CategoryDTO{
-        if index == 0{
-            var category = CategoryDTO()
-            category.name = "Todos"
-            
-            return category
-        }
-        
-        return categoryList[index - 1]
+        return categoryList[index]
     }
     
     //MARK:- MovieViewModel methods and variables
     var state: MovieState = MovieState()
-    var onChange: ((MovieState.Change) -> ())
+    var onChange: ((MovieState.Change) -> ())?
     
     func reload() {
-        setSelectedList(index: selectedCategoryIndex!)
-        
-        onChange(MovieState.Change.success)
+        if selectedCategoryIndex == nil{
+            setMovieLists()
+            setSelectedList(index: 0)
+        }else{
+            setSelectedList(index: selectedCategoryIndex!)
+        }
     }
     
     //MARK:- DataBaseViewModel methods and variables
     var onChangeDataBase: ((MovieState.Change) -> ())
     
     func changeDataBase(change: MovieState.Change) {
-        setMovieLists()
-        
-        setSelectedList(index: selectedCategoryIndex!)
-        
-        onChangeDataBase(change)
+        switch change {
+        case .success:
+            selectedCategoryIndex = nil
+            break
+        default:
+            onChangeDataBase(MovieState.Change.error)
+        }
     }
     
     //MARK:- ScrollViewModel methods and variables
@@ -119,7 +113,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
         return selectedList.count
     }
     
-    func movie(row: Int, section: Int) -> MovieDTO {
-        return MovieDTO()
+    func movie(row: Int, section: Int = 1) -> MovieDTO {
+        return selectedList[row]
     }
 }
