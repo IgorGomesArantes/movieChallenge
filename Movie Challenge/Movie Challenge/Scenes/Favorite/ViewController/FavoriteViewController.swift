@@ -35,7 +35,6 @@ class FavoriteViewController : UIViewController{
         bindViewModel()
     }
     
-    //TODO: Atualizar listas
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -91,7 +90,6 @@ extension FavoriteViewController: MovieViewController{
     
     func bindViewModel() {
         self.viewModel = FavoriteViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
-        print("")
     }
 }
 
@@ -115,10 +113,7 @@ extension FavoriteViewController: DataBaseViewController{
 
 //MARK:- Collection methods
 extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfCategories()
     }
@@ -134,10 +129,7 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         viewModel.selectedCategoryIndex = indexPath.row
-        
-        print(indexPath.row)
     }
 }
 

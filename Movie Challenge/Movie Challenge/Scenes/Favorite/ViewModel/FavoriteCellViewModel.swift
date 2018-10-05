@@ -15,13 +15,9 @@ protocol FavoriteMovieTableViewCellDelegate{
 
 class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     func numberOfGenres() -> Int {
-        if state.settedUp{
-            guard let genres = movie.genres else { return 0 }
-            
-            return genres.count
-        }
+        guard let genres = movie.genres else { return 0 }
         
-        return 0
+        return genres.count
     }
     
     func getGenre(index: Int) -> Genre{
