@@ -14,34 +14,28 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     private(set) var movie: MovieDTO!
     
     //MARK:- Public variables
-    var movieId: Int?{
-        didSet{
-            reload()
-        }
-    }
+    var state: MovieState
+    var onChange: ((MovieState.Change) -> ())?
+    private let movieId: Int
     
     //MARK:- Public methods
-    init(onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
+    init(movieId: Int){
         state = MovieState()
         
-        self.onChange = onChange
-        self.onChangeDataBase = onChangeDataBase
+        self.movieId = movieId
     }
     
     func saveMovieOrRemoveFavorite(){
-        
-        guard let movie = movie else { return }
-        guard let favorite = movie.favorite else { return }
-        
-        if(favorite){
-            self.movie?.favorite = false
-            self.remove(movieId: movieId!)
+        if(movie.favorite!){
+            self.movie.favorite = false
+            self.remove(movieId: movieId)
         }else{
-            self.movie?.favorite = true
+            self.movie.favorite = true
             save(movie: movie)
         }
     }
     
+    //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
         if state.settedUp{
             guard let genres = movie.genres else { return 0 }
@@ -58,19 +52,16 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
         return genreViewModel
     }
     
-    //MARK:- MovieViewModel methods and variables
-    var state: MovieState
-    var onChange: ((MovieState.Change) -> ())?
-    
+    //MARK:- MovieViewModel methods
     func reload() {
         do{
-            movie = try MovieRepository.shared().getMovie(by: movieId!)
+            movie = try MovieRepository.shared().getMovie(by: movieId)
             movie?.favorite = true
             state.settedUp = true
             
             onChange!(MovieState.Change.success)
         }catch{
-            MovieService.shared().getMovieDetail(id: movieId!){ movie, response, requestError in
+            MovieService.shared().getMovieDetail(id: movieId){ movie, response, requestError in
                 if requestError != nil{
                     self.onChange!(MovieState.Change.error)
                 }else{
@@ -85,9 +76,9 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     }
     
     //MARK:- DataBaseViewModel methods and variables
-    var onChangeDataBase: ((MovieState.Change) -> ())
+    var onChangeDataBase: ((MovieState.Change) -> ())?
     
     func changeDataBase(change: MovieState.Change) { 
-        onChangeDataBase(change)
+        onChangeDataBase!(change)
     }
 }

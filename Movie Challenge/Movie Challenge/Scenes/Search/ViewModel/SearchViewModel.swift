@@ -10,65 +10,67 @@ import Foundation
 
 class SearchViewModel : MovieViewModel, ScrollViewModel{
     
-    //MARK:- Private
-    private var moviePage: MoviePageDTO!
+    //MARK:- Private variables
+    private var moviePage: MoviePageDTO
     
-    //MARK:- Public
-    var searchQuery: String?{
+    //MARK:- Public variables
+    var state: MovieState
+    var onChange: ((MovieState.Change) -> ())?
+    
+    var searchQuery: String{
         didSet{
             reload()
         }
     }
     
-    init(onChange: @escaping ((MovieState.Change) -> ())){
+    //MARK:- Public Methods
+    init(){
+        searchQuery = ""
         state = MovieState()
-        
-        self.onChange = onChange
+        moviePage = MoviePageDTO()
     }
     
-    //MARK:- MovieViewModel
-    var state: MovieState
-    var onChange: ((MovieState.Change) -> ())?
-    
-    func reload(){
-        guard let query = searchQuery else { return }
+    func getSearchCellViewModel(index: Int) -> SearchCellViewModel{
+        let cellViewModel = SearchCellViewModel(movie: moviePage.results[index])
         
-        if query.isEmpty{
+        return cellViewModel
+    }
+    
+    func getDetailViewModel(index: Int) -> DetailViewModel{
+        let movieId = moviePage.results[index].id!
+        
+        let detailViewModel = DetailViewModel(movieId: movieId)
+        
+        return detailViewModel
+    }
+    
+    //MARK:- MovieViewModel methods
+    func reload(){
+        if searchQuery.isEmpty{
             self.moviePage = MoviePageDTO()
-            state.settedUp = true
             self.onChange!(MovieState.Change.emptyResult)
         }else{
-            MovieService.shared().getMoviePageByName(query: query){ moviePage, reponse, requestError in
+            MovieService.shared().getMoviePageByName(query: searchQuery){ moviePage, reponse, requestError in
                 if requestError != nil{
                     self.moviePage = MoviePageDTO()
                     self.onChange!(MovieState.Change.error)
                 }else if moviePage.results.isEmpty{
                     self.moviePage = MoviePageDTO()
-                    self.state.settedUp = true
                     self.onChange!(MovieState.Change.emptyResult)
                 }else{
                     self.moviePage = moviePage
-                    self.state.settedUp = true
                     self.onChange!(MovieState.Change.success)
                 }
             }
         }
     }
     
-    //MARK:- ScrollViewModel
+    //MARK:- ScrollViewModel methods
     func numberOfSections() -> Int {
         return 1
     }
     
     func numberOfRows() -> Int{
-        if state.settedUp{
-            return moviePage.results.count
-        }
-        
-        return 0
-    }
-    
-    func movie(row: Int, section: Int = 1) -> MovieDTO{
-        return moviePage.results[row]
+        return moviePage.results.count
     }
 }

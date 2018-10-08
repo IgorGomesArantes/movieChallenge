@@ -10,6 +10,9 @@ import UIKit
 
 class GenreCollectionViewCell: UICollectionViewCell {
     
+    static let identifier = "genreCollectionViewCell"
+    static let className = "GenreCollectionViewCell"
+    
     private var viewModel: GenreViewModel!
 
     @IBOutlet weak var nameLabel: UILabel!

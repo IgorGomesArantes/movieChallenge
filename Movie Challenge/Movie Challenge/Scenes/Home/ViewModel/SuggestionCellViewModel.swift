@@ -8,7 +8,6 @@
 
 import Foundation
 
-//TODO:- BestMovie nao esta setando -> Erro na classe MoreMoviesCell
 class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     
     //MARK:- Private variables
@@ -43,7 +42,7 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
         onChange!(MovieState.Change.success)
     }
     
-    func searchMoreMovies(){
+    func searchMoreMovies(completion: @escaping () -> ()){
         MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ newMoviePage, response, error in
             
             self.moviePage.results.append(contentsOf: newMoviePage.results)
@@ -51,6 +50,8 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
             self.page += 1
             
             self.onChange!(MovieState.Change.success)
+            
+            completion()
         }
         
     }

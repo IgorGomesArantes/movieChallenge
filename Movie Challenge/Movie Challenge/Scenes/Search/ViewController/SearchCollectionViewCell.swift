@@ -11,6 +11,12 @@ import SDWebImage
 
 class SearchCollectionViewCell : UICollectionViewCell{
     
+    //MARK:- Constants
+    static let identifier: String = "searchCollectionViewCell"
+    
+    //MARK:- Private variables
+    private var viewModel: SearchCellViewModel!
+    
     //MARK:- View variables
     @IBOutlet weak var posterImage: UIImageView!
     
@@ -21,8 +27,15 @@ class SearchCollectionViewCell : UICollectionViewCell{
         posterImage.setLittleBorderFeatured()
     }
     
+    //MARK:- Private functions
+    func configure(){
+        posterImage.sd_setImage(with: URL(string: viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
+    }
+    
     //MARK:- Public functions
-    func setUp(posterURL: String){
-        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + posterURL), placeholderImage: UIImage(named: AppConstants.placeHolder))
+    func setup(viewModel: SearchCellViewModel){
+        self.viewModel = viewModel
+        
+        configure()
     }
 }

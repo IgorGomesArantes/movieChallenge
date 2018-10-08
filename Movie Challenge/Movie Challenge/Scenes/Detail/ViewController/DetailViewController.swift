@@ -11,6 +11,10 @@ import UIKit
 
 class DetailViewController : UIViewController{
     
+    //MARK:- Constants
+    private let removeButtonStateString = "Remover"
+    private let addButtonStateString = "Favoritar"
+    
     //MARK:- Private variables
     private var movieId: Int!
     private var viewModel: DetailViewModel!
@@ -39,9 +43,7 @@ class DetailViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        genreCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
-        
-        bindViewModel()
+        genreCollection.register(UINib(nibName: GenreCollectionViewCell.className, bundle: nil), forCellWithReuseIdentifier: GenreCollectionViewCell.identifier)
         
         genreCollection.delegate = self
         genreCollection.dataSource = self
@@ -51,8 +53,8 @@ class DetailViewController : UIViewController{
         overviewView.setLittleBorderFeatured()
         titleLabel.setCornerRadius()
         
-        viewModel.movieId = movieId
-        setButtonState()
+        bindViewModel()
+        viewModel.reload()
     }
     
     //MARK:- Private Functions
@@ -61,11 +63,11 @@ class DetailViewController : UIViewController{
         if viewModel.state.settedUp{
             if (viewModel.movie?.favorite)!{
                 self.favoriteButton.backgroundColor = AppConstants.colorSecondary
-                self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
+                self.favoriteButton.setTitle(removeButtonStateString, for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
             }else{
                 self.favoriteButton.backgroundColor = AppConstants.colorFeatured
-                self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
+                self.favoriteButton.setTitle(addButtonStateString, for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorSecondary, for: UIControl.State.normal)
             }
         }
@@ -100,15 +102,16 @@ class DetailViewController : UIViewController{
     }
     
     //MARK:- Public functions
-    public func setup(movieId: Int?){
-        self.movieId = movieId
+    public func setup(viewModel: DetailViewModel){
+        self.viewModel = viewModel
     }
 }
 
 //MARK:- MovieViewController methods
 extension DetailViewController: MovieViewController{
     func bindViewModel(){
-        viewModel = DetailViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+        viewModel.onChange = viewModelStateChange
+        viewModel.onChangeDataBase = viewModelDataBaseChange
     }
     
     func viewModelStateChange(change: MovieState.Change) {
@@ -149,7 +152,7 @@ extension DetailViewController :  UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionViewCell.identifier, for: indexPath) as! GenreCollectionViewCell
         
         cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         

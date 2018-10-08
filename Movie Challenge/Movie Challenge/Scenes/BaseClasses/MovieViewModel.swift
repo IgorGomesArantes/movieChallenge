@@ -25,7 +25,7 @@ protocol MovieViewModel{
 }
 
 protocol DataBaseViewModel{
-    var onChangeDataBase: ((MovieState.Change) -> ()) { get set }
+    var onChangeDataBase: ((MovieState.Change) -> ())? { get set }
     func remove(movieId: Int)
     func save(movie: MovieDTO)
     func changeDataBase(change: MovieState.Change)
@@ -56,7 +56,7 @@ extension DataBaseViewModel{
 protocol ScrollViewModel{
     func numberOfSections() -> Int
     func numberOfRows() -> Int
-    func movie(row: Int, section: Int) -> MovieDTO
+    //func movie(row: Int, section: Int) -> MovieDTO
 }
 
 protocol BaseDetailViewModel{

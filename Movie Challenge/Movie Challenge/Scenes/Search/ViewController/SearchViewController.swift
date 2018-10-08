@@ -11,6 +11,10 @@ import UIKit
 
 class SearchViewController : UIViewController{
     
+    //MARK:- Constants
+    private let emptyMovieCollectionString: String = "Buscar filmes"
+    private let errorMovieCollectionString: String = "Erro ao buscar os filmes"
+    
     //MARK:- Private variables
     private var viewModel: SearchViewModel!
     
@@ -22,12 +26,13 @@ class SearchViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        movieCollection.showEmptyCell(string: "Buscar filmes")
-        bindViewModel()
+        movieCollection.showEmptyCell(string: emptyMovieCollectionString)
         hideKeyboardWhenTappedAround()
+        
+        viewModel = SearchViewModel()
+        bindViewModel()
     }
     
-    //TODO Coordinator
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
@@ -36,10 +41,8 @@ class SearchViewController : UIViewController{
             let indexPathArray = movieCollection.indexPathsForSelectedItems! as NSArray
             let indexPath = indexPathArray.firstObject as! NSIndexPath
             
-            let selectedMovie = self.viewModel.movie(row: indexPath.row)
-            
             let detailViewController = segue.destination as! DetailViewController
-            detailViewController.setup(movieId: selectedMovie.id)
+            detailViewController.setup(viewModel: viewModel.getDetailViewModel(index: indexPath.row))
         }
     }
 }
@@ -47,23 +50,24 @@ class SearchViewController : UIViewController{
 //MARK:- MovieViewController methods
 extension SearchViewController: MovieViewController{
     func bindViewModel() {
-        viewModel = SearchViewModel(onChange: viewModelStateChange)
+        viewModel.onChange = viewModelStateChange
     }
     
     func viewModelStateChange(change: MovieState.Change) {
+        
+        movieCollection.reloadData()
+        
         switch change {
         case .success:
             movieCollection.hideEmptyCell()
             break
         case .error:
-            movieCollection.showEmptyCell(string: "Erro ao buscar os filmes")
+            movieCollection.showEmptyCell(string: errorMovieCollectionString)
             break
         case .emptyResult:
-            movieCollection.showEmptyCell(string: "Buscar filmes")
+            movieCollection.showEmptyCell(string: emptyMovieCollectionString)
             break
         }
-        
-        movieCollection.reloadData()
     }
 }
 
@@ -71,7 +75,7 @@ extension SearchViewController: MovieViewController{
 extension SearchViewController: UISearchBarDelegate{
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        viewModel.searchQuery = searchBar.text
+        viewModel.searchQuery = searchBar.text ?? ""
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -83,20 +87,14 @@ extension SearchViewController: UISearchBarDelegate{
 
 //MARK:- Collection view methods
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.numberOfSections()
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfRows()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SearchCollectionCell", for: indexPath) as! SearchCollectionViewCell
-        
-        let movie: MovieDTO = viewModel.movie(row: indexPath.row)
-        
-        cell.setUp(posterURL: movie.poster_path ?? "")
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchCollectionViewCell.identifier, for: indexPath) as! SearchCollectionViewCell
+
+        cell.setup(viewModel: viewModel.getSearchCellViewModel(index: indexPath.row))
         
         return cell
     }

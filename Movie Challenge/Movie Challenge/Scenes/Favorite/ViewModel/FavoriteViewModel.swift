@@ -47,7 +47,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
                 categoryList.insert(allCategory, at: 0)
             }
         }catch{
-            onChangeDataBase(MovieState.Change.error)
+            onChangeDataBase!(MovieState.Change.error)
         }
     }
     
@@ -92,7 +92,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     }
     
     //MARK:- DataBaseViewModel methods and variables
-    var onChangeDataBase: ((MovieState.Change) -> ())
+    var onChangeDataBase: ((MovieState.Change) -> ())?
     
     func changeDataBase(change: MovieState.Change) {
         switch change {
@@ -100,7 +100,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
             selectedCategoryIndex = nil
             break
         default:
-            onChangeDataBase(MovieState.Change.error)
+            onChangeDataBase!(MovieState.Change.error)
         }
     }
     

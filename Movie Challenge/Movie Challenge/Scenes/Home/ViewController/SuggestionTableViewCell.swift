@@ -47,7 +47,9 @@ class SuggestionTableViewCell: UITableViewCell{
 //MARK:- MoreMoviesCollectionViewCellDelegate methods
 extension SuggestionTableViewCell: MoreMoviesCollectionViewCellDelegate{
     func searchMoreMovies(completion: @escaping () -> ()) {
-        viewModel.searchMoreMovies()
+        viewModel.searchMoreMovies(){
+            completion()
+        }
     }
 }
 
