@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HomeViewModel: MovieViewModel, BaseDetailViewModel{
+class HomeViewModel: MovieViewModel{
     
     //MARK:- Private variables
     private(set) var bestMovie: MovieDTO!
@@ -28,6 +28,7 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
                 if let bestMovie = moviePage.results.first{
                     MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
                         self.bestMovie = movie
+                        self.onChange!(MovieState.Change.success)
                     }
                 }
             }
@@ -107,10 +108,16 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
-        return 0/////bestMovie.genres!.count
+        if(bestMovie == nil){
+            return 0
+        }
+        
+        return bestMovie.genres!.count
     }
     
-    func getGenre(index: Int) -> Genre {
-        return bestMovie.genres![index]
+    func getGenreViewModel(index: Int) -> GenreViewModel {
+        let genreViewModel = GenreViewModel(genre: bestMovie.genres![index], style: .pattern)
+        
+        return genreViewModel
     }
 }

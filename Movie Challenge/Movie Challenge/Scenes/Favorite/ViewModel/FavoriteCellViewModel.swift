@@ -13,17 +13,17 @@ protocol FavoriteMovieTableViewCellDelegate{
     func changeToMovieDetail(movieId: Int)
 }
 
-class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
+class FavoriteCellViewModel: MovieViewModel{
     func numberOfGenres() -> Int {
         guard let genres = movie.genres else { return 0 }
         
         return genres.count
     }
     
-    func getGenre(index: Int) -> Genre{
-        guard let genres = movie.genres else { return Genre() }
+    func getGenreViewModel(index: Int) -> GenreViewModel {
+        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
         
-        return genres[index]
+        return genreViewModel
     }
     
     private var delegate: FavoriteMovieTableViewCellDelegate!

@@ -52,10 +52,10 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
         return 0
     }
     
-    func getGenre(index: Int) -> Genre{
-        guard let genres = movie.genres else { return Genre() }
+    func getGenreViewModel(index: Int) -> GenreViewModel {
+        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .secondary)
         
-        return genres[index]
+        return genreViewModel
     }
     
     //MARK:- MovieViewModel methods and variables

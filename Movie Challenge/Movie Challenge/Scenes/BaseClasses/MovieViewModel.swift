@@ -61,5 +61,5 @@ protocol ScrollViewModel{
 
 protocol BaseDetailViewModel{
     func numberOfGenres() -> Int
-    func getGenre(index: Int) -> Genre
+    func getGenreViewModel(index: Int) -> GenreViewModel
 }

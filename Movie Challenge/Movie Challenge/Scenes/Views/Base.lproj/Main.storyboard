@@ -207,7 +207,7 @@
                                                             <rect key="frame" x="116" y="8" width="241" height="25"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Titulo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Br-B4-GgG">
-                                                                    <rect key="frame" x="8" y="2.3333333333333339" width="225" height="20.333333333333329"/>
+                                                                    <rect key="frame" x="0.0" y="2.3333333333333339" width="241" height="20.333333333333329"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <color key="textColor" name="TextPattern"/>
                                                                     <nil key="highlightedColor"/>
@@ -215,10 +215,10 @@
                                                             </subviews>
                                                             <color key="backgroundColor" name="TextFeatured"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="5Br-B4-GgG" secondAttribute="trailing" constant="8" id="0Fv-hI-8Sg"/>
+                                                                <constraint firstAttribute="trailing" secondItem="5Br-B4-GgG" secondAttribute="trailing" id="0Fv-hI-8Sg"/>
                                                                 <constraint firstItem="5Br-B4-GgG" firstAttribute="centerY" secondItem="gSW-da-ZWW" secondAttribute="centerY" id="R2l-Vs-9fY"/>
                                                                 <constraint firstAttribute="height" constant="25" id="Tnp-cq-Qr3"/>
-                                                                <constraint firstItem="5Br-B4-GgG" firstAttribute="leading" secondItem="gSW-da-ZWW" secondAttribute="leading" constant="8" id="ebc-ae-wfd"/>
+                                                                <constraint firstItem="5Br-B4-GgG" firstAttribute="leading" secondItem="gSW-da-ZWW" secondAttribute="leading" id="ebc-ae-wfd"/>
                                                             </constraints>
                                                         </view>
                                                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9eZ-lB-OAu">
@@ -233,34 +233,7 @@
                                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                                 <inset key="sectionInset" minX="2" minY="2" maxX="2" maxY="2"/>
                                                             </collectionViewFlowLayout>
-                                                            <cells>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="favoriteCategoryCollectionViewCell" reuseIdentifier="favoriteCategoryCollectionViewCell" id="GJq-YH-cPw" customClass="FavoriteCategoryCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
-                                                                    <rect key="frame" x="2" y="2" width="50" height="15"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="15"/>
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genero" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1MJ-y1-Ogh">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                                <color key="textColor" name="TextPattern"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                        </subviews>
-                                                                    </view>
-                                                                    <color key="backgroundColor" name="BackgroundPattern"/>
-                                                                    <constraints>
-                                                                        <constraint firstItem="1MJ-y1-Ogh" firstAttribute="leading" secondItem="GJq-YH-cPw" secondAttribute="leading" id="ALI-XF-LgT"/>
-                                                                        <constraint firstItem="1MJ-y1-Ogh" firstAttribute="top" secondItem="GJq-YH-cPw" secondAttribute="top" id="KJ3-dd-Yxt"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="1MJ-y1-Ogh" secondAttribute="bottom" id="Trw-nH-TWM"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="1MJ-y1-Ogh" secondAttribute="trailing" id="jkt-a2-KgO"/>
-                                                                    </constraints>
-                                                                    <connections>
-                                                                        <outlet property="nameLabel" destination="1MJ-y1-Ogh" id="Lyy-kO-bz3"/>
-                                                                    </connections>
-                                                                </collectionViewCell>
-                                                            </cells>
+                                                            <cells/>
                                                         </collectionView>
                                                         <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="Kzn-qJ-ZhT">
                                                             <rect key="frame" x="116" y="153" width="270" height="5"/>
@@ -472,33 +445,7 @@
                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                 <inset key="sectionInset" minX="2" minY="2" maxX="2" maxY="2"/>
                                             </collectionViewFlowLayout>
-                                            <cells>
-                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="bestMovieCategoryCollectionViewCell" id="3ej-cU-tXl" customClass="BestMovieCategoryCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
-                                                    <rect key="frame" x="2" y="2" width="71" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                        <rect key="frame" x="0.0" y="0.0" width="71" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                        <subviews>
-                                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ação" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPj-dr-gW9">
-                                                                <rect key="frame" x="0.0" y="0.0" width="71" height="18"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                <color key="textColor" name="TextPattern"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </view>
-                                                    <color key="backgroundColor" name="BackgroundPattern"/>
-                                                    <constraints>
-                                                        <constraint firstItem="WPj-dr-gW9" firstAttribute="top" secondItem="3ej-cU-tXl" secondAttribute="top" id="4bd-JV-z38"/>
-                                                        <constraint firstAttribute="trailing" secondItem="WPj-dr-gW9" secondAttribute="trailing" id="Gek-vt-qlX"/>
-                                                        <constraint firstItem="WPj-dr-gW9" firstAttribute="leading" secondItem="3ej-cU-tXl" secondAttribute="leading" id="nde-XU-DIJ"/>
-                                                    </constraints>
-                                                    <connections>
-                                                        <outlet property="nameViewLabel" destination="WPj-dr-gW9" id="R7B-x2-gtV"/>
-                                                    </connections>
-                                                </collectionViewCell>
-                                            </cells>
+                                            <cells/>
                                         </collectionView>
                                     </subviews>
                                     <color key="backgroundColor" name="TextFeatured"/>
@@ -657,8 +604,8 @@
                     <tabBarItem key="tabBarItem" systemItem="mostViewed" id="G0S-3j-zlX"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="bestMovieCategoryCollection" destination="BgA-rA-s5l" id="6ix-Q9-N8j"/>
-                        <outlet property="bestMovieCategoryCollectionHeightConstraint" destination="JQ1-bX-nKm" id="h35-d6-Ary"/>
+                        <outlet property="bestMovieGenreCollection" destination="BgA-rA-s5l" id="6ix-Q9-N8j"/>
+                        <outlet property="bestMovieGenreCollectionHeightConstraint" destination="JQ1-bX-nKm" id="h35-d6-Ary"/>
                         <outlet property="bestMovieImage" destination="ejc-YM-D2G" id="Ex5-xT-Pru"/>
                         <outlet property="bestMovieRuntimeLabel" destination="MKl-TM-cQQ" id="osU-Pv-Ps4"/>
                         <outlet property="bestMovieTitleLabel" destination="I0W-KP-rFS" id="e9j-XB-SgX"/>
@@ -755,35 +702,7 @@
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="8" maxX="0.0" maxY="8"/>
                                         </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CategoryCell" id="z9F-Xe-cEz" customClass="CategoryCollectionViewCell" customModule="Movie_Challenge" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="8" width="101" height="20"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ação" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HtF-R4-hpH">
-                                                            <rect key="frame" x="0.0" y="0.0" width="101" height="20"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" name="TextPattern"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                </view>
-                                                <color key="backgroundColor" name="TextFeatured"/>
-                                                <constraints>
-                                                    <constraint firstItem="HtF-R4-hpH" firstAttribute="top" secondItem="z9F-Xe-cEz" secondAttribute="top" id="94y-hE-zyo"/>
-                                                    <constraint firstAttribute="bottom" secondItem="HtF-R4-hpH" secondAttribute="bottom" id="L0Y-eh-6yP"/>
-                                                    <constraint firstAttribute="trailing" secondItem="HtF-R4-hpH" secondAttribute="trailing" id="L7A-YR-L9A"/>
-                                                    <constraint firstItem="HtF-R4-hpH" firstAttribute="leading" secondItem="z9F-Xe-cEz" secondAttribute="leading" id="Zgd-xt-Sc3"/>
-                                                </constraints>
-                                                <size key="customSize" width="101" height="20"/>
-                                                <connections>
-                                                    <outlet property="nameLabel" destination="HtF-R4-hpH" id="Wjg-mh-2u6"/>
-                                                </connections>
-                                            </collectionViewCell>
-                                        </cells>
+                                        <cells/>
                                     </collectionView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-na-TUc">
                                         <rect key="frame" x="8" y="775.33333333333337" width="398" height="33"/>
@@ -857,9 +776,9 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="414" height="1000"/>
                     <connections>
-                        <outlet property="categoryCollection" destination="L0s-Xl-76c" id="38r-UT-aEo"/>
-                        <outlet property="categoryCollectionHeightConstraint" destination="LnX-lY-vrl" id="mGX-Bt-aHq"/>
                         <outlet property="favoriteButton" destination="aQw-na-TUc" id="paV-H0-tDZ"/>
+                        <outlet property="genreCollection" destination="L0s-Xl-76c" id="38r-UT-aEo"/>
+                        <outlet property="genreCollectionHeightConstraint" destination="LnX-lY-vrl" id="mGX-Bt-aHq"/>
                         <outlet property="overviewLabel" destination="Eu4-7f-LnF" id="ikj-LE-Va8"/>
                         <outlet property="overviewView" destination="Xtf-b1-Udj" id="VCA-Iv-CxY"/>
                         <outlet property="posterImage" destination="yzi-Zn-arg" id="jtK-tr-eFx"/>

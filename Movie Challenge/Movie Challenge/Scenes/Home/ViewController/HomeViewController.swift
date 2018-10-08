@@ -22,24 +22,24 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var bestMovieVotesCountLabel: UILabel!
     @IBOutlet weak var bestMovieYearLabel: UILabel!
     @IBOutlet weak var bestMovieRuntimeLabel: UILabel!
-    @IBOutlet weak var bestMovieCategoryCollection: UICollectionView!
-    @IBOutlet weak var bestMovieCategoryCollectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bestMovieGenreCollection: UICollectionView!
+    @IBOutlet weak var bestMovieGenreCollectionHeightConstraint: NSLayoutConstraint!
     
     //MARK:- Primitive methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bestMovieGenreCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
+        
         suggestionTable.delegate = self
         suggestionTable.dataSource = self
         
-        bestMovieCategoryCollection.delegate = self
-        bestMovieCategoryCollection.dataSource = self
+        bestMovieGenreCollection.delegate = self
+        bestMovieGenreCollection.dataSource = self
         
         bestMovieImage.setLittleBorderFeatured()
         bestMovieView.setLittleBorderFeatured()
-        
-        //resizeBestMovieView()
-        
+
         bindViewModel()
         viewModel.reload()
     }
@@ -64,16 +64,9 @@ class HomeViewController: UIViewController {
             self.bestMovieRuntimeLabel.text = "Duração indefinida"
         }
         
-        self.bestMovieCategoryCollection.reloadData()
-        let height = self.bestMovieCategoryCollection.collectionViewLayout.collectionViewContentSize.height
-        self.bestMovieCategoryCollectionHeightConstraint.constant = height
-    }
-
-    private func resizeBestMovieView(){
-        let screenSize = UIScreen.main.bounds
-        let screenWidth = screenSize.width
-        
-        bestMovieView.frame = CGRect(x: bestMovieView.frame.origin.x, y: bestMovieView.frame.origin.y, width: bestMovieView.frame.width, height: (screenWidth * 5.0) / 8.0)
+        self.bestMovieGenreCollection.reloadData()
+        let height = self.bestMovieGenreCollection.collectionViewLayout.collectionViewContentSize.height
+        self.bestMovieGenreCollectionHeightConstraint.constant = height
     }
 }
 
@@ -136,9 +129,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bestMovieCategoryCollectionViewCell", for: indexPath) as! BestMovieCategoryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
         
-        cell.setup(genre: viewModel.getGenre(index: indexPath.row))
+        cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         
         return cell
     }

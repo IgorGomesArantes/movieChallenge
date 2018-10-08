@@ -15,12 +15,6 @@ protocol SuggestionTableViewCellDelegate{
 class SuggestionTableViewCell: UITableViewCell{
     
     //MARK:- Private variables
-//    private var delegate: SuggestionTableViewCellDelegate!
-//    private var moviePage = MoviePageDTO()
-//    private var getPosterTasks: [URLSessionDataTask]!
-//    private var page = 2
-//    private var sort: Sort!
-//    private var canSearchMore: Bool!
     private var viewModel: SuggestionCellViewModel!
     
     //MARK:- View variables
@@ -29,12 +23,10 @@ class SuggestionTableViewCell: UITableViewCell{
     @IBOutlet weak var suggestionHeaderView: UIView!
     @IBOutlet weak var suggestionCategoryView: UIView!
     
-    
     //MARK:- Primitive variables
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        //getPosterTasks = [URLSessionDataTask]()
         suggestionCategoryView.setCornerRadius()
         
         suggestionMoviesCollectionView.setLittleBorderFeatured()
@@ -106,11 +98,5 @@ extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         viewModel.gotoMovieDetail(index: indexPath.row)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
-        print("Teste: " + String(indexPath.row))
-        
-        return true
     }
 }

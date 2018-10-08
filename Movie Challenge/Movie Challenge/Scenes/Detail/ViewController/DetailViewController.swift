@@ -23,9 +23,9 @@ class DetailViewController : UIViewController{
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImage: UIImageView!
-    @IBOutlet weak var categoryCollection: UICollectionView!
+    @IBOutlet weak var genreCollection: UICollectionView!
     @IBOutlet weak var favoriteButton: UIButton!
-    @IBOutlet weak var categoryCollectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var genreCollectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var posterView: UIView!
     @IBOutlet weak var overviewView: UIView!
@@ -39,10 +39,12 @@ class DetailViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        genreCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
+        
         bindViewModel()
         
-        categoryCollection.delegate = self
-        categoryCollection.dataSource = self
+        genreCollection.delegate = self
+        genreCollection.dataSource = self
 
         titleLabel.setLittleBorderFeatured()
         favoriteButton.setBorderFeatured()
@@ -58,13 +60,13 @@ class DetailViewController : UIViewController{
     private func setButtonState(){
         if viewModel.state.settedUp{
             if (viewModel.movie?.favorite)!{
-                self.favoriteButton.backgroundColor = AppConstants.colorPattern
+                self.favoriteButton.backgroundColor = AppConstants.colorSecondary
                 self.favoriteButton.setTitle("Remover", for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
             }else{
                 self.favoriteButton.backgroundColor = AppConstants.colorFeatured
                 self.favoriteButton.setTitle("Favoritar", for: UIControl.State.normal)
-                self.favoriteButton.setTitleColor(AppConstants.colorPattern, for: UIControl.State.normal)
+                self.favoriteButton.setTitleColor(AppConstants.colorSecondary, for: UIControl.State.normal)
             }
         }
     }
@@ -89,10 +91,10 @@ class DetailViewController : UIViewController{
             runtimeLabel.text = "Duração indefinida"
         }
         
-        categoryCollection.reloadData()
+        genreCollection.reloadData()
         
-        let height = categoryCollection.collectionViewLayout.collectionViewContentSize.height
-        categoryCollectionHeightConstraint.constant = height
+        let height = genreCollection.collectionViewLayout.collectionViewContentSize.height
+        genreCollectionHeightConstraint.constant = height
         
         setButtonState()
     }
@@ -147,9 +149,9 @@ extension DetailViewController :  UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCell", for: indexPath) as! CategoryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
         
-        cell.setup(genre: viewModel.getGenre(index: indexPath.row))
+        cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         
         return cell
     }

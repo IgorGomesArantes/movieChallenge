@@ -39,6 +39,8 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        categoryCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
+        
         posterImage.setLittleBorderFeatured()
         titleView.setCornerRadius()
         setLittleBorderFeatured()
@@ -101,11 +103,9 @@ extension FavoriteMovieTableViewCell: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "favoriteCategoryCollectionViewCell", for: indexPath) as! FavoriteCategoryCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
         
-        let genre = viewModel.getGenre(index: indexPath.row)
-        
-        cell.setup(genre: genre)
+        cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         
         return cell
     }
