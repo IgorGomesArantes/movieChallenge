@@ -45,12 +45,12 @@ class FavoriteViewController : UIViewController{
 //MARK:- FavoriteMovieTableViewCellDelegate methods
 extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     func changeToMovieDetail(movieId: Int) {
-//        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
-//            viewController.setup(movieId: movieId)
-//            if let navigator = navigationController {
-//                navigator.pushViewController(viewController, animated: true)
-//            }
-//        }
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
+            viewController.setup(viewModel: viewModel.getDetailViewModel(movieId: movieId))
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
     }
     
     func removeFavoriteMovie(id: Int) {

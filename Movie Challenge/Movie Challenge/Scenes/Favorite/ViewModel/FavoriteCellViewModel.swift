@@ -13,29 +13,17 @@ protocol FavoriteMovieTableViewCellDelegate{
     func changeToMovieDetail(movieId: Int)
 }
 
-class FavoriteCellViewModel: MovieViewModel{
-    func numberOfGenres() -> Int {
-        guard let genres = movie.genres else { return 0 }
-        
-        return genres.count
-    }
+class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     
-    func getGenreViewModel(index: Int) -> GenreViewModel {
-        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
-        
-        return genreViewModel
-    }
-    
+    //MARK:- Private variables
     private var delegate: FavoriteMovieTableViewCellDelegate!
-    var movie: MovieDTO!
-    var state: MovieState = MovieState()
+    private(set) var movie: MovieDTO!
+    private(set) var state: MovieState = MovieState()
     
+    //MARK: Public variables
     var onChange: ((MovieState.Change) -> ())?
     
-    func reload() {
-        onChange!(MovieState.Change.success)
-    }
-    
+    //MARK:- Public methods
     init(delegate: FavoriteMovieTableViewCellDelegate, movie: MovieDTO){
         self.delegate = delegate
         self.movie = movie
@@ -51,5 +39,23 @@ class FavoriteCellViewModel: MovieViewModel{
         if let id = movie.id{
             delegate.removeFavoriteMovie(id: id)
         }
+    }
+    
+    //MARK:- MovieViewModel methods
+    func reload() {
+        onChange!(MovieState.Change.success)
+    }
+    
+    //MARK:- BaseDetailViewModel methods
+    func numberOfGenres() -> Int {
+        guard let genres = movie.genres else { return 0 }
+        
+        return genres.count
+    }
+    
+    func getGenreViewModel(index: Int) -> GenreViewModel {
+        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
+        
+        return genreViewModel
     }
 }

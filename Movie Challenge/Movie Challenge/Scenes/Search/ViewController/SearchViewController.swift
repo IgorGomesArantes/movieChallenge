@@ -11,10 +11,6 @@ import UIKit
 
 class SearchViewController : UIViewController{
     
-    //MARK:- Constants
-    private let emptyMovieCollectionString: String = "Buscar filmes"
-    private let errorMovieCollectionString: String = "Erro ao buscar os filmes"
-    
     //MARK:- Private variables
     private var viewModel: SearchViewModel!
     
@@ -26,7 +22,7 @@ class SearchViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        movieCollection.showEmptyCell(string: emptyMovieCollectionString)
+        movieCollection.showEmptyCell(string: NSLocalizedString("SearchMovies", comment: ""))
         hideKeyboardWhenTappedAround()
         
         viewModel = SearchViewModel()
@@ -62,10 +58,10 @@ extension SearchViewController: MovieViewController{
             movieCollection.hideEmptyCell()
             break
         case .error:
-            movieCollection.showEmptyCell(string: errorMovieCollectionString)
+            movieCollection.showEmptyCell(string: NSLocalizedString("SearchMoviesError", comment: ""))
             break
         case .emptyResult:
-            movieCollection.showEmptyCell(string: emptyMovieCollectionString)
+            movieCollection.showEmptyCell(string: NSLocalizedString("SearchMovies", comment: ""))
             break
         }
     }

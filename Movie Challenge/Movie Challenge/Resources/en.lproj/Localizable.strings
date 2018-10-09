@@ -6,4 +6,7 @@
   Copyright © 2018 igor gomes arantes. All rights reserved.
 */
 
-
+"Remove" = "Remover";
+"Favorite" = "Favoritar";
+"SearchMovies" = "Buscar filmes";
+"SearchMoviesError" = "Erro ao buscar os filmes";

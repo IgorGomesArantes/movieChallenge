@@ -9,14 +9,10 @@
 import Foundation
 import UIKit
 
+//TODO:- Tratar os erros de viewModelStateChange e viewModelDataBaseChange
 class DetailViewController : UIViewController{
-    
-    //MARK:- Constants
-    private let removeButtonStateString = "Remover"
-    private let addButtonStateString = "Favoritar"
-    
+
     //MARK:- Private variables
-    private var movieId: Int!
     private var viewModel: DetailViewModel!
     
     //MARK:- View variables
@@ -58,40 +54,30 @@ class DetailViewController : UIViewController{
     }
     
     //MARK:- Private Functions
-    //TODO:- Misterio
     private func setButtonState(){
         if viewModel.state.settedUp{
             if (viewModel.movie?.favorite)!{
                 self.favoriteButton.backgroundColor = AppConstants.colorSecondary
-                self.favoriteButton.setTitle(removeButtonStateString, for: UIControl.State.normal)
+                self.favoriteButton.setTitle(NSLocalizedString("Remove", comment: ""), for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
             }else{
                 self.favoriteButton.backgroundColor = AppConstants.colorFeatured
-                self.favoriteButton.setTitle(addButtonStateString, for: UIControl.State.normal)
+                self.favoriteButton.setTitle(NSLocalizedString("Favorite", comment: ""), for: UIControl.State.normal)
                 self.favoriteButton.setTitleColor(AppConstants.colorSecondary, for: UIControl.State.normal)
             }
         }
     }
     
-    func setFields(){
-        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + (viewModel.movie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
+    private func setFields(){
         
-        titleLabel.text = viewModel.movie.title
-        votesAverageLabel.text = String(viewModel.movie.vote_average!)
-        votesCountLabel.text = "(" + String(viewModel.movie.vote_count!) + ")"
-        overviewLabel.text = viewModel.movie.overview
+        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
-        if let releaseDate = viewModel.movie.release_date{
-            if !releaseDate.isEmpty{
-                yearLabel.text = String((viewModel.movie.release_date?.split(separator: "-").first)!)
-            }
-        }
-        
-        if let runtime = viewModel.movie.runtime{
-            runtimeLabel.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
-        } else{
-            runtimeLabel.text = "Duração indefinida"
-        }
+        yearLabel.text = viewModel.year
+        titleLabel.text = viewModel.title
+        runtimeLabel.text = viewModel.runtime
+        overviewLabel.text = viewModel.overview
+        votesCountLabel.text = viewModel.voteCount
+        votesAverageLabel.text = viewModel.voteAverage
         
         genreCollection.reloadData()
         
@@ -135,11 +121,8 @@ extension DetailViewController: DataBaseViewController{
             setButtonState()
             break
         case .error:
-            //Erro ao acessar o banco
-            //Erro ao remover
             break
         case .emptyResult:
-            //O filme não está setado
             break
         }
     }

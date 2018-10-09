@@ -60,6 +60,59 @@ protocol ScrollViewModel{
 }
 
 protocol BaseDetailViewModel{
+    var movie: MovieDTO! { get }
+    
     func numberOfGenres() -> Int
     func getGenreViewModel(index: Int) -> GenreViewModel
+    var posterPath: String { get }
+    var title: String { get }
+    var voteCount: String { get }
+    var voteAverage: String { get }
+    var overview: String { get }
+    var year: String { get }
+    var runtime: String { get }
+}
+
+extension BaseDetailViewModel{
+    
+    var posterPath:  String{
+        return movie.poster_path ?? ""
+    }
+    
+    var title: String{
+        return movie.title ?? "Titulo desconhecido"
+    }
+    
+    var voteAverage: String{
+        guard let average = movie.vote_average else { return "0" }
+        
+        return String(average)
+    }
+    
+    var voteCount: String{
+        guard let count = movie.vote_count else { return "(0)" }
+        
+        return "(" + String(count) + ")"
+    }
+    
+    
+    var overview: String{
+        return movie.overview ?? "Não há resumo"
+    }
+    
+    var year: String{
+        guard let releaseDate = movie.release_date else { return "0000" }
+        
+        if !releaseDate.isEmpty{
+            return String((releaseDate.split(separator: "-").first)!)
+        }
+        
+        return "0000"
+    }
+    
+    var runtime: String{
+        guard let runtime = movie.runtime else { return "00h 00m" }
+        
+        return String(runtime / 60) + "h" + String(runtime % 60) + "m"
+    }
 }

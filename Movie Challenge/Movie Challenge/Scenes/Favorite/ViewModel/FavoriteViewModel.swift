@@ -78,6 +78,12 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
         return categoryList[index]
     }
     
+    func getDetailViewModel(movieId: Int) -> DetailViewModel{
+        let detailViewModel = DetailViewModel(movieId: movieId)
+        
+        return detailViewModel
+    }
+    
     //MARK:- MovieViewModel methods and variables
     var state: MovieState = MovieState()
     var onChange: ((MovieState.Change) -> ())?
