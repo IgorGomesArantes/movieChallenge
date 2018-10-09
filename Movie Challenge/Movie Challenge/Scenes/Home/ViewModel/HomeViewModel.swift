@@ -8,11 +8,11 @@
 
 import Foundation
 
-class HomeViewModel: MovieViewModel{
+class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
-    private(set) var bestMovie: MovieDTO!
     private var moviePageList: [MoviePageDTO]!
+    private(set) var movie: MovieDTO!
     
     //MARK:- Public variables
     var state: MovieState
@@ -27,7 +27,7 @@ class HomeViewModel: MovieViewModel{
             if isBestMovieHere{
                 if let bestMovie = moviePage.results.first{
                     MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
-                        self.bestMovie = movie
+                        self.movie = movie
                         self.onChange!(MovieState.Change.success)
                     }
                 }
@@ -68,12 +68,12 @@ class HomeViewModel: MovieViewModel{
     }
     
     //MARK:- Public methods
-    init(onChange: @escaping ((MovieState.Change) -> ())){
+    init(){
         state = MovieState()
-        self.onChange = onChange
+        movie = MovieDTO()
     }
     
-    func cellViewlModel(index: Int, delegate: SuggestionTableViewCellDelegate) -> SuggestionCellViewModel{
+    func getSuggestionCellViewModel(index: Int, delegate: SuggestionCellViewModelDelegate) -> SuggestionCellViewModel{
         
         var cellViewModel: SuggestionCellViewModel
         
@@ -108,15 +108,15 @@ class HomeViewModel: MovieViewModel{
     
     //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
-        if(bestMovie == nil){
+        if(movie.genres == nil){
             return 0
         }
         
-        return bestMovie.genres!.count
+        return movie.genres!.count
     }
     
     func getGenreViewModel(index: Int) -> GenreViewModel {
-        let genreViewModel = GenreViewModel(genre: bestMovie.genres![index], style: .pattern)
+        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
         
         return genreViewModel
     }

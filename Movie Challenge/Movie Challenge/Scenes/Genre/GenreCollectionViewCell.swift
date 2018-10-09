@@ -10,13 +10,17 @@ import UIKit
 
 class GenreCollectionViewCell: UICollectionViewCell {
     
+    //MARK- Constants
     static let identifier = "genreCollectionViewCell"
     static let className = "GenreCollectionViewCell"
     
+    //MARK:- Private variables
     private var viewModel: GenreViewModel!
 
+    //MARK:- View variables
     @IBOutlet weak var nameLabel: UILabel!
     
+    //MARK:- Primitive methods
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -24,21 +28,14 @@ class GenreCollectionViewCell: UICollectionViewCell {
         setCornerRadius()
     }
     
+    //MARK:- Private Methods
     private func configure(){
-        nameLabel.text = viewModel.genre.name ?? "Genero"
-        
-        switch viewModel.style {
-        case GenreStyle.pattern:
-            nameLabel.textColor = AppConstants.textColorPattern
-            nameLabel.backgroundColor = AppConstants.colorPattern
-            break
-        case GenreStyle.secondary:
-            nameLabel.textColor = AppConstants.textColorPattern
-            nameLabel.backgroundColor = AppConstants.colorSecondary
-            break
-        }
+        nameLabel.text = viewModel.name
+        nameLabel.textColor = viewModel.textColor
+        nameLabel.backgroundColor = viewModel.backGroundColor
     }
     
+    //MARK:- Public methods
     func setup(viewModel: GenreViewModel){
         self.viewModel = viewModel
         configure()

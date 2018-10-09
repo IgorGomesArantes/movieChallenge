@@ -21,6 +21,7 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     //MARK:- Public methods
     init(movieId: Int){
         state = MovieState()
+        movie = MovieDTO()
         
         self.movieId = movieId
     }
@@ -37,13 +38,9 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     
     //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
-        if state.settedUp{
-            guard let genres = movie.genres else { return 0 }
-            
-            return genres.count
-        }
+        guard let genres = movie.genres else { return 0 }
         
-        return 0
+        return genres.count
     }
     
     func getGenreViewModel(index: Int) -> GenreViewModel {
@@ -57,7 +54,6 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
         do{
             movie = try MovieRepository.shared().getMovie(by: movieId)
             movie?.favorite = true
-            state.settedUp = true
             
             onChange!(MovieState.Change.success)
         }catch{
@@ -65,7 +61,6 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
                 if requestError != nil{
                     self.onChange!(MovieState.Change.error)
                 }else{
-                    self.state.settedUp = true
                     self.movie = movie
                     self.movie?.favorite = false
                     

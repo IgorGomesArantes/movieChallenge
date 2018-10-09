@@ -43,9 +43,9 @@ class FavoriteViewController : UIViewController{
 }
 
 //MARK:- FavoriteMovieTableViewCellDelegate methods
-extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
+extension FavoriteViewController: FavoriteCellViewModelDelegate{
     func changeToMovieDetail(movieId: Int) {
-        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
+        if let viewController = UIStoryboard(name: AppConstants.storyBoardName, bundle: nil).instantiateViewController(withIdentifier: DetailViewController.identifier) as? DetailViewController {
             viewController.setup(viewModel: viewModel.getDetailViewModel(movieId: movieId))
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
@@ -54,12 +54,12 @@ extension FavoriteViewController: FavoriteMovieTableViewCellDelegate{
     }
     
     func removeFavoriteMovie(id: Int) {
-        let alert = UIAlertController(title: "Deseja mesmo remover este filme dos favoritos?", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("Are you sure?", comment: ""), message: "", preferredStyle: .alert)
 
-        alert.addAction(UIAlertAction(title: "Sim", style: .default, handler: {action in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .default, handler: {action in
             self.viewModel.remove(movieId: id)
         }))
-        alert.addAction(UIAlertAction(title: "Não", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment: ""), style: .cancel, handler: nil))
         
         self.present(alert, animated: true)
     }
@@ -72,7 +72,7 @@ extension FavoriteViewController: MovieViewController{
         favoriteMoviesTable.reloadData()
         categoriesCollection.reloadData()
         
-        selectedCategoryLabel.text = viewModel.selectedCategoryName!
+        selectedCategoryLabel.text = viewModel.selectedCategoryName
         
         switch change {
         case .success:
@@ -80,8 +80,8 @@ extension FavoriteViewController: MovieViewController{
             categoriesCollection.hideEmptyCell()
             break
         case .emptyResult:
-            favoriteMoviesTable.showEmptyCell(string: "Não há filmes")
-            categoriesCollection.showEmptyCell(string: "Não há categorias")
+            favoriteMoviesTable.showEmptyCell(string: NSLocalizedString("Empty favorites", comment: ""))
+            categoriesCollection.showEmptyCell(string: NSLocalizedString("Empty categories", comment: ""))
             break
         default:
             break
@@ -98,12 +98,12 @@ extension FavoriteViewController: DataBaseViewController{
     func viewModelDataBaseChange(change: MovieState.Change) {
         switch change {
         case .success:
-            selectedCategoryLabel.text = viewModel.selectedCategoryName!
+            selectedCategoryLabel.text = viewModel.selectedCategoryName
             favoriteMoviesTable.reloadData()
             categoriesCollection.reloadData()
             break
         case .error:
-            showAlert(title: "Ocorreu um erro ao acessar o banco de dados")
+            showAlert(title: NSLocalizedString("DataBaseAccessError", comment: ""))
             break
         default:
             break
@@ -119,11 +119,9 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "categoryOptionCollectionViewCell", for: indexPath) as! CategoryOptionCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryOptionCollectionViewCell.identifier, for: indexPath) as! CategoryOptionCollectionViewCell
         
-        let category = viewModel.category(index: indexPath.row)
-        
-        cell.setup(category: category)
+        cell.setup(viewModel: viewModel.getCategoryOptionViewModel(index: indexPath.row))
         
         return cell
     }
@@ -144,11 +142,9 @@ extension FavoriteViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteMovieTableCell", for: indexPath) as! FavoriteMovieTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteMovieTableViewCell.identifier, for: indexPath) as! FavoriteMovieTableViewCell
 
-        let cellViewModel = FavoriteCellViewModel(delegate: self, movie: viewModel.movie(row: indexPath.row))
-        
-        cell.setup(viewModel: cellViewModel)
+        cell.setup(viewModel: viewModel.getFavoriteCellViewModel(delegate: self, index: indexPath.row))
         
         return cell
     }

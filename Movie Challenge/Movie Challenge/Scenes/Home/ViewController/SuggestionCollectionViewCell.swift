@@ -11,12 +11,24 @@ import UIKit
 
 class SuggestionCollectionViewCell: UICollectionViewCell{
     
+    //MARK:- Constants
+    static let identifier = "suggestionMovieCollectionViewCell"
+    
+    //MARK:- Private variables
+    private var viewModel: SuggestionCollectionCellViewModel!
+    
     //MARK:- View variables
     @IBOutlet weak var posterImageView: UIImageView!
     
-    //MARK:- Public methods
-    func setup(movie: MovieDTO){
+    //MARK:- Private methods
+    private func configure(){
         posterImageView.setLittleBorderFeatured()
-        posterImageView.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + (movie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
+        posterImageView.sd_setImage(with: URL(string: viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
+    }
+    
+    //MARK:- Public methods
+    func setup(viewModel: SuggestionCollectionCellViewModel){
+        self.viewModel = viewModel
+        configure()
     }
 }

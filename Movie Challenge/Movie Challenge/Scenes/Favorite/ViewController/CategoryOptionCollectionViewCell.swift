@@ -11,6 +11,12 @@ import UIKit
 
 class CategoryOptionCollectionViewCell: UICollectionViewCell{
     
+    //MARK:- Constants
+    static let identifier = "categoryOptionCollectionViewCell"
+    
+    //MARK:- Private variables
+    private var viewModel: CategoryOptionViewModel!
+    
     //MARK:- View variables
     @IBOutlet weak var nameLabel: UILabel!
     
@@ -21,8 +27,14 @@ class CategoryOptionCollectionViewCell: UICollectionViewCell{
         self.setLittleBorderFeatured()
     }
     
+    //MARK:- Private methods
+    func configure(){
+        nameLabel.text = viewModel.name
+    }
+    
     //MARK:- Public methods
-    func setup(category: CategoryDTO){
-        nameLabel.text = category.name 
+    func setup(viewModel: CategoryOptionViewModel){
+        self.viewModel = viewModel
+        configure()
     }
 }

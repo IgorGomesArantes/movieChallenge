@@ -9,27 +9,45 @@
 import Foundation
 import UIKit
 
-protocol MoreMoviesCollectionViewCellDelegate {
-    func searchMoreMovies(completion: @escaping () -> ())
-}
+
 
 class MoreMoviesCollectionViewCell: UICollectionViewCell{
     
+    //MARK:- Constants
+    static let identifier = "moreMoviesCollectionViewCell"
+    
     //MARK:- Private variables
-    private var delegate: MoreMoviesCollectionViewCellDelegate!
+    private var viewModel: MoreMoviesCollectionCellViewModel!
+    
+    //MARK:- View variables
     @IBOutlet weak var searchMoreMoviesButton: UIButton!
     
     //MARK:- View actions
     @IBAction func searchMoreMovies(_ sender: Any) {
         searchMoreMoviesButton.isEnabled = false
-        
-        delegate.searchMoreMovies(){
-            self.searchMoreMoviesButton.isEnabled = true
-        }
+        viewModel.reload()
     }
     
     //MARK:- Public methods
-    func setUp(delegate: MoreMoviesCollectionViewCellDelegate){
-        self.delegate = delegate
+    func setup(viewModel: MoreMoviesCollectionCellViewModel){
+        self.viewModel = viewModel
+        bindViewModel()
+    }
+}
+
+//MARK:- MoviewViewController methods
+extension MoreMoviesCollectionViewCell: MovieViewController{
+    func viewModelStateChange(change: MovieState.Change) {
+        switch change {
+        case .success:
+            self.searchMoreMoviesButton.isEnabled = true
+            break
+        default:
+            break
+        }
+    }
+    
+    func bindViewModel() {
+        viewModel.onChange = viewModelStateChange
     }
 }

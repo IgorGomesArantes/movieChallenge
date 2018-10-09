@@ -9,8 +9,11 @@
 import Foundation
 import UIKit
 
-//TODO arrumar codigo
+//TODO Tratar os erros no método viewModelStateChange
 class FavoriteMovieTableViewCell: UITableViewCell{
+    
+    //MARK:- Constants
+    static let identifier = "favoriteMovieTableCell"
     
     //MARK:- Private variables
     private var viewModel: FavoriteCellViewModel!
@@ -39,7 +42,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        categoryCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
+        categoryCollection.register(UINib(nibName: GenreCollectionViewCell.className, bundle: nil), forCellWithReuseIdentifier: GenreCollectionViewCell.identifier)
         
         posterImage.setLittleBorderFeatured()
         titleView.setCornerRadius()
@@ -48,17 +51,14 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     
     //MARK:- Private methods
     private func setFields(){
-        titleLabel.text = viewModel.movie.title
-        creationDateLabel.text = viewModel.movie.creation_date != nil ? viewModel.movie.creation_date?.toString(dateFormat: "dd-MM-yyyy") : ""
-        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.low.rawValue + "/" + viewModel.movie.poster_path!), placeholderImage: UIImage(named: AppConstants.placeHolder))
-        voteAverageLabel.text = String(self.viewModel.movie.vote_average!)
-        voteCountLabel.text = "(" + String(self.viewModel.movie.vote_count!) + ")"
         
-        voteAverageProgressBar.progress = viewModel.movie.vote_average != nil ? viewModel.movie.vote_average! / 10.0 : 0.0
+        posterImage.sd_setImage(with: URL(string: viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
-        if let voteAverage = viewModel.movie.vote_average{
-            voteAverageProgressBar.progress = voteAverage / 10.0
-        }
+        titleLabel.text = viewModel.title
+        voteCountLabel.text = viewModel.voteCount
+        voteAverageLabel.text = viewModel.voteAverage
+        creationDateLabel.text = viewModel.creationDate
+        voteAverageProgressBar.progress = viewModel.progressBarScore
     
         let height = self.categoryCollection.collectionViewLayout.collectionViewContentSize.height
         self.categoryCollectionHeightConstraint.constant = height
@@ -80,6 +80,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
     }
 }
 
+//MARK:- FavoriteMovieTableViewCell methods
 extension FavoriteMovieTableViewCell: MovieViewController{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
@@ -103,7 +104,7 @@ extension FavoriteMovieTableViewCell: UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionViewCell.identifier, for: indexPath) as! GenreCollectionViewCell
         
         cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         

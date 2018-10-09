@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol SuggestionTableViewCellDelegate{
-    func changeToMovieDetail(movieId: Int)
-}
-
+//TODO:- Tratar os erros de viewModelStateChange 
 class SuggestionTableViewCell: UITableViewCell{
+    
+    //MARK:- Constants
+    static let identifier = "suggestionTableViewCell"
     
     //MARK:- Private variables
     private var viewModel: SuggestionCellViewModel!
@@ -83,16 +83,16 @@ extension SuggestionTableViewCell: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if viewModel.canSearchMore, indexPath.row == viewModel.numberOfRows() - 1{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "moreMoviesCollectionViewCell", for: indexPath) as! MoreMoviesCollectionViewCell
+        if viewModel.isThisTheMoreMoviesCellTime(index: indexPath.row){
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MoreMoviesCollectionViewCell.identifier, for: indexPath) as! MoreMoviesCollectionViewCell
             
-            cell.setUp(delegate: self)
+            cell.setup(viewModel: viewModel.getMoreMoviesCollectionCellViewModel(delegate: self))
             
             return cell
         }else{
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "suggestionMovieCollectionViewCell", for: indexPath) as! SuggestionCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SuggestionCollectionViewCell.identifier, for: indexPath) as! SuggestionCollectionViewCell
             
-            cell.setup(movie: viewModel.movie(row: indexPath.row))
+            cell.setup(viewModel: viewModel.getSuggestionCollectionCellViewModel(index: indexPath.row))
             
             return cell
         }

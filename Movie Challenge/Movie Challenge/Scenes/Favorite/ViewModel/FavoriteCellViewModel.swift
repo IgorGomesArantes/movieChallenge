@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FavoriteMovieTableViewCellDelegate{
+protocol FavoriteCellViewModelDelegate{
     func removeFavoriteMovie(id: Int)
     func changeToMovieDetail(movieId: Int)
 }
@@ -16,15 +16,18 @@ protocol FavoriteMovieTableViewCellDelegate{
 class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
-    private var delegate: FavoriteMovieTableViewCellDelegate!
+    private var delegate: FavoriteCellViewModelDelegate!
     private(set) var movie: MovieDTO!
     private(set) var state: MovieState = MovieState()
+    var progressBarScore: Float{
+        return movie.vote_average != nil ? movie.vote_average! / 10.0 : 0.0
+    }
     
     //MARK: Public variables
     var onChange: ((MovieState.Change) -> ())?
     
     //MARK:- Public methods
-    init(delegate: FavoriteMovieTableViewCellDelegate, movie: MovieDTO){
+    init(delegate: FavoriteCellViewModelDelegate, movie: MovieDTO){
         self.delegate = delegate
         self.movie = movie
     }

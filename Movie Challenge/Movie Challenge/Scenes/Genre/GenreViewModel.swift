@@ -6,7 +6,7 @@
 //  Copyright © 2018 igor gomes arantes. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 enum GenreStyle: Int{
     case pattern = 1
@@ -15,9 +15,34 @@ enum GenreStyle: Int{
 
 class GenreViewModel{
     
-    let genre: Genre
-    let style: GenreStyle
+    //MARK:- Private variables
+    private let genre: Genre
+    private let style: GenreStyle
     
+    //MARK:- Public variables
+    var name: String{
+        return genre.name ?? "Genero"
+    }
+    
+    var textColor: UIColor{
+        switch style {
+        case GenreStyle.pattern:
+            return AppConstants.textColorPattern
+        case GenreStyle.secondary:
+            return AppConstants.textColorPattern
+        }
+    }
+    
+    var backGroundColor: UIColor{
+        switch style {
+        case GenreStyle.pattern:
+            return AppConstants.colorPattern
+        case GenreStyle.secondary:
+            return AppConstants.colorSecondary
+        }
+    }
+    
+    //MARK:- Public methods
     init(genre: Genre, style : GenreStyle){
         self.genre = genre
         self.style = style

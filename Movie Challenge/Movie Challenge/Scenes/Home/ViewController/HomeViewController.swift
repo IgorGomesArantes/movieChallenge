@@ -8,6 +8,7 @@
 
 import UIKit
 
+//TODO:- Tratar os erros de viewModelStateChange 
 class HomeViewController: UIViewController {
     
     //MARK:- Private variables
@@ -29,7 +30,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bestMovieGenreCollection.register(UINib(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "genreCollectionViewCell")
+        bestMovieGenreCollection.register(UINib(nibName: GenreCollectionViewCell.className, bundle: nil), forCellWithReuseIdentifier: GenreCollectionViewCell.identifier)
         
         suggestionTable.delegate = self
         suggestionTable.dataSource = self
@@ -40,45 +41,38 @@ class HomeViewController: UIViewController {
         bestMovieImage.setLittleBorderFeatured()
         bestMovieView.setLittleBorderFeatured()
 
+        viewModel = HomeViewModel()
         bindViewModel()
         viewModel.reload()
     }
     
     //MARK:- Private methods
     private func setBestMovie(){
-        bestMovieImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.medium.rawValue + "/" + (viewModel.bestMovie.poster_path ?? "")), placeholderImage: UIImage(named: AppConstants.placeHolder))
+        bestMovieImage.sd_setImage(with: URL(string: viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
-        self.bestMovieTitleLabel.text = viewModel.bestMovie.title
-        self.bestMovieVotesAverageLabel.text = String(viewModel.bestMovie.vote_average!)
-        self.bestMovieVotesCountLabel.text = "(" + String(viewModel.bestMovie.vote_count!) + ")"
-        
-        if let releaseDate = viewModel.bestMovie.release_date{
-            if !releaseDate.isEmpty{
-                self.bestMovieYearLabel.text = String((releaseDate.split(separator: "-").first)!)
-            }
-        }
-        
-        if let runtime = viewModel.bestMovie.runtime{
-            self.bestMovieRuntimeLabel.text = String(runtime / 60) + "h" + String(runtime % 60) + "m"
-        } else{
-            self.bestMovieRuntimeLabel.text = "Duração indefinida"
-        }
+        self.bestMovieYearLabel.text = viewModel.year
+        self.bestMovieTitleLabel.text = viewModel.title
+        self.bestMovieRuntimeLabel.text = viewModel.runtime
+        self.bestMovieVotesCountLabel.text = viewModel.voteCount
+        self.bestMovieVotesAverageLabel.text = viewModel.voteAverage
         
         self.bestMovieGenreCollection.reloadData()
         let height = self.bestMovieGenreCollection.collectionViewLayout.collectionViewContentSize.height
         self.bestMovieGenreCollectionHeightConstraint.constant = height
+        
+        self.suggestionTable.reloadData()
     }
 }
 
-//MARK:- SuggestionTableViewCellDelegate methods
-extension HomeViewController: SuggestionTableViewCellDelegate {
+//MARK:- SuggestionCellViewModelDelegate methods
+extension HomeViewController: SuggestionCellViewModelDelegate {
     func changeToMovieDetail(movieId: Int) {
-//        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NewDetailView") as? DetailViewController {
-//            viewController.setup(movieId: movieId)
-//            if let navigator = navigationController {
-//                navigator.pushViewController(viewController, animated: true)
-//            }
-//        }
+        if let viewController = UIStoryboard(name: AppConstants.storyBoardName, bundle: nil).instantiateViewController(withIdentifier: DetailViewController.identifier) as? DetailViewController {
+            viewController.setup(viewModel: DetailViewModel(movieId: movieId))
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
     }
 }
 
@@ -87,11 +81,7 @@ extension HomeViewController: MovieViewController{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:
-            if viewModel.bestMovie != nil{
-                self.setBestMovie()
-            }
-            
-            self.suggestionTable.reloadData()
+            self.setBestMovie()
             break
         default:
             break
@@ -99,7 +89,7 @@ extension HomeViewController: MovieViewController{
     }
     
     func bindViewModel() {
-        viewModel = HomeViewModel(onChange: viewModelStateChange)
+        viewModel.onChange = viewModelStateChange
     }
 }
 
@@ -114,9 +104,9 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "suggestionTableViewCell", for: indexPath) as! SuggestionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SuggestionTableViewCell.identifier, for: indexPath) as! SuggestionTableViewCell
         
-        cell.setup(viewModel: viewModel.cellViewlModel(index: indexPath.row, delegate: self))
+        cell.setup(viewModel: viewModel.getSuggestionCellViewModel(index: indexPath.row, delegate: self))
         
         return cell
     }
@@ -129,7 +119,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "genreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionViewCell.identifier, for: indexPath) as! GenreCollectionViewCell
         
         cell.setup(viewModel: viewModel.getGenreViewModel(index: indexPath.row))
         

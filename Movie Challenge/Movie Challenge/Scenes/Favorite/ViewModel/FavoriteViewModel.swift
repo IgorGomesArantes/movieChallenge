@@ -14,7 +14,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     private var allMoviesList: [MovieDTO]!
     private var categoryList: [CategoryDTO]!
     private(set) var selectedList: [MovieDTO]!
-    private(set) var selectedCategoryName: String?
+    private(set) var selectedCategoryName: String
     
     //MARK:- Public variables
     var selectedCategoryIndex: Int?{
@@ -53,7 +53,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     
     private func setSelectedList(index: Int){
         if categoryList.count > index{
-            selectedCategoryName =  categoryList[index].name
+            selectedCategoryName = categoryList[index].name ?? "Genero"
             selectedList = categoryList[index].movies
             onChange!(MovieState.Change.success)
         }else{
@@ -65,6 +65,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     
     //MARK:- Public methods
     init(onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
+        selectedCategoryName = "Genero"
         self.onChange = onChange
         self.onChangeDataBase = onChangeDataBase
         self.setMovieLists()
@@ -74,14 +75,20 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
         return categoryList.count
     }
     
-    func category(index: Int) -> CategoryDTO{
-        return categoryList[index]
+    func getCategoryOptionViewModel(index: Int) -> CategoryOptionViewModel{
+        let categoryOptionViewModel = CategoryOptionViewModel(category: categoryList[index])
+        
+        return categoryOptionViewModel
     }
     
     func getDetailViewModel(movieId: Int) -> DetailViewModel{
         let detailViewModel = DetailViewModel(movieId: movieId)
         
         return detailViewModel
+    }
+    
+    func getFavoriteCellViewModel(delegate: FavoriteCellViewModelDelegate, index: Int) -> FavoriteCellViewModel{
+        return FavoriteCellViewModel(delegate: delegate, movie: selectedList[index])
     }
     
     //MARK:- MovieViewModel methods and variables

@@ -8,22 +8,23 @@
 
 import Foundation
 
+//MARK:- MovieState
 struct MovieState{
     enum Change{
         case success
         case error
         case emptyResult
     }
-    
-    var settedUp: Bool = false
 }
 
+//MARK:- MovieViewModel
 protocol MovieViewModel{
     var state: MovieState { get }
     var onChange: ((MovieState.Change) -> ())? { get set }
     func reload()
 }
 
+//MARK:- DataBaseViewModel
 protocol DataBaseViewModel{
     var onChangeDataBase: ((MovieState.Change) -> ())? { get set }
     func remove(movieId: Int)
@@ -53,12 +54,13 @@ extension DataBaseViewModel{
     }
 }
 
+//MARK:- ScrollViewModel
 protocol ScrollViewModel{
     func numberOfSections() -> Int
     func numberOfRows() -> Int
-    //func movie(row: Int, section: Int) -> MovieDTO
 }
 
+//MARK:- BaseDetailViewModel
 protocol BaseDetailViewModel{
     var movie: MovieDTO! { get }
     
@@ -71,12 +73,15 @@ protocol BaseDetailViewModel{
     var overview: String { get }
     var year: String { get }
     var runtime: String { get }
+    var creationDate: String { get }
 }
 
 extension BaseDetailViewModel{
     
     var posterPath:  String{
-        return movie.poster_path ?? ""
+        guard let path = movie.poster_path else { return "" }
+        
+        return AppConstants.BaseImageURL + Quality.high.rawValue + "/" + path
     }
     
     var title: String{
@@ -114,5 +119,9 @@ extension BaseDetailViewModel{
         guard let runtime = movie.runtime else { return "00h 00m" }
         
         return String(runtime / 60) + "h" + String(runtime % 60) + "m"
+    }
+    
+    var creationDate: String{
+        return movie.creation_date != nil ? (movie.creation_date?.toString(dateFormat: "dd-MM-yyyy"))! : "00-00-0000"
     }
 }

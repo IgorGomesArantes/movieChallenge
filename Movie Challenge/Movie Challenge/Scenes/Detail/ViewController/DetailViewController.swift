@@ -12,6 +12,9 @@ import UIKit
 //TODO:- Tratar os erros de viewModelStateChange e viewModelDataBaseChange
 class DetailViewController : UIViewController{
 
+    //MARK:- Constants
+    static let identifier = "NewDetailView"
+    
     //MARK:- Private variables
     private var viewModel: DetailViewModel!
     
@@ -55,22 +58,20 @@ class DetailViewController : UIViewController{
     
     //MARK:- Private Functions
     private func setButtonState(){
-        if viewModel.state.settedUp{
-            if (viewModel.movie?.favorite)!{
-                self.favoriteButton.backgroundColor = AppConstants.colorSecondary
-                self.favoriteButton.setTitle(NSLocalizedString("Remove", comment: ""), for: UIControl.State.normal)
-                self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
-            }else{
-                self.favoriteButton.backgroundColor = AppConstants.colorFeatured
-                self.favoriteButton.setTitle(NSLocalizedString("Favorite", comment: ""), for: UIControl.State.normal)
-                self.favoriteButton.setTitleColor(AppConstants.colorSecondary, for: UIControl.State.normal)
-            }
+        if (viewModel.movie?.favorite)!{
+            self.favoriteButton.backgroundColor = AppConstants.colorSecondary
+            self.favoriteButton.setTitle(NSLocalizedString("Remove", comment: ""), for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(AppConstants.colorFeatured, for: UIControl.State.normal)
+        }else{
+            self.favoriteButton.backgroundColor = AppConstants.colorFeatured
+            self.favoriteButton.setTitle(NSLocalizedString("Favorite", comment: ""), for: UIControl.State.normal)
+            self.favoriteButton.setTitleColor(AppConstants.colorSecondary, for: UIControl.State.normal)
         }
     }
     
     private func setFields(){
         
-        posterImage.sd_setImage(with: URL(string: AppConstants.BaseImageURL + Quality.high.rawValue + "/" + viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
+        posterImage.sd_setImage(with: URL(string: viewModel.posterPath), placeholderImage: UIImage(named: AppConstants.placeHolder))
         
         yearLabel.text = viewModel.year
         titleLabel.text = viewModel.title

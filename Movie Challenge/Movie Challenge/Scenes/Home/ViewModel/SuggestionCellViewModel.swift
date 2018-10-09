@@ -8,10 +8,14 @@
 
 import Foundation
 
+protocol SuggestionCellViewModelDelegate{
+    func changeToMovieDetail(movieId: Int)
+}
+
 class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     
     //MARK:- Private variables
-    private var delegate: SuggestionTableViewCellDelegate
+    private var delegate: SuggestionCellViewModelDelegate
     private(set) var moviePage: MoviePageDTO
     private var getPosterTasks: [URLSessionDataTask]?
     private var page = 2
@@ -19,7 +23,7 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     private(set) var canSearchMore: Bool
     
     //MARK:- Public methods
-    init(moviePage: MoviePageDTO, delegate: SuggestionTableViewCellDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
+    init(moviePage: MoviePageDTO, delegate: SuggestionCellViewModelDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
         self.delegate = delegate
         self.canSearchMore = canSearchMore
         self.sort = sort
@@ -30,6 +34,22 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     func gotoMovieDetail(index: Int){
         if moviePage.results.count > index{
             delegate.changeToMovieDetail(movieId: moviePage.results[index].id!)
+        }
+    }
+    
+    func getSuggestionCollectionCellViewModel(index: Int) -> SuggestionCollectionCellViewModel{
+        return SuggestionCollectionCellViewModel(movie: moviePage.results[index])
+    }
+    
+    func getMoreMoviesCollectionCellViewModel(delegate: MoreMoviesCollectionViewCellDelegate) -> MoreMoviesCollectionCellViewModel{
+        return MoreMoviesCollectionCellViewModel(delegate: delegate)
+    }
+    
+    func isThisTheMoreMoviesCellTime(index: Int) -> Bool{
+        if canSearchMore, index == numberOfRows() - 1{
+            return true
+        }else{
+            return false
         }
     }
     
