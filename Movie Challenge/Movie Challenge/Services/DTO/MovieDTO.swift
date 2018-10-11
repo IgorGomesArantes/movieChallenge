@@ -12,6 +12,11 @@ struct Genre : Codable{
     var id: Int?
     var name: String?
     
+    init(){
+        id = 0
+        name = "Genero"
+    }
+    
     init(id: Int, name: String){
         self.id = id
         self.name = name
@@ -62,4 +67,5 @@ struct MovieDTO : Codable{
     var vote_count: Int?
     var poster: Data?
     var creation_date: Date?
+    var favorite: Bool?
 }

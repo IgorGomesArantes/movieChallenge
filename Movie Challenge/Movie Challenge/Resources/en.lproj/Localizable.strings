@@ -6,4 +6,14 @@
   Copyright © 2018 igor gomes arantes. All rights reserved.
 */
 
+"Remove" = "Remover";
+"Favorite" = "Favoritar";
+"SearchMovies" = "Buscar filmes";
+"SearchMoviesError" = "Erro ao buscar os filmes";
+"DataBaseAccessError" = "Erro ao acessar o banco de dados";
+"Yes" = "Sim";
+"No" = "Não";
+"Are you sure?" = "Você realmente deseja remover este filme da sua lista de favoritos?";
+"Empty favorites" = "Não há filmes";
+"Empty categories" = "Não há categorias";
 
