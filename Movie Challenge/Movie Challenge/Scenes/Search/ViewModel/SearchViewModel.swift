@@ -39,7 +39,7 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
     func getDetailViewModel(index: Int) -> DetailViewModel{
         let movieId = moviePage.results[index].id!
         
-        let detailViewModel = DetailViewModel(movieId: movieId)
+        let detailViewModel = DetailViewModel(movieId: movieId, service: MovieService(), repository: MovieRepository())
         
         return detailViewModel
     }
@@ -50,16 +50,19 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
             self.moviePage = MoviePageDTO()
             self.onChange!(MovieState.Change.emptyResult)
         }else{
-            MovieService.shared().getMoviePageByName(query: searchQuery){ moviePage, reponse, requestError in
-                if requestError != nil{
+            MovieService.shared().getMoviePageByName(query: searchQuery){ result in
+                switch(result){
+                case .success(Success: let moviePage):
+                    if moviePage.results.isEmpty{
+                        self.moviePage = MoviePageDTO()
+                        self.onChange!(MovieState.Change.emptyResult)
+                    }else{
+                        self.moviePage = moviePage
+                        self.onChange!(MovieState.Change.success)
+                    }
+                case .error:
                     self.moviePage = MoviePageDTO()
                     self.onChange!(MovieState.Change.error)
-                }else if moviePage.results.isEmpty{
-                    self.moviePage = MoviePageDTO()
-                    self.onChange!(MovieState.Change.emptyResult)
-                }else{
-                    self.moviePage = moviePage
-                    self.onChange!(MovieState.Change.success)
                 }
             }
         }

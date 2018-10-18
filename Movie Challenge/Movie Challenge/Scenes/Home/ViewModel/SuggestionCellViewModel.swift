@@ -63,15 +63,20 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     }
     
     func searchMoreMovies(completion: @escaping () -> ()){
-        MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ newMoviePage, response, error in
+        MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
             
-            self.moviePage.results.append(contentsOf: newMoviePage.results)
-            
-            self.page += 1
-            
-            self.onChange!(MovieState.Change.success)
-            
-            completion()
+            switch(result){
+            case .success(Success: let newMoviePage):
+                self.moviePage.results.append(contentsOf: newMoviePage.results)
+                
+                self.page += 1
+                
+                self.onChange!(MovieState.Change.success)
+                
+                completion()
+            case .error:
+                break
+            }
         }
         
     }

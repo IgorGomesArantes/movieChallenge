@@ -10,26 +10,27 @@ import Foundation
 import CoreData
 import UIKit
 
-class MovieRepository{
+protocol RepositoryProtocol{
+    func getAllMovies() throws -> [MovieDTO]
+    func getMovie(by id: Int) throws -> MovieDTO
+    func saveMovie(movie: MovieDTO) throws
+    func removeMovie(id: Int) throws
+    //func getCategory(by id: Int) throws -> CategoryEntity?
+    func getAllCategories() throws -> [CategoryDTO]
+}
+
+class MovieRepository: RepositoryProtocol{
 
     //MARK:- Private constants
     private let appDelegate : AppDelegate
     private let context : NSManagedObjectContext
     
     //MARK:- Singleton implementation
-    private static var sharedInstance: MovieRepository = {
-        let instance = MovieRepository()
-        
-        return instance
-    }()
-
-    private init(){
+//    static let shared = MovieRepository()
+//
+    init(){
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         context = appDelegate.persistentContainer.viewContext
-    }
-    
-    class func shared() -> MovieRepository{
-        return sharedInstance
     }
     
     //MARK:- Private movie methods
@@ -114,17 +115,13 @@ class MovieRepository{
         if let array = movieEntity.categoriesOfMovie{
             let categories = Array(array) as! [CategoryEntity]
             
-            for category in categories{
-                do{
-                    if let categoryEntity = try getCategory(by: Int(category.id)){
-                        let categoryDTO = MovieHelper.categoryEntityToDTO(categoryEntity: categoryEntity)
-                        
-                        if categoryDTO.movies?.count == 0{
-                            context.delete(categoryEntity)
-                        }
+            for category in categories {
+                if let categoryEntity = try getCategory(by: Int(category.id)){
+                    let categoryDTO = MovieHelper.categoryEntityToDTO(categoryEntity: categoryEntity)
+                    
+                    if categoryDTO.movies?.count == 0{
+                        context.delete(categoryEntity)
                     }
-                }catch{
-                    print("Erro ao remover categoria")
                 }
             }
         }

@@ -47,7 +47,7 @@ struct MovieDTO : Codable{
     var genres: [Genre]?
     var homepage: String?
     var id: Int?
-    var imdb_id: String?
+    private var imdb_id: String?
     var original_language: String?
     var original_title: String?
     var overview: String?

@@ -12,59 +12,67 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
     private var moviePageList: [MoviePageDTO]!
-    private(set) var movie: MovieDTO!
+    private(set) var movie: MovieDTO?
     
     //MARK:- Public variables
     var state: MovieState
     var onChange: ((MovieState.Change) -> ())?
     
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        MovieService.shared().getMoviePage(sort: sort, order: order){ newMoviePage, response, error in
-            var moviePage = newMoviePage
-            moviePage.label = label
-            self.moviePageList.append(moviePage)
+        MovieService.shared().getMoviePage(sort: sort, order: order){ result in
             
-            if isBestMovieHere{
-                if let bestMovie = moviePage.results.first{
-                    MovieService.shared().getMovieDetail(id: bestMovie.id!){ movie, response, error in
-                        self.movie = movie
-                        self.onChange!(MovieState.Change.success)
+            switch(result){
+            case .success(Success: var moviePage):
+                moviePage.label = label
+                self.moviePageList.append(moviePage)
+                
+                if isBestMovieHere{
+                    if let bestMovie = moviePage.results.first{
+                        MovieService.shared().getMovieDetail(id: bestMovie.id!){ result in
+                            switch(result){
+                            case .success(Success: let movie):
+                                self.movie = movie
+                                self.onChange!(.success)
+                                
+                            case .error:
+                                break
+                            }
+                            
+                        }
                     }
                 }
+                
+                self.onChange!(MovieState.Change.success)
+                
+            case .error:
+                break
             }
             
-            self.onChange!(MovieState.Change.success)
+
         }
     }
     
     private func searchTrendingMoviePage(label: String){
-        MovieService.shared().getTrendingMovies(){ newMoviePage, response, error in
-            var moviePage = newMoviePage
-            moviePage?.label = label
-            self.moviePageList.append(moviePage!)
-            
-            self.onChange!(MovieState.Change.success)
+        MovieService.shared().getTrendingMoviePage(){ result in
+            switch(result){
+            case .success(Success: var moviePage):
+                moviePage.label = label
+                self.moviePageList.append(moviePage)
+                
+                self.onChange!(MovieState.Change.success)
+                
+            case .error:
+                break
+            }
         }
     }
     
     private func setMoviePageList(){
         moviePageList = [MoviePageDTO]()
         
-        for i in 0...2{
-            switch i{
-            case 0:
-                searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
-                break
-            case 1:
-                searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
-                break
-            case 2:
-                searchTrendingMoviePage(label: "Melhores do dia")
-                break
-            default:
-                break
-            }
-        }
+        searchMoviePage(sort: Sort.popularity, order: Order.descending, label: "Populares da semana", isBestMovieHere: true)
+        searchMoviePage(sort: Sort.voteCount, order: Order.descending, label: "Mais votados de todos os tempos", isBestMovieHere: false)
+        searchTrendingMoviePage(label: "Melhores do dia")
     }
     
     //MARK:- Public methods
@@ -108,15 +116,15 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
-        if(movie.genres == nil){
+        if(movie!.genres == nil){
             return 0
         }
         
-        return movie.genres!.count
+        return movie!.genres!.count
     }
     
     func getGenreViewModel(index: Int) -> GenreViewModel {
-        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
+        let genreViewModel = GenreViewModel(genre: movie!.genres![index], style: .pattern)
         
         return genreViewModel
     }

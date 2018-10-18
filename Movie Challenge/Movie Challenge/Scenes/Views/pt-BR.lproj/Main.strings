@@ -1,0 +1,78 @@
+
+/* Class = "UILabel"; text = "Titulo"; ObjectID = "5Br-B4-GgG"; */
+"5Br-B4-GgG.text" = "Titulo";
+
+/* Class = "UILabel"; text = "2015"; ObjectID = "5f1-ww-Lre"; */
+"5f1-ww-Lre.text" = "2015";
+
+/* Class = "UIViewController"; title = "Sugestões"; ObjectID = "Cxz-kS-d65"; */
+"Cxz-kS-d65.title" = "Sugestões";
+
+/* Class = "UILabel"; text = "20-09-2018"; ObjectID = "DRs-jG-XQY"; */
+"DRs-jG-XQY.text" = "20-09-2018";
+
+/* Class = "UILabel"; text = "Resumo"; ObjectID = "Eu4-7f-LnF"; */
+"Eu4-7f-LnF.text" = "Resumo";
+
+/* Class = "UILabel"; text = "Titulo"; ObjectID = "FFE-Mu-0Zg"; */
+"FFE-Mu-0Zg.text" = "Titulo";
+
+/* Class = "UILabel"; text = "Titulo"; ObjectID = "I0W-KP-rFS"; */
+"I0W-KP-rFS.text" = "Titulo";
+
+/* Class = "UILabel"; text = "1h52m"; ObjectID = "J8H-DF-kQh"; */
+"J8H-DF-kQh.text" = "1h52m";
+
+/* Class = "UILabel"; text = "Quantidade"; ObjectID = "KDr-eo-f8R"; */
+"KDr-eo-f8R.text" = "Quantidade";
+
+/* Class = "UILabel"; text = "2h30m"; ObjectID = "MKl-TM-cQQ"; */
+"MKl-TM-cQQ.text" = "2h30m";
+
+/* Class = "UILabel"; text = "Categoria selecionada"; ObjectID = "Nl0-zS-7x1"; */
+"Nl0-zS-7x1.text" = "Categoria selecionada";
+
+/* Class = "UILabel"; text = "(13067)"; ObjectID = "Qbf-7D-K35"; */
+"Qbf-7D-K35.text" = "(13067)";
+
+/* Class = "UILabel"; text = "9.6"; ObjectID = "XTN-we-uc9"; */
+"XTN-we-uc9.text" = "9.6";
+
+/* Class = "UIButton"; normalTitle = "Favoritar"; ObjectID = "aQw-na-TUc"; */
+"aQw-na-TUc.normalTitle" = "Favoritar";
+
+/* Class = "UILabel"; text = "Pontuação"; ObjectID = "fUn-ef-9Vp"; */
+"fUn-ef-9Vp.text" = "Pontuação";
+
+/* Class = "UINavigationItem"; title = "Desafio app"; ObjectID = "gnI-l1-hVk"; */
+"gnI-l1-hVk.title" = "Desafio app";
+
+/* Class = "UILabel"; text = "8.9"; ObjectID = "hFk-QG-GIk"; */
+"hFk-QG-GIk.text" = "8.9";
+
+/* Class = "UILabel"; text = "2018"; ObjectID = "iKs-2N-zw1"; */
+"iKs-2N-zw1.text" = "2018";
+
+/* Class = "UILabel"; text = "Categoria"; ObjectID = "mtg-du-qdQ"; */
+"mtg-du-qdQ.text" = "Categoria";
+
+/* Class = "UILabel"; text = "(13078)"; ObjectID = "rf7-2m-Qov"; */
+"rf7-2m-Qov.text" = "(13078)";
+
+/* Class = "UIViewController"; title = "Favoritos"; ObjectID = "uTp-Wt-k4y"; */
+"uTp-Wt-k4y.title" = "Favoritos";
+
+/* Class = "UIViewController"; title = "Busca"; ObjectID = "ufg-ql-cPh"; */
+"ufg-ql-cPh.title" = "Busca";
+
+/* Class = "UILabel"; text = "Drama"; ObjectID = "yOd-d3-7xH"; */
+"yOd-d3-7xH.text" = "Drama";
+
+/* Class = "UISearchBar"; placeholder = "Buscar filmes"; ObjectID = "yst-9i-gyS"; */
+"yst-9i-gyS.placeholder" = "Buscar filmes";
+
+/* Class = "UISearchBar"; yst-9i-gyS.scopeButtonTitles[0] = "Title"; ObjectID = "yst-9i-gyS"; */
+"yst-9i-gyS.scopeButtonTitles[0]" = "Title";
+
+/* Class = "UISearchBar"; yst-9i-gyS.scopeButtonTitles[1] = "Title"; ObjectID = "yst-9i-gyS"; */
+"yst-9i-gyS.scopeButtonTitles[1]" = "Title";

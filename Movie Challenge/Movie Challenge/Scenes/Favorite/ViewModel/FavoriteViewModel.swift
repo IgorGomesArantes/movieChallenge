@@ -15,6 +15,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     private var categoryList: [CategoryDTO]!
     private(set) var selectedList: [MovieDTO]!
     private(set) var selectedCategoryName: String
+    internal var repository: RepositoryProtocol
     
     //MARK:- Public variables
     var selectedCategoryIndex: Int?{
@@ -26,8 +27,8 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     //MARK:- Private methods
     private func setMovieLists(){
         do{
-            allMoviesList = try MovieRepository.shared().getAllMovies()
-            categoryList = try MovieRepository.shared().getAllCategories()
+            allMoviesList = try repository.getAllMovies()
+            categoryList = try repository.getAllCategories()
             
             if(categoryList.count > 0){
                 categoryList.sort(by: { $0.name! < $1.name! })
@@ -64,11 +65,12 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     }
     
     //MARK:- Public methods
-    init(onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
+    init(repository: RepositoryProtocol, onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
         selectedCategoryName = "Genero"
         self.onChange = onChange
         self.onChangeDataBase = onChangeDataBase
-        self.setMovieLists()
+        self.repository = repository
+        setMovieLists()
     }
     
     func numberOfCategories() -> Int{
@@ -81,8 +83,9 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
         return categoryOptionViewModel
     }
     
+    //TODO:- Corrigir
     func getDetailViewModel(movieId: Int) -> DetailViewModel{
-        let detailViewModel = DetailViewModel(movieId: movieId)
+        let detailViewModel = DetailViewModel(movieId: movieId, service: MovieService(), repository: MovieRepository())
         
         return detailViewModel
     }

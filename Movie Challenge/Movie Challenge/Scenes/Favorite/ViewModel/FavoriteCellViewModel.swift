@@ -17,10 +17,10 @@ class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
     private var delegate: FavoriteCellViewModelDelegate!
-    private(set) var movie: MovieDTO!
+    private(set) var movie: MovieDTO?
     private(set) var state: MovieState = MovieState()
     var progressBarScore: Float{
-        return movie.vote_average != nil ? movie.vote_average! / 10.0 : 0.0
+        return movie!.vote_average != nil ? movie!.vote_average! / 10.0 : 0.0
     }
     
     //MARK: Public variables
@@ -33,13 +33,13 @@ class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     }
     
     func gotoDetailScene(){
-        if let id = movie.id{
+        if let id = movie!.id{
             delegate.changeToMovieDetail(movieId: id)
         }
     }
     
     func removeFromFavorite(){
-        if let id = movie.id{
+        if let id = movie!.id{
             delegate.removeFavoriteMovie(id: id)
         }
     }
@@ -51,13 +51,13 @@ class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
     
     //MARK:- BaseDetailViewModel methods
     func numberOfGenres() -> Int {
-        guard let genres = movie.genres else { return 0 }
+        guard let genres = movie!.genres else { return 0 }
         
         return genres.count
     }
     
     func getGenreViewModel(index: Int) -> GenreViewModel {
-        let genreViewModel = GenreViewModel(genre: movie.genres![index], style: .pattern)
+        let genreViewModel = GenreViewModel(genre: movie!.genres![index], style: .pattern)
         
         return genreViewModel
     }

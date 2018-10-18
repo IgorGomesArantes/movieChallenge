@@ -24,8 +24,15 @@ protocol MovieViewModel{
     func reload()
 }
 
+//MARK:- ServiceViewModel
+protocol ServiceViewModel{
+    var service: ServiceProtocol { get }
+    init(service: ServiceProtocol)
+}
+
 //MARK:- DataBaseViewModel
 protocol DataBaseViewModel{
+    var repository: RepositoryProtocol { get }
     var onChangeDataBase: ((MovieState.Change) -> ())? { get set }
     func remove(movieId: Int)
     func save(movie: MovieDTO)
@@ -35,7 +42,7 @@ protocol DataBaseViewModel{
 extension DataBaseViewModel{
     func remove(movieId: Int){
         do{
-            try MovieRepository.shared().removeMovie(id: movieId)
+            try repository.removeMovie(id: movieId)
             self.changeDataBase(change: MovieState.Change.success)
         }catch let error{
             print("Erro ao remover: ", error)
@@ -45,7 +52,7 @@ extension DataBaseViewModel{
     
     func save( movie: MovieDTO){
         do{
-            try MovieRepository.shared().saveMovie(movie: movie)
+            try repository.saveMovie(movie: movie)
             self.changeDataBase(change: MovieState.Change.success)
         }catch let error{
             print("Erro ao salvar: ", error)
@@ -62,7 +69,7 @@ protocol ScrollViewModel{
 
 //MARK:- BaseDetailViewModel
 protocol BaseDetailViewModel{
-    var movie: MovieDTO! { get }
+    var movie: MovieDTO? { get }
     
     func numberOfGenres() -> Int
     func getGenreViewModel(index: Int) -> GenreViewModel
@@ -79,34 +86,34 @@ protocol BaseDetailViewModel{
 extension BaseDetailViewModel{
     
     var posterPath:  String{
-        guard let path = movie.poster_path else { return "" }
+        guard let path = movie!.poster_path else { return "" }
         
         return AppConstants.BaseImageURL + Quality.high.rawValue + "/" + path
     }
     
     var title: String{
-        return movie.title ?? "Titulo desconhecido"
+        return movie!.title ?? "Titulo desconhecido"
     }
     
     var voteAverage: String{
-        guard let average = movie.vote_average else { return "0" }
+        guard let average = movie!.vote_average else { return "0" }
         
         return String(average)
     }
     
     var voteCount: String{
-        guard let count = movie.vote_count else { return "(0)" }
+        guard let count = movie!.vote_count else { return "(0)" }
         
         return "(" + String(count) + ")"
     }
     
     
     var overview: String{
-        return movie.overview ?? "Não há resumo"
+        return movie!.overview ?? "Não há resumo"
     }
     
     var year: String{
-        guard let releaseDate = movie.release_date else { return "0000" }
+        guard let releaseDate = movie!.release_date else { return "0000" }
         
         if !releaseDate.isEmpty{
             return String((releaseDate.split(separator: "-").first)!)
@@ -116,12 +123,12 @@ extension BaseDetailViewModel{
     }
     
     var runtime: String{
-        guard let runtime = movie.runtime else { return "00h 00m" }
+        guard let runtime = movie!.runtime else { return "00h 00m" }
         
         return String(runtime / 60) + "h" + String(runtime % 60) + "m"
     }
     
     var creationDate: String{
-        return movie.creation_date != nil ? (movie.creation_date?.toString(dateFormat: "dd-MM-yyyy"))! : "00-00-0000"
+        return movie!.creation_date != nil ? (movie!.creation_date?.toString(dateFormat: "dd-MM-yyyy"))! : "00-00-0000"
     }
 }

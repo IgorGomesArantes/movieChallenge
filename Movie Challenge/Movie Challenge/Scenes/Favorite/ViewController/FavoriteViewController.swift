@@ -89,7 +89,7 @@ extension FavoriteViewController: MovieViewController{
     }
     
     func bindViewModel() {
-        self.viewModel = FavoriteViewModel(onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+        self.viewModel = FavoriteViewModel(repository: MovieRepository(), onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
     }
 }
 
