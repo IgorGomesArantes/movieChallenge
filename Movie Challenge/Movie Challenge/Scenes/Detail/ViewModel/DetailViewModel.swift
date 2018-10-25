@@ -11,14 +11,15 @@ import Foundation
 class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     
     //MARK:- Private variables
-    private(set) var movie: MovieDTO?
     let service: ServiceProtocol
-    internal let repository: RepositoryProtocol
+    let repository: RepositoryProtocol
+    private(set) var movie: MovieDTO?
     
     //MARK:- Public variables
+    private let movieId: Int
     var state: MovieState
     var onChange: ((MovieState.Change) -> ())?
-    private let movieId: Int
+    var onChangeDataBase: ((MovieState.Change) -> ())?
     
     //MARK:- Public methods
     init(movieId: Int, service: ServiceProtocol, repository: RepositoryProtocol){
@@ -30,21 +31,26 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     }
     
     func saveMovieOrRemoveFavorite(){
-        guard var movie = self.movie else { return }
-        if(movie.favorite!){
-            movie.favorite = false
-            remove(movieId: movieId)
+        if let movie = movie{
+            if let favorite = movie.favorite, favorite{
+                self.movie!.favorite = false
+                remove(movieId: movieId)
+            }else{
+                self.movie!.favorite = true
+                save(movie: movie)
+            }
+            
+            onChangeDataBase!(.success)
         }else{
-            movie.favorite = true
-            save(movie: movie)
+            onChangeDataBase!(.error)
         }
     }
     
     //MARK:- BaseDetailViewModel
     func numberOfGenres() -> Int {
-        guard let movie = self.movie else { return 0 }
+        guard let movie = self.movie, let genres = movie.genres else { return 0 }
         
-        return movie.genres!.count
+        return genres.count
     }
     
     func getGenreViewModel(index: Int) -> GenreViewModel{
@@ -77,8 +83,6 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
     }
 
     //MARK:- DataBaseViewModel methods and variables
-    var onChangeDataBase: ((MovieState.Change) -> ())?
-    
     func changeDataBase(change: MovieState.Change) {
         onChangeDataBase!(change)
     }

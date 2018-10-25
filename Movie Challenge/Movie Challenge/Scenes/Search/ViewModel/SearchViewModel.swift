@@ -12,6 +12,7 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
     
     //MARK:- Private variables
     private var moviePage: MoviePageDTO
+    private let service: ServiceProtocol
     
     //MARK:- Public variables
     var state: MovieState
@@ -24,7 +25,8 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
     }
     
     //MARK:- Public Methods
-    init(){
+    init(service: ServiceProtocol){
+        self.service = service
         searchQuery = ""
         state = MovieState()
         moviePage = MoviePageDTO()
@@ -50,11 +52,10 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
             self.moviePage = MoviePageDTO()
             self.onChange!(MovieState.Change.emptyResult)
         }else{
-            MovieService.shared().getMoviePageByName(query: searchQuery){ result in
+            service.getMoviePageByName(query: searchQuery){ result in
                 switch(result){
                 case .success(Success: let moviePage):
                     if moviePage.results.isEmpty{
-                        self.moviePage = MoviePageDTO()
                         self.onChange!(MovieState.Change.emptyResult)
                     }else{
                         self.moviePage = moviePage

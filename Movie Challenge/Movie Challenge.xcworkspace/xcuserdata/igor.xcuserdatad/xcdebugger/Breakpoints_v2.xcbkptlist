@@ -998,32 +998,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Movie Challenge/Scenes/Detail/ViewModel/DetailViewModel.swift"
-            timestampString = "561584533.4869159"
+            filePath = "MovieChallengeTests/Mock/MockedRepository.swift"
+            timestampString = "562193084.241932"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "saveMovieOrRemoveFavorite()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Movie Challenge/Scenes/Detail/ViewModel/DetailViewModel.swift"
-            timestampString = "561584533.48774"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "saveMovieOrRemoveFavorite()"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "removeMovie(id:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

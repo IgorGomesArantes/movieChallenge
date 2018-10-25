@@ -19,6 +19,10 @@ protocol RepositoryProtocol{
     func getAllCategories() throws -> [CategoryDTO]
 }
 
+class RepositoryError: Error{
+    
+}
+
 class MovieRepository: RepositoryProtocol{
 
     //MARK:- Private constants

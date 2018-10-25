@@ -16,6 +16,9 @@ struct MoviePageDTO : Codable{
     var results: [MovieDTO]
     
     init() {
+        page = 1
+        total_results = 0
+        total_pages = 1
         results = [MovieDTO]()
     }
 }

@@ -130,7 +130,8 @@ extension DetailViewController: DataBaseViewController{
 }
 
 //MARK:- Collection View Methods
-extension DetailViewController :  UICollectionViewDelegate, UICollectionViewDataSource{
+extension DetailViewController :  UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfGenres()
     }

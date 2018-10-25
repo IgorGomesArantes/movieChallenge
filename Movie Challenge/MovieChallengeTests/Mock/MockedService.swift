@@ -10,19 +10,41 @@ import Foundation
 @testable import Movie_Challenge
 
 class MockedService: ServiceProtocol {
+    
+    enum TestCaseDetail {
+        case error(Error)
+        case savedMovie
+        case newMovie
+    }
+    
+    enum TestCasePage {
+        case error(Error)
+        case populatedPage
+        case emptyPage
+    }
+    
+    var testCaseDetail: TestCaseDetail?
+    var testCasePage: TestCasePage?
+    
+    init(testCaseDetail: TestCaseDetail) {
+        self.testCaseDetail = testCaseDetail
+    }
+    
+    init(testCasePage: TestCasePage){
+        self.testCasePage = testCasePage
+    }
+    
     func getMovieDetail(id: Int, completion: (Result<MovieDTO>) -> ()) {
-        switch id {
-        case 1:
+        switch testCaseDetail {
+        case .error(let error)?:
+            completion(.error(error))
+        case .newMovie?:
             let deadpool = try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .deadpool))
             completion(.success(deadpool))
-            
-        case 2:
-            let venom = try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .venom))
-            completion(.success(venom))
-            
-        default:
+        case .savedMovie?:
             completion(.error(ServiceError()))
-            
+        case .none:
+            break
         }
     }
     
@@ -31,7 +53,17 @@ class MockedService: ServiceProtocol {
     }
     
     func getMoviePageByName(query: String, completion: @escaping (Result<MoviePageDTO>) -> ()) {
-        
+        switch testCasePage {
+        case .error(let error)?:
+            completion(.error(error))
+        case .populatedPage?:
+            let moviePage = try! JSONDecoder().decode(MoviePageDTO.self, from: MockDataHelper.getData(forResource: .popularPage))
+            completion(.success(moviePage))
+        case .emptyPage?:
+            completion(.success(MoviePageDTO()))
+        case .none:
+            break
+        }
     }
     
     func getTrendingMoviePage(page: Int, completion: @escaping (Result<MoviePageDTO>) -> ()) {

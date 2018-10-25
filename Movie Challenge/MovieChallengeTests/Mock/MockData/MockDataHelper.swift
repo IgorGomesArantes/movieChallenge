@@ -15,6 +15,7 @@ class MockDataHelper{
         case deadpool = "Deadpool"
         case venom = "Venom"
         case popularList = "PopularList"
+        case popularPage = "PopularPage"
     }
     
     static func getData(forResource resource: MockedResource) ->  Data {

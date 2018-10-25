@@ -11,15 +11,40 @@ import Foundation
 
 class MockedRepository: RepositoryProtocol{
     
+    enum TestCase{
+        case error(Error)
+        case savedMovie
+        case populatedList
+        case none
+    }
+    
+    private var testCase: TestCase
+    
+    private var movie: MovieDTO?
     private var movies: [MovieDTO] = [MovieDTO]()
     private var categories: [CategoryDTO] = [CategoryDTO]()
     
-    init(){
-        let moviesToSave = try! JSONDecoder().decode([MovieDTO].self, from: MockDataHelper.getData(forResource: .popularList))
-        
-        for movie in moviesToSave{
-            try! saveMovie(movie: movie)
+    private func popule(){
+        switch testCase {
+        case .populatedList:
+            let moviesToSave = try! JSONDecoder().decode([MovieDTO].self, from: MockDataHelper.getData(forResource: .popularList))
+            
+            for movie in moviesToSave{
+                try! saveMovie(movie: movie)
+            }
+        case .savedMovie:
+            movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .venom))
+        case .error:
+            break
+        case .none:
+            break
         }
+    }
+    
+    init(testCase: TestCase){
+        self.testCase = testCase
+    
+        popule()
     }
     
     func getAllMovies() throws -> [MovieDTO] {
@@ -27,35 +52,33 @@ class MockedRepository: RepositoryProtocol{
     }
     
     func getMovie(by id: Int) throws -> MovieDTO {
-        let filterById = movies.filter{ $0.id == id }
-        
-        if let movie = filterById.first{
-            return movie
+        switch testCase {
+        case .none:
+            throw NotFoundError.runtimeError("Filme nao encontrado")
+        case .error:
+            throw NotFoundError.runtimeError("Filme nao encontrado")
+        default:
+            return movie ?? MovieDTO()
         }
-        
-        throw NotFoundError.runtimeError("Filme nao encontrado")
     }
     
     //TODO:- Colocar essa logica em uma classe separada junto com o MovieRepository
     func saveMovie(movie: MovieDTO) throws {
-        do{
-            let _ = try getMovie(by: movie.id!)
-        }catch{
-            movies.append(movie)
-            
-            if let movieCategories = movie.genres{
-                for genre in movieCategories{
-                    let filterById = categories.filter{ $0.id == genre.id }
-                    if filterById.count == 0 {
-                        var category = CategoryDTO()
-                        category.id = genre.id
-                        category.movies = [MovieDTO]()
-                        category.movies?.append(movie)
-                        category.name = genre.name
-                        categories.append(category)
-                    } else if var category = filterById.first {
-                        category.movies?.append(movie)
-                    }
+
+        movies.append(movie)
+        
+        if let movieCategories = movie.genres{
+            for genre in movieCategories{
+                let filterById = categories.filter{ $0.id == genre.id }
+                if filterById.count == 0 {
+                    var category = CategoryDTO()
+                    category.id = genre.id
+                    category.movies = [MovieDTO]()
+                    category.movies?.append(movie)
+                    category.name = genre.name
+                    categories.append(category)
+                } else if var category = filterById.first {
+                    category.movies?.append(movie)
                 }
             }
         }

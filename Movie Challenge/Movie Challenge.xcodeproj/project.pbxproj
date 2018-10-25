@@ -54,6 +54,8 @@
 		786553992167CD6C002685E7 /* SuggestionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786553982167CD6C002685E7 /* SuggestionCellViewModel.swift */; };
 		7877DF262177AA3A005992DA /* MockedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7877DF252177AA3A005992DA /* MockedService.swift */; };
 		7877F3EE215907B60088D747 /* MoreMoviesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7877F3ED215907B60088D747 /* MoreMoviesCollectionViewCell.swift */; };
+		787AC882217A0FF5009F048B /* PopularPage.json in Resources */ = {isa = PBXBuildFile; fileRef = 787AC881217A0FF5009F048B /* PopularPage.json */; };
+		787AC885217A10AC009F048B /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787AC884217A10AC009F048B /* SearchViewModelTests.swift */; };
 		78AB8335217773DE00A42CBE /* DetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AB8334217773DE00A42CBE /* DetailViewModelTests.swift */; };
 		78AB83382177799500A42CBE /* Deadpool.json in Resources */ = {isa = PBXBuildFile; fileRef = 78AB83372177799500A42CBE /* Deadpool.json */; };
 		78AB833A217779C000A42CBE /* MockDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AB8339217779C000A42CBE /* MockDataHelper.swift */; };
@@ -129,6 +131,8 @@
 		786553982167CD6C002685E7 /* SuggestionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionCellViewModel.swift; sourceTree = "<group>"; };
 		7877DF252177AA3A005992DA /* MockedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedService.swift; sourceTree = "<group>"; };
 		7877F3ED215907B60088D747 /* MoreMoviesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreMoviesCollectionViewCell.swift; sourceTree = "<group>"; };
+		787AC881217A0FF5009F048B /* PopularPage.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PopularPage.json; sourceTree = "<group>"; };
+		787AC884217A10AC009F048B /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
 		78AB8334217773DE00A42CBE /* DetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelTests.swift; sourceTree = "<group>"; };
 		78AB83372177799500A42CBE /* Deadpool.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Deadpool.json; sourceTree = "<group>"; };
 		78AB8339217779C000A42CBE /* MockDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataHelper.swift; sourceTree = "<group>"; };
@@ -404,6 +408,7 @@
 		7828690F217675180028EF11 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				787AC883217A107F009F048B /* Search */,
 				78AB83332177739100A42CBE /* Detail */,
 				78286910217675310028EF11 /* Favorite */,
 			);
@@ -472,6 +477,14 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		787AC883217A107F009F048B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				787AC884217A10AC009F048B /* SearchViewModelTests.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		78AB83332177739100A42CBE /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,6 +499,7 @@
 				78AB83372177799500A42CBE /* Deadpool.json */,
 				784AC8EE2178CA3200C3CB5B /* Venom.json */,
 				784AC8EC2178C35700C3CB5B /* PopularList.json */,
+				787AC881217A0FF5009F048B /* PopularPage.json */,
 				78AB8339217779C000A42CBE /* MockDataHelper.swift */,
 			);
 			path = MockData;
@@ -626,6 +640,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				787AC882217A0FF5009F048B /* PopularPage.json in Resources */,
 				78AB83382177799500A42CBE /* Deadpool.json in Resources */,
 				784AC8EF2178CA3200C3CB5B /* Venom.json in Resources */,
 				784AC8ED2178C35700C3CB5B /* PopularList.json in Resources */,
@@ -742,6 +757,7 @@
 				784AC8EB2178B7F800C3CB5B /* MockedRepository.swift in Sources */,
 				7877DF262177AA3A005992DA /* MockedService.swift in Sources */,
 				78AB8335217773DE00A42CBE /* DetailViewModelTests.swift in Sources */,
+				787AC885217A10AC009F048B /* SearchViewModelTests.swift in Sources */,
 				78AB833A217779C000A42CBE /* MockDataHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
