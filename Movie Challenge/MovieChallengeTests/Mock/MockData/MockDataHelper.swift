@@ -14,6 +14,7 @@ class MockDataHelper{
     enum MockedResource: String{
         case deadpool = "Deadpool"
         case venom = "Venom"
+        case popularCategortyList = "PopularCategoryList"
         case popularList = "PopularList"
         case popularPage = "PopularPage"
     }

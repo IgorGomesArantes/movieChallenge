@@ -479,7 +479,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
             endingLineNumber = "71"
-            landmarkName = "searchTrendingMoviePage(label:)"
+            landmarkName = "setMoviePageList()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -895,7 +895,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
             endingLineNumber = "123"
-            landmarkName = "numberOfRows()"
+            landmarkName = "numberOfGenres()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -992,22 +992,6 @@
             startingLineNumber = "32"
             endingLineNumber = "32"
             landmarkName = "configure()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MovieChallengeTests/Mock/MockedRepository.swift"
-            timestampString = "562193084.241932"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "removeMovie(id:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

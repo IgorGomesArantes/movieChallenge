@@ -27,11 +27,8 @@ class MockedRepository: RepositoryProtocol{
     private func popule(){
         switch testCase {
         case .populatedList:
-            let moviesToSave = try! JSONDecoder().decode([MovieDTO].self, from: MockDataHelper.getData(forResource: .popularList))
-            
-            for movie in moviesToSave{
-                try! saveMovie(movie: movie)
-            }
+            movies = try! JSONDecoder().decode([MovieDTO].self, from: MockDataHelper.getData(forResource: .popularList))
+            categories = try! JSONDecoder().decode([CategoryDTO].self, from: MockDataHelper.getData(forResource: .popularCategortyList))
         case .savedMovie:
             movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .venom))
         case .error:
@@ -64,40 +61,26 @@ class MockedRepository: RepositoryProtocol{
     
     //TODO:- Colocar essa logica em uma classe separada junto com o MovieRepository
     func saveMovie(movie: MovieDTO) throws {
-
+        let movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .deadpool))
+        
         movies.append(movie)
         
-        if let movieCategories = movie.genres{
-            for genre in movieCategories{
-                let filterById = categories.filter{ $0.id == genre.id }
-                if filterById.count == 0 {
-                    var category = CategoryDTO()
-                    category.id = genre.id
-                    category.movies = [MovieDTO]()
-                    category.movies?.append(movie)
-                    category.name = genre.name
-                    categories.append(category)
-                } else if var category = filterById.first {
-                    category.movies?.append(movie)
-                }
-            }
+        for genre in movie.genres!{
+            var category = CategoryDTO()
+            category.id = genre.id
+            category.movies?.append(movie)
+            category.name = genre.name
+            categories.append(category)
         }
     }
     
     //TODO:- Colocar essa logica em uma classe separada junto com o MovieRepository
     func removeMovie(id: Int) throws {
-        
-        let filterById = movies.filter{ $0.id == id }
-        
-        if filterById.count == 0{
-            throw NotFoundError.runtimeError("Filme nao encontrado")
+        for _ in movies[0].genres!{
+            categories.remove(at: 0)
         }
         
-        movies = movies.filter { $0.id != id }
-        
-        for i in 0..<categories.count{
-            categories[i].movies = categories[i].movies?.filter{ $0.id != id }
-        }
+        movies.remove(at: 0)
     }
     
     func getAllCategories() throws -> [CategoryDTO] {

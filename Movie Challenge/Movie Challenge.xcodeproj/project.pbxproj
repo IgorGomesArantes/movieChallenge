@@ -63,6 +63,7 @@
 		78C8F694214C004D006013CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F693214C004D006013CB /* HomeViewController.swift */; };
 		78C8F696214C01B9006013CB /* SuggestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F695214C01B9006013CB /* SuggestionTableViewCell.swift */; };
 		78C8F69E214C36C0006013CB /* UIView+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F69D214C36C0006013CB /* UIView+Additions.swift */; };
+		78DEAD602183CEBF0063EBFD /* PopularCategoryList.json in Resources */ = {isa = PBXBuildFile; fileRef = 78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */; };
 		78F9992E21663B5C00FF24D8 /* FavoriteCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F9992D21663B5C00FF24D8 /* FavoriteCellViewModel.swift */; };
 		8935B11A1AD9A8EC06276BB5 /* Pods_Movie_Challenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4DDEC79E83F3E192973702 /* Pods_Movie_Challenge.framework */; };
 /* End PBXBuildFile section */
@@ -140,6 +141,7 @@
 		78C8F693214C004D006013CB /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		78C8F695214C01B9006013CB /* SuggestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTableViewCell.swift; sourceTree = "<group>"; };
 		78C8F69D214C36C0006013CB /* UIView+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Additions.swift"; sourceTree = "<group>"; };
+		78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PopularCategoryList.json; sourceTree = "<group>"; };
 		78E4154F2146D71700BFF64C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		78E415502146D71700BFF64C /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
 		78E415512146D71700BFF64C /* DTPerformanceSession.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DTPerformanceSession.framework; path = Library/Frameworks/DTPerformanceSession.framework; sourceTree = DEVELOPER_DIR; };
@@ -498,6 +500,7 @@
 			children = (
 				78AB83372177799500A42CBE /* Deadpool.json */,
 				784AC8EE2178CA3200C3CB5B /* Venom.json */,
+				78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */,
 				784AC8EC2178C35700C3CB5B /* PopularList.json */,
 				787AC881217A0FF5009F048B /* PopularPage.json */,
 				78AB8339217779C000A42CBE /* MockDataHelper.swift */,
@@ -642,6 +645,7 @@
 			files = (
 				787AC882217A0FF5009F048B /* PopularPage.json in Resources */,
 				78AB83382177799500A42CBE /* Deadpool.json in Resources */,
+				78DEAD602183CEBF0063EBFD /* PopularCategoryList.json in Resources */,
 				784AC8EF2178CA3200C3CB5B /* Venom.json in Resources */,
 				784AC8ED2178C35700C3CB5B /* PopularList.json in Resources */,
 			);

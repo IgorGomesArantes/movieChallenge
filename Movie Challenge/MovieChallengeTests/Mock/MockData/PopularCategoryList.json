@@ -1,0 +1,28 @@
+[
+    {
+        "id": 5,
+        "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
+        "name": "Columbia Pictures",
+        "origin_country": "US"
+    },
+    {
+        "id": 7505,
+        "logo_path": "/837VMM4wOkODc1idNxGT0KQJlej.png",
+        "name": "Marvel Entertainment",
+        "origin_country": "US"
+    },
+    {
+        "id": 34,
+        "logo_path": "/GagSvqWlyPdkFHMfQ3pNq6ix9P.png",
+        "name": "Sony Pictures",
+        "origin_country": "US"
+    },
+    {
+        "id": 878,
+        "name": "Science Fiction"
+    },
+    {
+        "id": 28,
+        "name": "Action"
+    }
+]

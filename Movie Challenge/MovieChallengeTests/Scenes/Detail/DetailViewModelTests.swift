@@ -57,14 +57,7 @@ class DetailViewModelTests: XCTestCase{
         let categoryCount = try! repository.getAllCategories().count
         
         XCTAssertEqual(movieCount, 1)
-        XCTAssertEqual(categoryCount, 3)
-        
-//        do{
-//            let _ = try repository.getMovie(by: movieId)
-//            XCTAssert(true)
-//        }catch {
-//            XCTAssert(false)
-//        }
+        XCTAssertEqual(categoryCount, 2)
     }
     
     func testRemoveFavoriteMovie(){
@@ -95,15 +88,8 @@ class DetailViewModelTests: XCTestCase{
         let movieCount = try! repository.getAllMovies().count
         let categoryCount = try! repository.getAllCategories().count
         
-        XCTAssertEqual(movieCount, 19)
-        XCTAssertEqual(categoryCount, 14)
-        
-        do{
-            let _ = try repository.getMovie(by: movieId)
-            XCTAssert(false)
-        }catch {
-            XCTAssert(true)
-        }
+        XCTAssertEqual(movieCount, 1)
+        XCTAssertEqual(categoryCount, 3)
     }
     
     //sut = system under test
@@ -189,7 +175,7 @@ class DetailViewModelTests: XCTestCase{
         
         // Then
         XCTAssertEqual(onChangeResultState, .success)
-        XCTAssertEqual(sut.numberOfGenres(), 3)
+        XCTAssertEqual(sut.numberOfGenres(), 2)
     }
     
     func testGetGenreViewModel(){
@@ -210,7 +196,7 @@ class DetailViewModelTests: XCTestCase{
         
         // Then
         XCTAssertEqual(onChangeResultState, .success)
-        XCTAssertEqual(genreViewModel.name, "Adventure")
+        XCTAssertEqual(genreViewModel.name, "Comedy")
         XCTAssertEqual(genreViewModel.textColor, AppConstants.textColorPattern)
         XCTAssertEqual(genreViewModel.backGroundColor, AppConstants.colorSecondary)
     }
