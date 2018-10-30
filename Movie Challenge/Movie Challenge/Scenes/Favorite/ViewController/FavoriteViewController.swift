@@ -66,7 +66,7 @@ extension FavoriteViewController: FavoriteCellViewModelDelegate{
 }
 
 //MARK:- MovieViewController methods
-extension FavoriteViewController: MovieViewController{
+extension FavoriteViewController: ViewControllerProtocol{
     func viewModelStateChange(change: MovieState.Change) {
         
         favoriteMoviesTable.reloadData()
@@ -94,7 +94,7 @@ extension FavoriteViewController: MovieViewController{
 }
 
 //Mark:- DataBaseController methods
-extension FavoriteViewController: DataBaseViewController{
+extension FavoriteViewController: DataBaseViewControllerProtocol{
     func viewModelDataBaseChange(change: MovieState.Change) {
         switch change {
         case .success:

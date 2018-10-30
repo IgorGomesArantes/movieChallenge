@@ -11,19 +11,15 @@ import XCTest
 
 class DetailViewModelTests: XCTestCase{
     
-    func onChangeSuccess(state: MovieState.Change){
-        XCTAssertEqual(state, .success)
-    }
-    
+    // MARK: - Test methods
     func testInit() {
         // Given
         let movieId = 1
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .newMovie), repository: MockedRepository(testCase: .none))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: MockedRepository(testCase: .none))
         
         // Then
-        XCTAssertNotNil(sut.state)
         XCTAssertNotNil(sut.repository)
         XCTAssertNotNil(sut.service)
     }
@@ -35,7 +31,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         var onChangeDataBaseResultState: MovieState.Change?
         
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .newMovie), repository: repository)
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: repository)
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -68,7 +64,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeDataBaseResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .savedMovie), repository: repository)
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: repository)
         
         sut.onChange = { state in
            onChangeResultState = state
@@ -100,7 +96,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .savedMovie/*.none*/), repository: MockedRepository(testCase: .savedMovie))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: MockedRepository(testCase: .savedMovie))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -119,7 +115,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .newMovie), repository: MockedRepository(testCase: .none))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: MockedRepository(testCase: .none))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -139,7 +135,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeDataBaseResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .error(ServiceError())), repository: MockedRepository(testCase: .error(RepositoryError())))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .error(ServiceError())), repository: MockedRepository(testCase: .error(RepositoryError())))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -165,7 +161,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .newMovie), repository: MockedRepository(testCase: .none))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: MockedRepository(testCase: .none))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -184,7 +180,7 @@ class DetailViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCaseDetail: .newMovie), repository: MockedRepository(testCase: .none))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: MockedRepository(testCase: .none))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -199,5 +195,57 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(genreViewModel.name, "Comedy")
         XCTAssertEqual(genreViewModel.textColor, AppConstants.textColorPattern)
         XCTAssertEqual(genreViewModel.backGroundColor, AppConstants.colorSecondary)
+    }
+    
+    func testMovieValues(){
+        // Given
+        let movieId = 1
+        var onChangeResultState: MovieState.Change?
+        
+        // When
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: MockedRepository(testCase: .none))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+        
+        sut.reload()
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, .success)
+        XCTAssertEqual(sut.posterPath, "")
+        XCTAssertEqual(sut.title, "")
+        XCTAssertEqual(sut.voteAverage, "")
+        XCTAssertEqual(sut.voteCount, "")
+        XCTAssertEqual(sut.overview, "")
+        XCTAssertEqual(sut.year, "")
+        XCTAssertEqual(sut.runtime, "")
+        XCTAssertEqual(sut.creationDate, "")
+    }
+    
+    func testMovieValuesWhenNull(){
+        // Given
+        let movieId = 0
+        var onChangeResultState: MovieState.Change?
+        
+        // When
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: MockedRepository(testCase: .none))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+        
+        sut.reload()
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, .error)
+        XCTAssertEqual(sut.posterPath, NSLocalizedString("Empty poster path", comment: ""))
+        XCTAssertEqual(sut.title, NSLocalizedString("Unknown title", comment: ""))
+        XCTAssertEqual(sut.voteAverage, NSLocalizedString("Empty vote average", comment: ""))
+        XCTAssertEqual(sut.voteCount, NSLocalizedString("Empty vote count", comment: ""))
+        XCTAssertEqual(sut.overview, NSLocalizedString("Empty overview", comment: ""))
+        XCTAssertEqual(sut.year, NSLocalizedString("Empty year", comment: ""))
+        XCTAssertEqual(sut.runtime, NSLocalizedString("Empty runtime", comment: ""))
+        XCTAssertEqual(sut.creationDate, NSLocalizedString("Empty creation date", comment: ""))
     }
 }

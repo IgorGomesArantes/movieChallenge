@@ -81,7 +81,7 @@ class FavoriteMovieTableViewCell: UITableViewCell{
 }
 
 //MARK:- FavoriteMovieTableViewCell methods
-extension FavoriteMovieTableViewCell: MovieViewController{
+extension FavoriteMovieTableViewCell: ViewControllerProtocol{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:

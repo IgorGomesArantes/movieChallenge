@@ -17,4 +17,13 @@
 "Empty favorites" = "Não há filmes";
 "Empty categories" = "Não há categorias";
 
+"Empty poster path" = "";
+"Unknown title" = "Titulo desconhecido";
+"Empty vote average" = "0";
+"Empty vote count" = "(0)";
+"Empty overview" = "Não há resumo";
+"Empty year" = "0000";
+"Empty runtime" = "00h 00m";
+"Empty creation date" = "00-00-0000";
+
 

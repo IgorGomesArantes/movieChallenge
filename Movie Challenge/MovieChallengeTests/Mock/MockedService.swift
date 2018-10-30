@@ -11,49 +11,38 @@ import Foundation
 
 class MockedService: ServiceProtocol {
     
-    enum TestCaseDetail {
+    enum TestCase {
         case error(Error)
-        case savedMovie
         case newMovie
-    }
-    
-    enum TestCasePage {
-        case error(Error)
         case populatedPage
         case emptyPage
+        case none
     }
     
-    var testCaseDetail: TestCaseDetail?
-    var testCasePage: TestCasePage?
+    var testCase: TestCase?
     
-    init(testCaseDetail: TestCaseDetail) {
-        self.testCaseDetail = testCaseDetail
+    init(testCase: TestCase) {
+        self.testCase = testCase
     }
     
-    init(testCasePage: TestCasePage){
-        self.testCasePage = testCasePage
-    }
-    
-    func getMovieDetail(id: Int, completion: (Result<MovieDTO>) -> ()) {
-        switch testCaseDetail {
+    func getMovieDetail(id: Int, completion: (Response<MovieDTO>) -> ()) {
+        switch testCase {
         case .error(let error)?:
             completion(.error(error))
         case .newMovie?:
             let deadpool = try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .deadpool))
             completion(.success(deadpool))
-        case .savedMovie?:
+        default:
             completion(.error(ServiceError()))
-        case .none:
-            break
         }
     }
     
-    func getMoviePage(page: Int, sort: Sort, order: Order, completion: @escaping (Result<MoviePageDTO>) -> ()) {
+    func getMoviePage(page: Int, sort: Sort, order: Order, completion: @escaping (Response<MoviePageDTO>) -> ()) {
         
     }
     
-    func getMoviePageByName(query: String, completion: @escaping (Result<MoviePageDTO>) -> ()) {
-        switch testCasePage {
+    func getMoviePageByName(query: String, completion: @escaping (Response<MoviePageDTO>) -> ()) {
+        switch testCase {
         case .error(let error)?:
             completion(.error(error))
         case .populatedPage?:
@@ -61,14 +50,12 @@ class MockedService: ServiceProtocol {
             completion(.success(moviePage))
         case .emptyPage?:
             completion(.success(MoviePageDTO()))
-        case .none:
-            break
+        default:
+            completion(.error(ServiceError()))
         }
     }
     
-    func getTrendingMoviePage(page: Int, completion: @escaping (Result<MoviePageDTO>) -> ()) {
+    func getTrendingMoviePage(page: Int, completion: @escaping (Response<MoviePageDTO>) -> ()) {
         
     }
-    
-    
 }

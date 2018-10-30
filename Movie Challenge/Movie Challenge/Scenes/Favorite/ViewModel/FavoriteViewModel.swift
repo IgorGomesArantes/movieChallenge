@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
+class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollViewModelProtocol{
     
     //MARK:- Private variables
     private var allMoviesList: [MovieDTO]!
@@ -85,7 +85,7 @@ class FavoriteViewModel: MovieViewModel, DataBaseViewModel, ScrollViewModel{
     
     //TODO:- Corrigir
     func getDetailViewModel(movieId: Int) -> DetailViewModel{
-        let detailViewModel = DetailViewModel(movieId: movieId, service: MovieService(), repository: MovieRepository())
+        let detailViewModel = DetailViewModel(movieId: movieId, service: HTTPService(), repository: MovieRepository())
         
         return detailViewModel
     }

@@ -95,7 +95,7 @@ class DetailViewController : UIViewController{
 }
 
 //MARK:- MovieViewController methods
-extension DetailViewController: MovieViewController{
+extension DetailViewController: ViewControllerProtocol{
     func bindViewModel(){
         viewModel.onChange = viewModelStateChange
         viewModel.onChangeDataBase = viewModelDataBaseChange
@@ -115,7 +115,7 @@ extension DetailViewController: MovieViewController{
 }
 
 //MARK:- DataBaseViewController methods
-extension DetailViewController: DataBaseViewController{
+extension DetailViewController: DataBaseViewControllerProtocol{
     func viewModelDataBaseChange(change: MovieState.Change) {
         switch change {
         case .success:

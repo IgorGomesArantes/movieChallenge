@@ -54,7 +54,7 @@ extension SuggestionTableViewCell: MoreMoviesCollectionViewCellDelegate{
 }
 
 //MARK:- MovieViewController methods
-extension SuggestionTableViewCell: MovieViewController{
+extension SuggestionTableViewCell: ViewControllerProtocol{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:

@@ -8,56 +8,54 @@
 
 import Foundation
 
-class SearchViewModel : MovieViewModel, ScrollViewModel{
+class SearchViewModel : ViewModelProtocol, ScrollViewModelProtocol {
     
-    //MARK:- Private variables
+    // MARK: - Private variables
     private var moviePage: MoviePageDTO
     private let service: ServiceProtocol
     
-    //MARK:- Public variables
-    var state: MovieState
+    // MARK: - Public variables
     var onChange: ((MovieState.Change) -> ())?
     
-    var searchQuery: String{
-        didSet{
+    var searchQuery: String {
+        didSet {
             reload()
         }
     }
     
-    //MARK:- Public Methods
-    init(service: ServiceProtocol){
+    // MARK: - Public Methods
+    init(service: ServiceProtocol) {
         self.service = service
         searchQuery = ""
-        state = MovieState()
         moviePage = MoviePageDTO()
     }
     
-    func getSearchCellViewModel(index: Int) -> SearchCellViewModel{
+    func getSearchCellViewModel(index: Int) -> SearchCellViewModel {
         let cellViewModel = SearchCellViewModel(movie: moviePage.results[index])
         
         return cellViewModel
     }
     
-    func getDetailViewModel(index: Int) -> DetailViewModel{
+    func getDetailViewModel(index: Int) -> DetailViewModel {
         let movieId = moviePage.results[index].id!
         
-        let detailViewModel = DetailViewModel(movieId: movieId, service: MovieService(), repository: MovieRepository())
+        let detailViewModel = DetailViewModel(movieId: movieId, service: HTTPService(), repository: MovieRepository())
         
         return detailViewModel
     }
     
-    //MARK:- MovieViewModel methods
-    func reload(){
+    // MARK: - MovieViewModel methods
+    func reload() {
         if searchQuery.isEmpty{
             self.moviePage = MoviePageDTO()
             self.onChange!(MovieState.Change.emptyResult)
-        }else{
-            service.getMoviePageByName(query: searchQuery){ result in
-                switch(result){
+        } else {
+            service.getMoviePageByName(query: searchQuery) { result in
+                switch(result) {
                 case .success(Success: let moviePage):
-                    if moviePage.results.isEmpty{
+                    if moviePage.results.isEmpty {
                         self.onChange!(MovieState.Change.emptyResult)
-                    }else{
+                    } else {
                         self.moviePage = moviePage
                         self.onChange!(MovieState.Change.success)
                     }
@@ -69,12 +67,12 @@ class SearchViewModel : MovieViewModel, ScrollViewModel{
         }
     }
     
-    //MARK:- ScrollViewModel methods
+    // MARK: - ScrollViewModel methods
     func numberOfSections() -> Int {
         return 1
     }
     
-    func numberOfRows() -> Int{
+    func numberOfRows() -> Int {
         return moviePage.results.count
     }
 }

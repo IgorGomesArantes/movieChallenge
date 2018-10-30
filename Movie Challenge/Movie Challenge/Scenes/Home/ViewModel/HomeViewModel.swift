@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HomeViewModel: MovieViewModel, BaseDetailViewModel{
+class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     
     //MARK:- Private variables
     private var moviePageList: [MoviePageDTO]!
@@ -19,7 +19,7 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     var onChange: ((MovieState.Change) -> ())?
     
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        MovieService.shared().getMoviePage(sort: sort, order: order){ result in
+        HTTPService.shared().getMoviePage(sort: sort, order: order){ result in
             
             switch(result){
             case .success(Success: var moviePage):
@@ -28,7 +28,7 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
                 
                 if isBestMovieHere{
                     if let bestMovie = moviePage.results.first{
-                        MovieService.shared().getMovieDetail(id: bestMovie.id!){ result in
+                        HTTPService.shared().getMovieDetail(id: bestMovie.id!){ result in
                             switch(result){
                             case .success(Success: let movie):
                                 self.movie = movie
@@ -53,7 +53,7 @@ class HomeViewModel: MovieViewModel, BaseDetailViewModel{
     }
     
     private func searchTrendingMoviePage(label: String){
-        MovieService.shared().getTrendingMoviePage(){ result in
+        HTTPService.shared().getTrendingMoviePage(){ result in
             switch(result){
             case .success(Success: var moviePage):
                 moviePage.label = label

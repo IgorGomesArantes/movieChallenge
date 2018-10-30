@@ -9,18 +9,18 @@
 import Foundation
 
 class SearchCellViewModel{
-    //MARK:- Private variables
+    // MARK: - Private variables
     private let movie: MovieDTO
     
-    //MARK:- Public variables
-    var posterPath: String{
+    // MARK: - Public variables
+    var posterPath: String {
         guard let path = movie.poster_path else { return "" }
         
         return AppConstants.BaseImageURL + Quality.low.rawValue + path
     }
     
-    //MARK:- Public methods
-    init(movie: MovieDTO){
+    // MARK: - Public methods
+    init(movie: MovieDTO) {
         self.movie = movie
     }
 }

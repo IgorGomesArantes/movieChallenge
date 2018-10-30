@@ -11,63 +11,79 @@ import XCTest
 
 class SearchViewModelTests: XCTestCase{
     
-    var sut: SearchViewModel!
+    // MARK: - Private variables
+    private var sut: SearchViewModel!
+    private var onChangeResultState: MovieState.Change?
     
+    // MARK: - Primitive methods
     override func setUp() {
-        sut = SearchViewModel(service: MockedService(testCasePage: .populatedPage))
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
-    func testInit(){
-        XCTAssertEqual(sut.searchQuery, "")
-        XCTAssertNotNil(sut.state)
-    }
-    
-    func testChangeSearchEmptyText(){
-        // Then
-        sut.onChange = {
-            state in
-            XCTAssert(state == .emptyResult)
-        }
+        sut = SearchViewModel(service: MockedService(testCase: .populatedPage))
         
+        sut.onChange = { state in
+            self.onChangeResultState = state
+        }
+    }
+    
+    // MARK: - Test methods
+    func testInit(){
+        // Given
+        let sut = SearchViewModel(service: MockedService(testCase: .none))
+        
+        // Then
+        XCTAssertEqual(sut.searchQuery, "")
+    }
+    
+    func testSearchEmptyText(){
         // When
         sut.searchQuery = ""
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.emptyResult)
+        XCTAssertEqual(sut.numberOfRows(), 0)
     }
     
-    func testChangeSearchEmptyResult(){
-        // Then
-        sut.onChange = {
-            state in
-            XCTAssert(state == .none)
-        }
+    func testSearchEmptyResult(){
+        // Given
+        var onChangeResultState: MovieState.Change?
         
         // When
-        sut.searchQuery = "lord of the mirror 2"
+        let sut = SearchViewModel(service: MockedService(testCase: .emptyPage))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+        
+        sut.searchQuery = "matrix"
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.emptyResult)
+        XCTAssertEqual(sut.numberOfRows(), 0)
     }
     
-    func testChangePopularSearch(){
-        // Then
-        sut.onChange = {
-            state in
-            XCTAssert(state == .success)
-        }
-        
+    func testPopulatedPageSearch(){
         // When
-        sut.searchQuery = "popular"
+        sut.searchQuery = "matrix"
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
+        XCTAssertEqual(sut.numberOfRows(), 20)
     }
     
     func testChangeServiceErrorSearch(){
-        // Then
-        sut.onChange = {
-            state in
-            XCTAssert(state == .none)
-        }
+        // Given
+        var onChangeResultState: MovieState.Change?
         
         // When
-        sut.searchQuery = "error"
+        let sut = SearchViewModel(service: MockedService(testCase: .error(ServiceError())))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+        
+        sut.searchQuery = "matrix"
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.error)
     }
     
     func testNumberOfSections(){
@@ -75,49 +91,27 @@ class SearchViewModelTests: XCTestCase{
         XCTAssertEqual(sut.numberOfSections(), 1)
     }
     
-    func testNumberOfRows(){
-        // Given
-        sut.onChange = {
-            state in
-            XCTAssert(state == .success)
-        }
-        
-        // When
-        sut.searchQuery = "popular"
-        
-        // Then
-        XCTAssertEqual(sut.numberOfRows(), 20)
-    }
-    
     func testGetSearchCellViewModel(){
         // Given
-        sut.onChange = {
-            state in
-            XCTAssert(state == .success)
-        }
-        
-        sut.searchQuery = "popular"
+        sut.searchQuery = "matrix"
         
         // When
         let cellViewModel = sut.getSearchCellViewModel(index: 1)
         
         // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
         XCTAssertEqual(cellViewModel.posterPath, "https://image.tmdb.org/t/p/w200/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg")
     }
     
     func testGetDetailViewModel(){
         // Given
-        sut.onChange = {
-            state in
-            XCTAssert(state == .success)
-        }
-        
-        sut.searchQuery = "popular"
+        sut.searchQuery = "matrix"
         
         // When
         let detailViewModel = sut.getDetailViewModel(index: 0)
         
         // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
         XCTAssertNotNil(detailViewModel)
     }
 }

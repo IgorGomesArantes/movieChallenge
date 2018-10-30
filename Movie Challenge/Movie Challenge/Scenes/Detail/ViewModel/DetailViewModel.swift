@@ -8,31 +8,28 @@
 
 import Foundation
 
-class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
+class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewModelProtocol {
     
-    //MARK:- Private variables
+    // MARK: - Private variables
     let service: ServiceProtocol
     let repository: RepositoryProtocol
     private(set) var movie: MovieDTO?
     
-    //MARK:- Public variables
+    // MARK: - Public variables
     private let movieId: Int
-    var state: MovieState
     var onChange: ((MovieState.Change) -> ())?
     var onChangeDataBase: ((MovieState.Change) -> ())?
     
-    //MARK:- Public methods
-    init(movieId: Int, service: ServiceProtocol, repository: RepositoryProtocol){
-        state = MovieState()
-        
+    // MARK: - Public methods
+    init(movieId: Int, service: ServiceProtocol, repository: RepositoryProtocol) {
         self.movieId = movieId
         self.service = service
         self.repository = repository
     }
     
-    func saveMovieOrRemoveFavorite(){
-        if let movie = movie{
-            if let favorite = movie.favorite, favorite{
+    func saveMovieOrRemoveFavorite() {
+        if let movie = movie {
+            if let favorite = movie.favorite, favorite {
                 self.movie!.favorite = false
                 remove(movieId: movieId)
             }else{
@@ -46,43 +43,43 @@ class DetailViewModel: MovieViewModel, DataBaseViewModel, BaseDetailViewModel{
         }
     }
     
-    //MARK:- BaseDetailViewModel
+    // MARK: - BaseDetailViewModel methods
     func numberOfGenres() -> Int {
         guard let movie = self.movie, let genres = movie.genres else { return 0 }
         
         return genres.count
     }
     
-    func getGenreViewModel(index: Int) -> GenreViewModel{
+    func getGenreViewModel(index: Int) -> GenreViewModel    {
         let genreViewModel = GenreViewModel(genre: movie!.genres![index], style: .secondary)
         
         return genreViewModel
     }
     
-    //MARK:- MovieViewModel methods
+    // MARK: - MovieViewModel methods
     func reload() {
-        do{
+        do {
             movie = try repository.getMovie(by: movieId)
             movie?.favorite = true
             
             onChange!(MovieState.Change.success)
-        }catch{
-            service.getMovieDetail(id: movieId){ result in
-                switch(result){
-                case .success(Success: let movie):
+        } catch {
+            service.getMovieDetail(id: movieId) { response in
+                switch(response) {
+                case .success(Result: let movie):
                     self.movie = movie
                     self.movie?.favorite = false
                     
-                    self.onChange!(MovieState.Change.success)
+                    self.onChange!(.success)
                     
                 case .error:
-                    self.onChange!(MovieState.Change.error)
+                    self.onChange!(.error)
                 }
             }
         }
     }
 
-    //MARK:- DataBaseViewModel methods and variables
+    // MARK: - DataBaseViewModel methods
     func changeDataBase(change: MovieState.Change) {
         onChangeDataBase!(change)
     }

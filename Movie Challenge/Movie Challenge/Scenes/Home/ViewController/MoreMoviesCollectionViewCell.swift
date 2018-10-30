@@ -36,7 +36,7 @@ class MoreMoviesCollectionViewCell: UICollectionViewCell{
 }
 
 //MARK:- MoviewViewController methods
-extension MoreMoviesCollectionViewCell: MovieViewController{
+extension MoreMoviesCollectionViewCell: ViewControllerProtocol{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:

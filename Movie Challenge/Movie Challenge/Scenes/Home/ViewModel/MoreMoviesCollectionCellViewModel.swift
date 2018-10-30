@@ -12,7 +12,7 @@ protocol MoreMoviesCollectionViewCellDelegate {
     func searchMoreMovies(completion: @escaping () -> ())
 }
 
-class MoreMoviesCollectionCellViewModel: MovieViewModel{
+class MoreMoviesCollectionCellViewModel: ViewModelProtocol{
 
     //MARK:- Private variables
     private let delegate: MoreMoviesCollectionViewCellDelegate!

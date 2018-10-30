@@ -8,11 +8,7 @@
 
 import UIKit
 
-protocol MovieViewController{
+protocol ViewControllerProtocol {
     func viewModelStateChange(change: MovieState.Change)
     func bindViewModel()
-}
-
-protocol DataBaseViewController{
-    func viewModelDataBaseChange(change: MovieState.Change)
 }

@@ -13,7 +13,7 @@ protocol FavoriteCellViewModelDelegate{
     func changeToMovieDetail(movieId: Int)
 }
 
-class FavoriteCellViewModel: MovieViewModel, BaseDetailViewModel{
+class FavoriteCellViewModel: ViewModelProtocol, DetailViewModelProtocol{
     
     //MARK:- Private variables
     private var delegate: FavoriteCellViewModelDelegate!

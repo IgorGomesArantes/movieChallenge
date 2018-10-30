@@ -12,7 +12,7 @@ protocol SuggestionCellViewModelDelegate{
     func changeToMovieDetail(movieId: Int)
 }
 
-class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
+class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
     
     //MARK:- Private variables
     private var delegate: SuggestionCellViewModelDelegate
@@ -63,7 +63,7 @@ class SuggestionCellViewModel: MovieViewModel, ScrollViewModel{
     }
     
     func searchMoreMovies(completion: @escaping () -> ()){
-        MovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
+        HTTPService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
             
             switch(result){
             case .success(Success: let newMoviePage):

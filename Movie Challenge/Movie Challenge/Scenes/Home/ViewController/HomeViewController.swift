@@ -68,7 +68,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: SuggestionCellViewModelDelegate {
     func changeToMovieDetail(movieId: Int) {
         if let viewController = UIStoryboard(name: AppConstants.storyBoardName, bundle: nil).instantiateViewController(withIdentifier: DetailViewController.identifier) as? DetailViewController {
-            viewController.setup(viewModel: DetailViewModel(movieId: movieId, service: MovieService(), repository: MovieRepository()))
+            viewController.setup(viewModel: DetailViewModel(movieId: movieId, service: HTTPService(), repository: MovieRepository()))
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }
@@ -77,7 +77,7 @@ extension HomeViewController: SuggestionCellViewModelDelegate {
 }
 
 //MARK:- MoviewViewController methods
-extension HomeViewController: MovieViewController{
+extension HomeViewController: ViewControllerProtocol{
     func viewModelStateChange(change: MovieState.Change) {
         switch change {
         case .success:
