@@ -17,7 +17,7 @@ class SearchViewModelTests: XCTestCase{
     
     // MARK: - Primitive methods
     override func setUp() {
-        sut = SearchViewModel(service: MockedService(testCase: .populatedPage))
+        sut = SearchViewModel(service: MockedMovieService(testCase: .populatedPage))
         
         sut.onChange = { state in
             self.onChangeResultState = state
@@ -27,7 +27,7 @@ class SearchViewModelTests: XCTestCase{
     // MARK: - Test methods
     func testInit(){
         // Given
-        let sut = SearchViewModel(service: MockedService(testCase: .none))
+        let sut = SearchViewModel(service: MockedMovieService(testCase: .none))
         
         // Then
         XCTAssertEqual(sut.searchQuery, "")
@@ -38,7 +38,7 @@ class SearchViewModelTests: XCTestCase{
         sut.searchQuery = ""
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.emptyResult)
+        XCTAssertEqual(onChangeResultState, .emptyResult)
         XCTAssertEqual(sut.numberOfRows(), 0)
     }
     
@@ -47,7 +47,7 @@ class SearchViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = SearchViewModel(service: MockedService(testCase: .emptyPage))
+        let sut = SearchViewModel(service: MockedMovieService(testCase: .emptyPage))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -56,7 +56,7 @@ class SearchViewModelTests: XCTestCase{
         sut.searchQuery = "matrix"
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.emptyResult)
+        XCTAssertEqual(onChangeResultState, .emptyResult)
         XCTAssertEqual(sut.numberOfRows(), 0)
     }
     
@@ -65,7 +65,7 @@ class SearchViewModelTests: XCTestCase{
         sut.searchQuery = "matrix"
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
+        XCTAssertEqual(onChangeResultState, .success)
         XCTAssertEqual(sut.numberOfRows(), 20)
     }
     
@@ -74,7 +74,7 @@ class SearchViewModelTests: XCTestCase{
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = SearchViewModel(service: MockedService(testCase: .error(ServiceError())))
+        let sut = SearchViewModel(service: MockedMovieService(testCase: .error(ServiceError())))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -83,7 +83,7 @@ class SearchViewModelTests: XCTestCase{
         sut.searchQuery = "matrix"
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.error)
+        XCTAssertEqual(onChangeResultState, .error)
     }
     
     func testNumberOfSections(){
@@ -99,7 +99,7 @@ class SearchViewModelTests: XCTestCase{
         let cellViewModel = sut.getSearchCellViewModel(index: 1)
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
+        XCTAssertEqual(onChangeResultState, .success)
         XCTAssertEqual(cellViewModel.posterPath, "https://image.tmdb.org/t/p/w200/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg")
     }
     
@@ -111,7 +111,7 @@ class SearchViewModelTests: XCTestCase{
         let detailViewModel = sut.getDetailViewModel(index: 0)
         
         // Then
-        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
+        XCTAssertEqual(onChangeResultState, .success)
         XCTAssertNotNil(detailViewModel)
     }
 }

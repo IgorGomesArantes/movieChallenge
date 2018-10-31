@@ -20,4 +20,5 @@ class FavoriteViewModelTests: XCTestCase {
         XCTAssertNotNil(sut.repository)
     }
     
+    
 }

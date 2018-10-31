@@ -19,7 +19,7 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     var onChange: ((MovieState.Change) -> ())?
     
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        HTTPService.shared().getMoviePage(sort: sort, order: order){ result in
+        HTTPMovieService.shared().getMoviePage(sort: sort, order: order){ result in
             
             switch(result){
             case .success(Success: var moviePage):
@@ -28,7 +28,7 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
                 
                 if isBestMovieHere{
                     if let bestMovie = moviePage.results.first{
-                        HTTPService.shared().getMovieDetail(id: bestMovie.id!){ result in
+                        HTTPMovieService.shared().getMovieDetail(id: bestMovie.id!){ result in
                             switch(result){
                             case .success(Success: let movie):
                                 self.movie = movie
@@ -53,7 +53,7 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     }
     
     private func searchTrendingMoviePage(label: String){
-        HTTPService.shared().getTrendingMoviePage(){ result in
+        HTTPMovieService.shared().getTrendingMoviePage(){ result in
             switch(result){
             case .success(Success: var moviePage):
                 moviePage.label = label

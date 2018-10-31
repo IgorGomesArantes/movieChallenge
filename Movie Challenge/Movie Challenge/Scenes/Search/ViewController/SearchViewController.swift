@@ -25,7 +25,7 @@ class SearchViewController : UIViewController{
         movieCollection.showEmptyCell(string: NSLocalizedString("SearchMovies", comment: ""))
         hideKeyboardWhenTappedAround()
         
-        viewModel = SearchViewModel(service: HTTPService())
+        viewModel = SearchViewModel(service: HTTPMovieService())
         bindViewModel()
     }
     

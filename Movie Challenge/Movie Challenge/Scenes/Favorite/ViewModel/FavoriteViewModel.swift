@@ -87,7 +87,7 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     
     //TODO:- Corrigir
     func getDetailViewModel(movieId: Int) -> DetailViewModel{
-        let detailViewModel = DetailViewModel(movieId: movieId, service: HTTPService(), repository: MovieRepository())
+        let detailViewModel = DetailViewModel(movieId: movieId, service: HTTPMovieService(), repository: MovieRepository())
         
         return detailViewModel
     }

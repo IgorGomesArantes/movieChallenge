@@ -13,7 +13,7 @@ enum Response<Result: Codable> {
     case error(Error)
 }
 
-protocol ServiceProtocol {
+protocol MovieServiceProtocol {
     //MARK:- Methods
     func getMovieDetail(id: Int, completion: @escaping (Response<MovieDTO>) -> ())
     func getMoviePage(page: Int, sort: Sort, order: Order, completion: @escaping (Response<MoviePageDTO>) -> ())
@@ -25,7 +25,7 @@ class ServiceError: Error{
     
 }
 
-class HTTPService: ServiceProtocol {
+class HTTPMovieService: MovieServiceProtocol {
     
     // MARK: - Private constants
     private let apiKey: String = "423a7efcc5851107f96bc25a3b0c3f28"
@@ -42,8 +42,8 @@ class HTTPService: ServiceProtocol {
     }
     
     //TODO:- Tirar
-    static func shared() -> HTTPService {
-        return HTTPService()
+    static func shared() -> HTTPMovieService {
+        return HTTPMovieService()
     }
     
     func getData<T:Codable>(url:URL, completion: @escaping(Response<T>) -> ()) {

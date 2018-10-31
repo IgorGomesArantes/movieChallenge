@@ -63,7 +63,7 @@ class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
     }
     
     func searchMoreMovies(completion: @escaping () -> ()){
-        HTTPService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
+        HTTPMovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
             
             switch(result){
             case .success(Success: let newMoviePage):

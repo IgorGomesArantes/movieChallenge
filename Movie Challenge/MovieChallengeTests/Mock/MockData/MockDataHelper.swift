@@ -11,16 +11,16 @@ import Foundation
 class MockDataHelper{
     
     //MARK:- Enums
-    enum MockedResource: String{
-        case deadpool = "Deadpool"
+    enum MockedResource: String {
         case venom = "Venom"
-        case popularCategortyList = "PopularCategoryList"
+        case deadpool = "Deadpool"
         case popularList = "PopularList"
         case popularPage = "PopularPage"
         case nilFieldsMovie = "NilFieldsMovie"
+        case popularCategortyList = "PopularCategoryList"
     }
     
-    static func getData(forResource resource: MockedResource) ->  Data {
+    static func getData(forResource resource: MockedResource) -> Data {
         
         let bundle = Bundle(for: self)
         guard let path = bundle.path(forResource: resource.rawValue, ofType: "json"),

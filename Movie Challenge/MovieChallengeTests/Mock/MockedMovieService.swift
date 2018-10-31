@@ -9,7 +9,7 @@
 import Foundation
 @testable import Movie_Challenge
 
-class MockedService: ServiceProtocol {
+class MockedMovieService: MovieServiceProtocol {
     
     enum TestCase {
         case error(Error)

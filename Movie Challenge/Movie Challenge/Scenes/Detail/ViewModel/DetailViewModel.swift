@@ -15,14 +15,14 @@ class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewM
     private(set) var movie: MovieDTO?
     
     // MARK: - Public variables
-    let service: ServiceProtocol
+    let service: MovieServiceProtocol
     let repository: RepositoryProtocol
     
     var onChange: ((MovieState.Change) -> ())?
     var onChangeDataBase: ((MovieState.Change) -> ())?
     
     // MARK: - Public methods
-    init(movieId: Int, service: ServiceProtocol, repository: RepositoryProtocol) {
+    init(movieId: Int, service: MovieServiceProtocol, repository: RepositoryProtocol) {
         self.movieId = movieId
         self.service = service
         self.repository = repository
@@ -38,9 +38,9 @@ class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewM
                 save(movie: movie)
             }
             
-            onChangeDataBase!(.success)
+            onChangeDataBase?(.success)
         }else{
-            onChangeDataBase!(.error)
+            onChangeDataBase?(.error)
         }
     }
     
@@ -63,7 +63,7 @@ class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewM
             movie = try repository.getMovie(by: movieId)
             movie?.favorite = true
             
-            onChange!(MovieState.Change.success)
+            onChange?(MovieState.Change.success)
         } catch {
             service.getMovieDetail(id: movieId) { response in
                 switch(response) {
@@ -71,10 +71,10 @@ class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewM
                     self.movie = movie
                     self.movie?.favorite = false
                     
-                    self.onChange!(.success)
+                    self.onChange?(.success)
                     
                 case .error:
-                    self.onChange!(.error)
+                    self.onChange?(.error)
                 }
             }
         }
@@ -82,6 +82,6 @@ class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewM
 
     // MARK: - DataBaseViewModel methods
     func changeDataBase(change: MovieState.Change) {
-        onChangeDataBase!(change)
+        onChangeDataBase?(change)
     }
 }
