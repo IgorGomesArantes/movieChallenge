@@ -15,9 +15,13 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     private var categoryList: [CategoryDTO]!
     private(set) var selectedList: [MovieDTO]!
     private(set) var selectedCategoryName: String
-    internal var repository: RepositoryProtocol
     
     //MARK:- Public variables
+    var repository: RepositoryProtocol
+    
+    var onChange: ((MovieState.Change) -> ())?
+    var onChangeDataBase: ((MovieState.Change) -> ())?
+    
     var selectedCategoryIndex: Int?{
         didSet{
             reload()
@@ -65,10 +69,8 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     }
     
     //MARK:- Public methods
-    init(repository: RepositoryProtocol, onChange: @escaping ((MovieState.Change) -> ()), onChangeDataBase: @escaping ((MovieState.Change) -> ())){
+    init(repository: RepositoryProtocol){
         selectedCategoryName = "Genero"
-        self.onChange = onChange
-        self.onChangeDataBase = onChangeDataBase
         self.repository = repository
         setMovieLists()
     }
@@ -95,9 +97,6 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     }
     
     //MARK:- MovieViewModel methods and variables
-    var state: MovieState = MovieState()
-    var onChange: ((MovieState.Change) -> ())?
-    
     func reload() {
         if selectedCategoryIndex == nil{
             setMovieLists()
@@ -108,8 +107,6 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     }
     
     //MARK:- DataBaseViewModel methods and variables
-    var onChangeDataBase: ((MovieState.Change) -> ())?
-    
     func changeDataBase(change: MovieState.Change) {
         switch change {
         case .success:

@@ -24,7 +24,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertNotNil(sut.service)
     }
     
-    func testSaveNewMovie(){
+    func testSaveNewMovie() {
         // Given
         let movieId = 1
         let repository = MockedRepository(testCase: .none)
@@ -56,7 +56,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(categoryCount, 2)
     }
     
-    func testRemoveFavoriteMovie(){
+    func testRemoveFavoriteMovie() {
         // Given
         let movieId = 2
         let repository = MockedRepository(testCase: .populatedList)
@@ -90,7 +90,7 @@ class DetailViewModelTests: XCTestCase{
     
     //sut = system under test
     
-    func testReloadWithSavedMovie(){
+    func testReloadWithSavedMovie() {
         // Given
         let movieId = 2
         var onChangeResultState: MovieState.Change?
@@ -109,7 +109,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertNotNil(sut.movie)
     }
     
-    func testReloadWithNewMovie(){
+    func testReloadWithNewMovie() {
         // Given
         let movieId = 1
         var onChangeResultState: MovieState.Change?
@@ -128,7 +128,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertNotNil(sut.movie)
     }
     
-    func testReloadAndSaveOrRemoveWithError(){
+    func testReloadAndSaveOrRemoveWithError() {
         // Given
         let movieId = 0
         var onChangeResultState: MovieState.Change?
@@ -155,7 +155,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(onChangeDataBaseResultState, .error)
     }
     
-    func testNumberOfGenres(){
+    func testNumberOfGenres() {
         // Given
         let movieId = 1
         var onChangeResultState: MovieState.Change?
@@ -174,7 +174,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(sut.numberOfGenres(), 2)
     }
     
-    func testGetGenreViewModel(){
+    func testGetGenreViewModel() {
         // Given
         let movieId = 1
         var onChangeResultState: MovieState.Change?
@@ -197,13 +197,13 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(genreViewModel.backGroundColor, AppConstants.colorSecondary)
     }
     
-    func testMovieValues(){
+    func testMovieValues() {
         // Given
         let movieId = 1
         var onChangeResultState: MovieState.Change?
         
         // When
-        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .newMovie), repository: MockedRepository(testCase: .none))
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: MockedRepository(testCase: .savedMovie))
         
         sut.onChange = { state in
             onChangeResultState = state
@@ -213,17 +213,38 @@ class DetailViewModelTests: XCTestCase{
         
         // Then
         XCTAssertEqual(onChangeResultState, .success)
-        XCTAssertEqual(sut.posterPath, "")
-        XCTAssertEqual(sut.title, "")
-        XCTAssertEqual(sut.voteAverage, "")
-        XCTAssertEqual(sut.voteCount, "")
-        XCTAssertEqual(sut.overview, "")
-        XCTAssertEqual(sut.year, "")
-        XCTAssertEqual(sut.runtime, "")
-        XCTAssertEqual(sut.creationDate, "")
+        XCTAssertEqual(sut.posterPath, "https://image.tmdb.org/t/p/original/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg")
+        XCTAssertEqual(sut.title, "Venom")
+        XCTAssertEqual(sut.voteAverage, "6.6")
+        XCTAssertEqual(sut.voteCount, "(1199)")
+        XCTAssertEqual(sut.overview, "When Eddie Brock acquires the powers of a symbiote, he will have to release his alter-ego “Venom” to save his life.")
+        XCTAssertEqual(sut.year, "2018")
+        XCTAssertEqual(sut.runtime, "1h52m")
+        XCTAssertEqual(sut.creationDate, "31-10-2018")
     }
     
-    func testMovieValuesWhenNull(){
+    func testMovieNullValues() {
+        // Given
+        let movieId = 3
+        var onChangeResultState: MovieState.Change?
+        
+        // When
+        let sut = DetailViewModel(movieId: movieId, service: MockedService(testCase: .none), repository: MockedRepository(testCase: .nilFieldsMovie))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+        
+        sut.reload()
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, MovieState.Change.success)
+        XCTAssertEqual(sut.overview, NSLocalizedString("Empty overview", comment: ""))
+        XCTAssertEqual(sut.year, NSLocalizedString("Empty year", comment: ""))
+        XCTAssertEqual(sut.creationDate, NSLocalizedString("Empty creation date", comment: ""))
+    }
+    
+    func testMovieValuesWhenNull() {
         // Given
         let movieId = 0
         var onChangeResultState: MovieState.Change?

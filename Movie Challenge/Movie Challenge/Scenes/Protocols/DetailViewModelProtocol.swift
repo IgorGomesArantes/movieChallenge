@@ -28,7 +28,7 @@ extension DetailViewModelProtocol {
     var posterPath:  String {
         guard let movie = movie, let path = movie.poster_path else { return NSLocalizedString("Empty poster path", comment: "") }
         
-        return AppConstants.BaseImageURL + Quality.high.rawValue + "/" + path
+        return AppConstants.BaseImageURL + Quality.high.rawValue + path
     }
     
     var title: String {
@@ -74,6 +74,6 @@ extension DetailViewModelProtocol {
     var creationDate: String {
         guard let movie = movie else { return NSLocalizedString("Empty creation date", comment: "") }
         
-        return movie.creation_date != nil ? (movie.creation_date?.toString(dateFormat: "dd-MM-yyyy"))! : "00-00-0000"
+        return movie.creation_date != nil ? (movie.creation_date?.toString(dateFormat: "dd-MM-yyyy"))! : NSLocalizedString("Empty creation date", comment: "")
     }
 }

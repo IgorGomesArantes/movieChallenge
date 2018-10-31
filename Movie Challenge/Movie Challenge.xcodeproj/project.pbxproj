@@ -62,6 +62,7 @@
 		78C8F694214C004D006013CB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F693214C004D006013CB /* HomeViewController.swift */; };
 		78C8F696214C01B9006013CB /* SuggestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F695214C01B9006013CB /* SuggestionTableViewCell.swift */; };
 		78C8F69E214C36C0006013CB /* UIView+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C8F69D214C36C0006013CB /* UIView+Additions.swift */; };
+		78CAF82B2189E0B00088E4BD /* NilFieldsMovie.json in Resources */ = {isa = PBXBuildFile; fileRef = 78CAF82A2189E0B00088E4BD /* NilFieldsMovie.json */; };
 		78DEAD602183CEBF0063EBFD /* PopularCategoryList.json in Resources */ = {isa = PBXBuildFile; fileRef = 78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */; };
 		78F7B57C21889033002BED10 /* GenreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7B57B21889033002BED10 /* GenreViewModelTests.swift */; };
 		78F7B57E2188A26D002BED10 /* SearchCellViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7B57D2188A26D002BED10 /* SearchCellViewModelTests.swift */; };
@@ -145,6 +146,7 @@
 		78C8F693214C004D006013CB /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		78C8F695214C01B9006013CB /* SuggestionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTableViewCell.swift; sourceTree = "<group>"; };
 		78C8F69D214C36C0006013CB /* UIView+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Additions.swift"; sourceTree = "<group>"; };
+		78CAF82A2189E0B00088E4BD /* NilFieldsMovie.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NilFieldsMovie.json; sourceTree = "<group>"; };
 		78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PopularCategoryList.json; sourceTree = "<group>"; };
 		78E4154F2146D71700BFF64C /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		78E415502146D71700BFF64C /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -518,6 +520,7 @@
 				78DEAD5F2183CEBF0063EBFD /* PopularCategoryList.json */,
 				784AC8EC2178C35700C3CB5B /* PopularList.json */,
 				787AC881217A0FF5009F048B /* PopularPage.json */,
+				78CAF82A2189E0B00088E4BD /* NilFieldsMovie.json */,
 				78AB8339217779C000A42CBE /* MockDataHelper.swift */,
 			);
 			path = MockData;
@@ -671,6 +674,7 @@
 				78DEAD602183CEBF0063EBFD /* PopularCategoryList.json in Resources */,
 				784AC8EF2178CA3200C3CB5B /* Venom.json in Resources */,
 				784AC8ED2178C35700C3CB5B /* PopularList.json in Resources */,
+				78CAF82B2189E0B00088E4BD /* NilFieldsMovie.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

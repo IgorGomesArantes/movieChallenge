@@ -11,4 +11,13 @@ import XCTest
 
 class FavoriteViewModelTests: XCTestCase {
     
+    // MARK: - Test methods
+    func testInit(){
+        // Given
+        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .none))
+
+        // Then
+        XCTAssertNotNil(sut.repository)
+    }
+    
 }

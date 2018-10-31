@@ -11,12 +11,13 @@ import Foundation
 class DetailViewModel: ViewModelProtocol, DataBaseViewModelProtocol, DetailViewModelProtocol {
     
     // MARK: - Private variables
-    let service: ServiceProtocol
-    let repository: RepositoryProtocol
+    private let movieId: Int
     private(set) var movie: MovieDTO?
     
     // MARK: - Public variables
-    private let movieId: Int
+    let service: ServiceProtocol
+    let repository: RepositoryProtocol
+    
     var onChange: ((MovieState.Change) -> ())?
     var onChangeDataBase: ((MovieState.Change) -> ())?
     

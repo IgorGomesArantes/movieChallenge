@@ -14,6 +14,7 @@ class MockedRepository: RepositoryProtocol{
     enum TestCase{
         case error(Error)
         case savedMovie
+        case nilFieldsMovie
         case populatedList
         case none
     }
@@ -31,6 +32,12 @@ class MockedRepository: RepositoryProtocol{
             categories = try! JSONDecoder().decode([CategoryDTO].self, from: MockDataHelper.getData(forResource: .popularCategortyList))
         case .savedMovie:
             movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .venom))
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy/MM/dd"
+            let creationDate = formatter.date(from: "2018/10/31")
+            movie?.creation_date = creationDate
+        case .nilFieldsMovie:
+            movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .nilFieldsMovie))
         case .error:
             break
         case .none:
@@ -54,6 +61,8 @@ class MockedRepository: RepositoryProtocol{
             throw NotFoundError.runtimeError("Filme nao encontrado")
         case .error:
             throw NotFoundError.runtimeError("Filme nao encontrado")
+        case .nilFieldsMovie:
+            return movie ?? MovieDTO()
         default:
             return movie ?? MovieDTO()
         }

@@ -17,6 +17,7 @@ class MockDataHelper{
         case popularCategortyList = "PopularCategoryList"
         case popularList = "PopularList"
         case popularPage = "PopularPage"
+        case nilFieldsMovie = "NilFieldsMovie"
     }
     
     static func getData(forResource resource: MockedResource) ->  Data {

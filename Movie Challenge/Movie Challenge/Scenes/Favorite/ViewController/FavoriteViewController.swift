@@ -32,6 +32,7 @@ class FavoriteViewController : UIViewController{
         
         selectedCategoryLabel.setLittleBorderFeatured()
         
+        viewModel = FavoriteViewModel(repository: MovieRepository())
         bindViewModel()
     }
     
@@ -89,7 +90,8 @@ extension FavoriteViewController: ViewControllerProtocol{
     }
     
     func bindViewModel() {
-        self.viewModel = FavoriteViewModel(repository: MovieRepository(), onChange: viewModelStateChange, onChangeDataBase: viewModelDataBaseChange)
+        viewModel.onChange = viewModelStateChange
+        viewModel.onChangeDataBase = viewModelDataBaseChange
     }
 }
 
