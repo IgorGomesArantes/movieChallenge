@@ -51,8 +51,11 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
                 
                 categoryList.insert(allCategory, at: 0)
             }
-        }catch{
-            onChangeDataBase!(MovieState.Change.error)
+            
+            setSelectedList(index: 0)
+            
+        } catch {
+            onChangeDataBase?(.error)
         }
     }
     
@@ -60,11 +63,11 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
         if categoryList.count > index{
             selectedCategoryName = categoryList[index].name ?? "Genero"
             selectedList = categoryList[index].movies
-            onChange!(MovieState.Change.success)
+            onChange?(.success)
         }else{
             selectedList = [MovieDTO]()
             selectedCategoryName = "Vazio"
-            onChange!(MovieState.Change.emptyResult)
+            onChange?(.emptyResult)
         }
     }
     
@@ -96,28 +99,27 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
         return FavoriteCellViewModel(delegate: delegate, movie: selectedList[index])
     }
     
-    //MARK:- MovieViewModel methods and variables
+    //MARK:- MovieViewModel methods
     func reload() {
         if selectedCategoryIndex == nil{
             setMovieLists()
-            setSelectedList(index: 0)
-        }else{
+        } else {
             setSelectedList(index: selectedCategoryIndex!)
         }
     }
     
-    //MARK:- DataBaseViewModel methods and variables
+    //MARK:- DataBaseViewModel methods
     func changeDataBase(change: MovieState.Change) {
         switch change {
         case .success:
             selectedCategoryIndex = nil
             break
         default:
-            onChangeDataBase!(MovieState.Change.error)
+            onChangeDataBase?(MovieState.Change.error)
         }
     }
     
-    //MARK:- ScrollViewModel methods and variables
+    //MARK:- ScrollViewModel methods
     func numberOfSections() -> Int {
         return 1
     }

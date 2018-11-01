@@ -1,28 +1,169 @@
 [
     {
-        "id": 5,
-        "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
-        "name": "Columbia Pictures",
-        "origin_country": "US"
+        "id": 18,
+        "name": "Drama",
+        "movies": [
+            {
+                "vote_count": 641,
+                "id": 332562,
+                "video": false,
+                "vote_average": 7.6,
+                "title": "A Star Is Born",
+                "popularity": 225.565,
+                "poster_path": "/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "original_language": "en",
+                "original_title": "A Star Is Born",
+                "genres": [
+                    {
+                        "id": 18,
+                        "name": "Drama"
+                    },
+                    {
+                        "id": 10402,
+                        "name": "Music"
+                    },
+                    {
+                        "id": 10749,
+                        "name": "Romance"
+                    }
+                ],
+                "backdrop_path": "/840rbblaLc4SVxm8gF3DNdJ0YAE.jpg",
+                "adult": false,
+                "overview": "Seasoned musician Jackson Maine discovers—and falls in love with—struggling artist Ally. She has just about given up on her dream to make it big as a singer—until Jack coaxes her into the spotlight. But even as Ally's career takes off, the personal side of their relationship is breaking down, as Jack fights an ongoing battle with his own internal demons.",
+                "release_date": "2018-10-03"
+            }
+        ]
     },
     {
-        "id": 7505,
-        "logo_path": "/837VMM4wOkODc1idNxGT0KQJlej.png",
-        "name": "Marvel Entertainment",
-        "origin_country": "US"
+        "id": 10402,
+        "name": "Music",
+        "movies": [
+            {
+                "vote_count": 641,
+                "id": 332562,
+                "video": false,
+                "vote_average": 7.6,
+                "title": "A Star Is Born",
+                "popularity": 225.565,
+                "poster_path": "/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "original_language": "en",
+                "original_title": "A Star Is Born",
+                "genres": [
+                    {
+                        "id": 18,
+                        "name": "Drama"
+                    },
+                    {
+                        "id": 10402,
+                        "name": "Music"
+                    },
+                    {
+                        "id": 10749,
+                        "name": "Romance"
+                    }
+                ],
+                "backdrop_path": "/840rbblaLc4SVxm8gF3DNdJ0YAE.jpg",
+                "adult": false,
+                "overview": "Seasoned musician Jackson Maine discovers—and falls in love with—struggling artist Ally. She has just about given up on her dream to make it big as a singer—until Jack coaxes her into the spotlight. But even as Ally's career takes off, the personal side of their relationship is breaking down, as Jack fights an ongoing battle with his own internal demons.",
+                "release_date": "2018-10-03"
+            }
+        ]
     },
     {
-        "id": 34,
-        "logo_path": "/GagSvqWlyPdkFHMfQ3pNq6ix9P.png",
-        "name": "Sony Pictures",
-        "origin_country": "US"
+        "id": 10749,
+        "name": "Romance",
+        "movies": [
+            {
+                "vote_count": 641,
+                "id": 332562,
+                "video": false,
+                "vote_average": 7.6,
+                "title": "A Star Is Born",
+                "popularity": 225.565,
+                "poster_path": "/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "original_language": "en",
+                "original_title": "A Star Is Born",
+                "genres": [
+                    {
+                        "id": 18,
+                        "name": "Drama"
+                    },
+                    {
+                        "id": 10402,
+                        "name": "Music"
+                    },
+                    {
+                        "id": 10749,
+                        "name": "Romance"
+                    }
+                ],
+                "backdrop_path": "/840rbblaLc4SVxm8gF3DNdJ0YAE.jpg",
+                "adult": false,
+                "overview": "Seasoned musician Jackson Maine discovers—and falls in love with—struggling artist Ally. She has just about given up on her dream to make it big as a singer—until Jack coaxes her into the spotlight. But even as Ally's career takes off, the personal side of their relationship is breaking down, as Jack fights an ongoing battle with his own internal demons.",
+                "release_date": "2018-10-03"
+            }
+        ]
     },
     {
         "id": 878,
-        "name": "Science Fiction"
+        "name": "Science Fiction",
+        "movies": [
+            {
+                "vote_count": 1188,
+                "id": 2,
+                "video": false,
+                "vote_average": 6.6,
+                "title": "Venom",
+                "popularity": 432.604,
+                "poster_path": "/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg",
+                "original_language": "en",
+                "original_title": "Venom",
+                "genres": [
+                    {
+                        "id": 878,
+                        "name": "Science Fiction"
+                    },
+                    {
+                        "id": 28,
+                        "name": "Action"
+                    }
+                ],
+                "backdrop_path": "/VuukZLgaCrho2Ar8Scl9HtV3yD.jpg",
+                "adult": false,
+                "overview": "When Eddie Brock acquires the powers of a symbiote, he will have to release his alter-ego “Venom” to save his life.",
+                "release_date": "2018-10-03"
+            }
+        ]
     },
     {
         "id": 28,
-        "name": "Action"
+        "name": "Action",
+        "movies": [
+            {
+                "vote_count": 1188,
+                "id": 2,
+                "video": false,
+                "vote_average": 6.6,
+                "title": "Venom",
+                "popularity": 432.604,
+                "poster_path": "/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg",
+                "original_language": "en",
+                "original_title": "Venom",
+                "genres": [
+                    {
+                        "id": 878,
+                        "name": "Science Fiction"
+                    },
+                    {
+                        "id": 28,
+                        "name": "Action"
+                    }
+                ],
+                "backdrop_path": "/VuukZLgaCrho2Ar8Scl9HtV3yD.jpg",
+                "adult": false,
+                "overview": "When Eddie Brock acquires the powers of a symbiote, he will have to release his alter-ego “Venom” to save his life.",
+                "release_date": "2018-10-03"
+            }
+        ]
     }
 ]

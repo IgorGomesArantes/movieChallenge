@@ -30,14 +30,17 @@ class MockedRepository: RepositoryProtocol{
         case .populatedList:
             movies = try! JSONDecoder().decode([MovieDTO].self, from: MockDataHelper.getData(forResource: .popularList))
             categories = try! JSONDecoder().decode([CategoryDTO].self, from: MockDataHelper.getData(forResource: .popularCategortyList))
+            
         case .savedMovie:
             movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .venom))
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy/MM/dd"
             let creationDate = formatter.date(from: "2018/10/31")
             movie?.creation_date = creationDate
+            
         case .nilFieldsMovie:
             movie =  try! JSONDecoder().decode(MovieDTO.self, from: MockDataHelper.getData(forResource: .nilFieldsMovie))
+            
         case .error:
             break
         case .none:
@@ -52,7 +55,12 @@ class MockedRepository: RepositoryProtocol{
     }
     
     func getAllMovies() throws -> [MovieDTO] {
-        return movies
+        switch testCase {
+        case .error(let error):
+            throw error
+        default:
+            return movies
+        }
     }
     
     func getMovie(by id: Int) throws -> MovieDTO {
@@ -83,7 +91,7 @@ class MockedRepository: RepositoryProtocol{
         }
     }
     
-    //TODO:- Colocar essa logica em uma classe separada junto com o MovieRepository
+    //TODO:- Colocar essa logica em um protocolo separada junto com o MovieRepository
     func removeMovie(id: Int) throws {
         for _ in movies[0].genres!{
             categories.remove(at: 0)
@@ -93,6 +101,11 @@ class MockedRepository: RepositoryProtocol{
     }
     
     func getAllCategories() throws -> [CategoryDTO] {
-        return categories
+        switch testCase {
+        case .error(let error):
+            throw error
+        default:
+            return categories
+        }
     }
 }
