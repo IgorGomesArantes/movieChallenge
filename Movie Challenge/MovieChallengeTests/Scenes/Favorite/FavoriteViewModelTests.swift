@@ -12,14 +12,6 @@ import XCTest
 class FavoriteViewModelTests: XCTestCase {
     
     // MARK: - Test methods
-    func testInit(){
-        // Given
-        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .none))
-
-        // Then
-        XCTAssertNotNil(sut.repository)
-    }
-    
     func testPopulatedList(){
         // Given
         var onChangeResultState: MovieState.Change?
@@ -92,5 +84,73 @@ class FavoriteViewModelTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRows(), 1)
         XCTAssertEqual(sut.movie(row: 0).id, 2)
         XCTAssertEqual(sut.selectedCategoryName, "Action")
+    }
+    
+    func testGetCategoryOptionViewModel(){
+        // Given
+        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .populatedList))
+        
+        // When
+        let categoryOptionViewModel = sut.getCategoryOptionViewModel(index: 1)
+        
+        // Then
+        XCTAssertEqual(categoryOptionViewModel.name, "Action")
+    }
+    
+    func testGetDetailViewModel(){
+        // Given
+        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .populatedList))
+        
+        // When
+        let detailViewModel: DetailViewModel? = sut.getDetailViewModel(movieId: 1)
+        
+        // Then
+        XCTAssertNotNil(detailViewModel)
+    }
+    
+    func testGetFavoriteCellViewModel(){
+        // Given
+        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .populatedList))
+        
+        let delegate = FavoriteCellViewModelDelegateTests()
+        
+        // When
+        let favoriteCellViewModel: FavoriteCellViewModel? = sut.getFavoriteCellViewModel(delegate: delegate, index: 1)
+        
+        favoriteCellViewModel?.removeFromFavorite()
+        favoriteCellViewModel?.gotoDetailScene()
+        
+        // Then
+        XCTAssertNotNil(favoriteCellViewModel)
+        XCTAssertEqual(delegate.changeMovieId, 2)
+        XCTAssertEqual(delegate.removeId, 2)
+    }
+    
+    func testChangeDataBase(){
+        // Given
+        var onChangeResultState: MovieState.Change?
+        var onChangeDataBaseResultState: MovieState.Change?
+        
+        let sut = FavoriteViewModel(repository: MockedRepository(testCase: .populatedList))
+        
+        sut.onChange = { state in
+            onChangeResultState = state
+        }
+
+        sut.onChangeDataBase = { state in
+            onChangeDataBaseResultState = state
+        }
+        
+        // When
+        sut.changeDataBase(change: .success)
+        
+        // Then
+        XCTAssertEqual(onChangeResultState, .success)
+        
+        // When
+        sut.changeDataBase(change: .error)
+        
+        // Then
+        XCTAssertEqual(onChangeDataBaseResultState, .error)
     }
 }

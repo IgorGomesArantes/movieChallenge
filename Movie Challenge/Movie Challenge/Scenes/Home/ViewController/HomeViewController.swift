@@ -41,7 +41,7 @@ class HomeViewController: UIViewController {
         bestMovieImage.setLittleBorderFeatured()
         bestMovieView.setLittleBorderFeatured()
 
-        viewModel = HomeViewModel()
+        viewModel = HomeViewModel(service: HTTPMovieService())
         bindViewModel()
         viewModel.reload()
     }

@@ -46,7 +46,7 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
                 
                 var allCategory = CategoryDTO()
                 allCategory.id = -1
-                allCategory.name = "Todos os filmes"
+                allCategory.name = NSLocalizedString("All movies", comment: "")
                 allCategory.movies = allMoviesList
                 
                 categoryList.insert(allCategory, at: 0)
@@ -61,19 +61,19 @@ class FavoriteViewModel: ViewModelProtocol, DataBaseViewModelProtocol, ScrollVie
     
     private func setSelectedList(index: Int){
         if categoryList.count > index{
-            selectedCategoryName = categoryList[index].name ?? "Genero"
+            selectedCategoryName = categoryList[index].name ?? NSLocalizedString("Genre", comment: "")
             selectedList = categoryList[index].movies
             onChange?(.success)
         }else{
             selectedList = [MovieDTO]()
-            selectedCategoryName = "Vazio"
+            selectedCategoryName = NSLocalizedString("Empty", comment: "")
             onChange?(.emptyResult)
         }
     }
     
     //MARK:- Public methods
     init(repository: RepositoryProtocol){
-        selectedCategoryName = "Genero"
+        selectedCategoryName = NSLocalizedString("Genre", comment: "")
         self.repository = repository
         setMovieLists()
     }

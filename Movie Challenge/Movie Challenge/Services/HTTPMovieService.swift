@@ -42,9 +42,9 @@ class HTTPMovieService: MovieServiceProtocol {
     }
     
     //TODO:- Tirar
-    static func shared() -> HTTPMovieService {
-        return HTTPMovieService()
-    }
+//    static func shared() -> HTTPMovieService {
+//        return HTTPMovieService()
+//    }
     
     func getData<T:Codable>(url:URL, completion: @escaping(Response<T>) -> ()) {
         getDataFromUrl(url: url){ data, response, error in

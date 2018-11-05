@@ -87,9 +87,7 @@ class DetailViewModelTests: XCTestCase{
         XCTAssertEqual(movieCount, 1)
         XCTAssertEqual(categoryCount, 3)
     }
-    
-    //sut = system under test
-    
+
     func testReloadWithSavedMovie() {
         // Given
         let movieId = 2

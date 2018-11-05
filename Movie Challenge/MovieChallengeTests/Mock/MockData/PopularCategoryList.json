@@ -4,6 +4,31 @@
         "name": "Drama",
         "movies": [
             {
+                "vote_count": 1188,
+                "id": 2,
+                "video": false,
+                "vote_average": 6.6,
+                "title": "Venom",
+                "popularity": 432.604,
+                "poster_path": "/2uNW4WbgBXL25BAbXGLnLqX71Sw.jpg",
+                "original_language": "en",
+                "original_title": "Venom",
+                "genres": [
+                    {
+                        "id": 878,
+                        "name": "Science Fiction"
+                    },
+                    {
+                        "id": 28,
+                        "name": "Action"
+                    }
+                ],
+                "backdrop_path": "/VuukZLgaCrho2Ar8Scl9HtV3yD.jpg",
+                "adult": false,
+                "overview": "When Eddie Brock acquires the powers of a symbiote, he will have to release his alter-ego “Venom” to save his life.",
+                "release_date": "2018-10-03"
+            },
+            {
                 "vote_count": 641,
                 "id": 332562,
                 "video": false,

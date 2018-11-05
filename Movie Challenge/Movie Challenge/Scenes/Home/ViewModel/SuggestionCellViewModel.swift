@@ -12,32 +12,39 @@ protocol SuggestionCellViewModelDelegate{
     func changeToMovieDetail(movieId: Int)
 }
 
-class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
+class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol {
     
-    //MARK:- Private variables
-    private var delegate: SuggestionCellViewModelDelegate
-    private(set) var moviePage: MoviePageDTO
-    private var getPosterTasks: [URLSessionDataTask]?
+    // MARK: - Private variables
     private var page = 2
     private var sort: Sort
+    private var getPosterTasks: [URLSessionDataTask]?
+    private var delegate: SuggestionCellViewModelDelegate
+
     private(set) var canSearchMore: Bool
+    private(set) var moviePage: MoviePageDTO
     
-    //MARK:- Public methods
-    init(moviePage: MoviePageDTO, delegate: SuggestionCellViewModelDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity){
-        self.delegate = delegate
-        self.canSearchMore = canSearchMore
+    // MARK: - Public variables
+    var state: MovieState
+    var service: MovieServiceProtocol
+    var onChange: ((MovieState.Change) -> ())?
+    
+    // MARK: - Public methods
+    init(service: MovieServiceProtocol, moviePage: MoviePageDTO, delegate: SuggestionCellViewModelDelegate, canSearchMore: Bool, sort: Sort = Sort.popularity) {
         self.sort = sort
-        self.moviePage = moviePage
+        self.service = service
+        self.delegate = delegate
         self.state = MovieState()
+        self.moviePage = moviePage
+        self.canSearchMore = canSearchMore
     }
     
-    func gotoMovieDetail(index: Int){
+    func gotoMovieDetail(index: Int) {
         if moviePage.results.count > index{
             delegate.changeToMovieDetail(movieId: moviePage.results[index].id!)
         }
     }
     
-    func getSuggestionCollectionCellViewModel(index: Int) -> SuggestionCollectionCellViewModel{
+    func getSuggestionCollectionCellViewModel(index: Int) -> SuggestionCollectionCellViewModel {
         return SuggestionCollectionCellViewModel(movie: moviePage.results[index])
     }
     
@@ -45,7 +52,7 @@ class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
         return MoreMoviesCollectionCellViewModel(delegate: delegate)
     }
     
-    func isThisTheMoreMoviesCellTime(index: Int) -> Bool{
+    func isThisTheMoreMoviesCellTime(index: Int) -> Bool {
         if canSearchMore, index == numberOfRows() - 1{
             return true
         }else{
@@ -53,18 +60,13 @@ class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
         }
     }
     
-    //MARK:- MovieViewModel
-    var state: MovieState
-    
-    var onChange: ((MovieState.Change) -> ())?
-    
+    // MARK: - MovieViewModel
     func reload() {
         onChange!(MovieState.Change.success)
     }
     
     func searchMoreMovies(completion: @escaping () -> ()){
-        HTTPMovieService.shared().getMoviePage(page: page, sort: sort, order: Order.descending){ result in
-            
+        service.getMoviePage(page: page, sort: sort, order: Order.descending) { result in
             switch(result){
             case .success(Success: let newMoviePage):
                 self.moviePage.results.append(contentsOf: newMoviePage.results)
@@ -78,10 +80,9 @@ class SuggestionCellViewModel: ViewModelProtocol, ScrollViewModelProtocol{
                 break
             }
         }
-        
     }
     
-    //MARK:- ScrollViewModel
+    // MARK: - ScrollViewModel
     func numberOfSections() -> Int {
         return 1
     }

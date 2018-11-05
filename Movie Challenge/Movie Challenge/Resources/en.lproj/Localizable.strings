@@ -26,4 +26,6 @@
 "Empty runtime" = "00h 00m";
 "Empty creation date" = "00-00-0000";
 
-
+"Empty" = "Vazio";
+"Genre" = "Genero";
+"All movies" = "Todos os filmes";

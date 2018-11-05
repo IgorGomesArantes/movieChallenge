@@ -15,11 +15,13 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     private(set) var movie: MovieDTO?
     
     //MARK:- Public variables
+    let service: MovieServiceProtocol
+    
     var state: MovieState
     var onChange: ((MovieState.Change) -> ())?
     
     private func searchMoviePage(sort: Sort, order: Order, label: String, isBestMovieHere: Bool){
-        HTTPMovieService.shared().getMoviePage(sort: sort, order: order){ result in
+        service.getMoviePage(page: 1, sort: sort, order: order){ result in
             
             switch(result){
             case .success(Success: var moviePage):
@@ -28,11 +30,11 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
                 
                 if isBestMovieHere{
                     if let bestMovie = moviePage.results.first{
-                        HTTPMovieService.shared().getMovieDetail(id: bestMovie.id!){ result in
-                            switch(result){
+                        self.service.getMovieDetail(id: bestMovie.id!){ result in
+                            switch(result) {
                             case .success(Success: let movie):
                                 self.movie = movie
-                                self.onChange!(.success)
+                                self.onChange?(.success)
                                 
                             case .error:
                                 break
@@ -42,7 +44,7 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
                     }
                 }
                 
-                self.onChange!(MovieState.Change.success)
+                self.onChange?(MovieState.Change.success)
                 
             case .error:
                 break
@@ -53,13 +55,13 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     }
     
     private func searchTrendingMoviePage(label: String){
-        HTTPMovieService.shared().getTrendingMoviePage(){ result in
+        service.getTrendingMoviePage(page: 1){ result in
             switch(result){
             case .success(Success: var moviePage):
                 moviePage.label = label
                 self.moviePageList.append(moviePage)
                 
-                self.onChange!(MovieState.Change.success)
+                self.onChange?(MovieState.Change.success)
                 
             case .error:
                 break
@@ -76,7 +78,9 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
     }
     
     //MARK:- Public methods
-    init(){
+    init(service: MovieServiceProtocol){
+        self.service = service
+        
         state = MovieState()
         movie = MovieDTO()
     }
@@ -87,13 +91,13 @@ class HomeViewModel: ViewModelProtocol, DetailViewModelProtocol{
         
         switch index{
         case 0:
-            cellViewModel = SuggestionCellViewModel(moviePage: moviePageList[index], delegate: delegate, canSearchMore: true, sort: Sort.popularity)
+            cellViewModel = SuggestionCellViewModel(service: service, moviePage: moviePageList[index], delegate: delegate, canSearchMore: true, sort: Sort.popularity)
             break
         case 1:
-            cellViewModel = SuggestionCellViewModel(moviePage: moviePageList[index], delegate: delegate, canSearchMore: true, sort: Sort.voteCount)
+            cellViewModel = SuggestionCellViewModel(service: service, moviePage: moviePageList[index], delegate: delegate, canSearchMore: true, sort: Sort.voteCount)
             break
         default:
-            cellViewModel = SuggestionCellViewModel(moviePage: moviePageList[index], delegate: delegate, canSearchMore: false)
+            cellViewModel = SuggestionCellViewModel(service: service, moviePage: moviePageList[index], delegate: delegate, canSearchMore: false)
             break
         }
         

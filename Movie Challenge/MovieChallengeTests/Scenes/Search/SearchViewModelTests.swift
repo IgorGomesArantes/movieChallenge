@@ -108,10 +108,9 @@ class SearchViewModelTests: XCTestCase{
         sut.searchQuery = "matrix"
         
         // When
-        let detailViewModel = sut.getDetailViewModel(index: 0)
+        let detailViewModel: DetailViewModel? = sut.getDetailViewModel(index: 0)
         
         // Then
-        XCTAssertEqual(onChangeResultState, .success)
         XCTAssertNotNil(detailViewModel)
     }
 }

@@ -43,6 +43,7 @@ class MockedRepository: RepositoryProtocol{
             
         case .error:
             break
+            
         case .none:
             break
         }
@@ -93,9 +94,9 @@ class MockedRepository: RepositoryProtocol{
     
     //TODO:- Colocar essa logica em um protocolo separada junto com o MovieRepository
     func removeMovie(id: Int) throws {
-        for _ in movies[0].genres!{
-            categories.remove(at: 0)
-        }
+        categories[0].movies?.remove(at: 1)
+        categories.remove(at: 1)
+        categories.remove(at: 1)
         
         movies.remove(at: 0)
     }
