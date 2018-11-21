@@ -41,11 +41,6 @@ class HTTPMovieService: MovieServiceProtocol {
         task.resume()
     }
     
-    //TODO:- Tirar
-//    static func shared() -> HTTPMovieService {
-//        return HTTPMovieService()
-//    }
-    
     func getData<T:Codable>(url:URL, completion: @escaping(Response<T>) -> ()) {
         getDataFromUrl(url: url){ data, response, error in
             if let data = data{
